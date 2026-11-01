@@ -1,0 +1,127 @@
+# Dead Island 2 Workshop for Mac — User Guide
+
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.3.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+
+## Install or update
+
+1. Download [the latest installer](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true). For a private repository, sign into GitHub in your browser first.
+2. Quit Workshop, then extract the ZIP.
+3. Double-click **Install.command**.
+4. The installer builds and opens **Dead Island 2 Workshop** in Applications. It updates the same app and retains source in **Applications / Dead Island 2 Workshop Development**.
+
+macOS 12 or newer, Python 3.9 or newer, and Apple's Command Line Tools are required. Homebrew Python is used when available. No pip packages, Windows emulator, or third-party editor executable are required. A locally built app is ad-hoc signed, not notarized by Apple.
+
+## Open your save
+
+Keep an original PS4 backup. In Save Wizard's Advanced Mode, export the internal game-data file (typically `ue4savegame.ps4.sav`). Open that exported file with **Open Save** or **Command-O**. Workshop checks the save structure and verifies that saving without edits would reproduce the input exactly.
+
+Workshop does not modify the file you open. Edits stay in memory until you export a separate copy. Closing without exporting discards them.
+
+## Understand the location menu
+
+| Location | Meaning |
+| --- | --- |
+| Shared storage locker — Regular | Weapons stored in the shared locker for regular play |
+| Shared Unclaimed Property — Regular | The regular game's Unclaimed Property collection; not the Lost & Found quest list |
+| Shared storage locker — New Game Plus | Separate shared locker for NG+ |
+| Shared Unclaimed Property — New Game Plus | Separate Unclaimed Property collection for NG+ |
+| Ryan, Carla, Jacob, Dani, Amy, or Bruno — Regular | That saved character's carried inventory in regular play |
+| Character name — New Game Plus | That character's NG+ save and carried inventory |
+| (active) | The character marked active in the opened save |
+
+The first preview's Warrior/Berserker/Rogue labels were internal class metadata. Current versions show the actual slayer names and read NG+ status from the saved profile privileges. Empty legacy character-specific stash entries are not shown as shared lockers. Only character saves actually present in the file are listed.
+
+## Edit a weapon
+
+1. Select a location, then select a weapon. Use **Find a weapon** to narrow the list.
+2. Change **Required weapon level** or **Weapon rarity**.
+3. Tick or untick entries under **Mods & perks**. Search or use **Installed only** to shorten the list.
+4. **Copy perk set** copies the selected weapon's upgrade list. Select another weapon and choose **Paste perk set** to apply it there.
+5. **Revert this weapon** cancels that weapon's staged edits, replacement, or deletion.
+
+The catalog combines named game data with special entries already in your save. Hover over a perk to see its internal identifier. A stored upgrade is not a guarantee of an active game effect. Duplicate upgrades cannot be added. Rarity changes do not offer a separate control for combat classes such as Bulldozer or Headhunter.
+
+Levels 0–1000 and up to 256 upgrades are accepted as experimental values. Values beyond normal game rules may be ignored, changed, or rejected by the game. Special built-in Bare Hands and Fury Fists records are read-only and do not consume normal weapon-capacity calculations.
+
+## Create a weapon
+
+1. Choose **Create Weapon** or press **Command-N**.
+2. Choose a **Destination**. Its free-slot count includes staged deletions and creations.
+3. Search the catalog and select the weapon.
+4. Set its level, rarity, and perks. **Use copied perk set** applies a previously copied list.
+5. Choose **Add to Export**.
+
+The new weapon is queued, not immediately written. Reopen Create Weapon to inspect the queue or **Remove** a queued creation. Review & Export writes queued weapons to the edited copy.
+
+The catalog contains base-game and DLC weapon variants and additional types found in the opened save. It is not guaranteed to cover every later game update. DLC entries require the relevant content. New weapons receive fresh IDs, and melee weapons start with durability 1000. Named weapons, DLC content, and unusual upgrade combinations still need in-game testing.
+
+## Delete a weapon to make room
+
+Select a weapon and choose **Delete Weapon** near the top of its details. The list marks it for deletion and the button becomes **Undo Delete**. Undo restores it before export. Marking a weapon for deletion discards its other staged edits.
+
+Deleting a weapon immediately frees its slot for a creation in the same export. Existing overfilled inventories are preserved, but enough deletions are needed to bring the final total within the configured limits: 16 carried weapons or 64 locker weapons. Creation in Unclaimed Property is unavailable.
+
+When a carried weapon is deleted, its character's matching shortcut assignment is removed if no surviving weapon uses the same persistent ID. Other characters' copies remain untouched.
+
+## Replace a weapon without an extra slot
+
+1. Select the existing weapon.
+2. Choose **Replace Weapon** near the top of its details.
+3. Select a different weapon from the catalog. Level and rarity are prefilled; choose the replacement's perks (the old perk set is cleared initially).
+4. Choose **Stage Replacement**.
+
+Replacement uses the same inventory slot and keeps the existing IDs for shortcut references. It does not require free space. **Revert this weapon** cancels it before export.
+
+## Export and return to PS4
+
+1. Choose **Review & Export** or press **Command-S**.
+2. Review all edits, replacements, deletions, and new weapons.
+3. Choose **Validate & Save Copy** and save the resulting `_Edited.sav` file.
+4. Move it to the PC running Save Wizard.
+5. Open the original PS4 save in Save Wizard Advanced Mode, select the same internal file originally exported, import the edited file, then apply the changes.
+6. Copy the resulting PS4 save back to your console using your normal USB workflow.
+
+Workshop refuses to export over a file opened as an input during the session. Its output is reparsed and compared with requested changes before saving. This checks file structure, not game compatibility. Start with one change and keep the original PS4 backup.
+
+## PS4 encryption and Save Wizard
+
+**Built-in PS4 container decryption/re-encryption is not implemented.** The file Workshop edits is the game data inside the PS4's encrypted USB save container. Editing that data and preparing a container the PS4 accepts are separate tasks.
+
+No documented Save Wizard integration API was identified during this implementation. Desktop Apollo Save Patcher also requires PS4 saves to arrive already decrypted; its console-side companion provides the extraction workflow on a compatible homebrew-enabled PS4. Workshop does not bundle that console software or claim to replace Save Wizard.
+
+Continue using Save Wizard for export/import in the current workflow. No Save Wizard password, license, PSN credential, or console encryption key is requested or stored by Workshop.
+
+References: [Apollo desktop guide](https://bucanero.github.io/apollo-patcher/guide.html), [Apollo PS4 project](https://github.com/bucanero/apollo-ps4), [Apollo PS4 usage documentation](https://github.com/bucanero/apollo-ps4/blob/main/docs/usage.md).
+
+## Updates
+
+- **Help → Download Updates** opens the latest ZIP download in your default browser. For this private repository, use a browser signed into an authorized GitHub account. Quit Workshop and run the downloaded installer.
+- **Help → Check for Updates** reads `update.json`. If a newer version is available, you can download and queue it for installation after the app closes. If authentication is unavailable, it offers the browser download instead.
+- **Help → Automatic Updates** is enabled by default and can be turned off. A per-user LaunchAgent checks every 15 minutes while the Mac is awake and you are signed in. Automatic checks/downloads/installation run only while Workshop is closed. Updates leave it closed.
+- Private repository automation requires an already authenticated **GitHub CLI (`gh`)** on this Mac with access to this repository. Workshop uses `gh api`; it does not copy the login token. A browser GitHub login alone does not authenticate the background updater. Without CLI authentication, use Download Updates; automatic attempts will report authentication required in the update log.
+- Downloaded updates are SHA-256 checked, extracted into a temporary folder, built locally, and installed over the same Applications app. An application lock prevents installation while the updated app is open. Failed downloads or builds retain the previous app. Old version updates also check the running app before replacement.
+
+The background agent and settings are under your user account. Settings and logs live in `~/Library/Application Support/Dead Island 2 Workshop/`. The agent is `~/Library/LaunchAgents/local.ted.di2workshop.updater.plist`.
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| Command-O | Open decrypted save |
+| Command-N | Create weapon |
+| Command-S | Review and export |
+| Command-W | Close window and quit |
+| Command-Q | Quit |
+| Command-C / V / X / A | Standard text editing |
+
+Shortcuts are fixed in this preview. Mouse-wheel input does not change number fields or dropdown selections.
+
+## Troubleshooting
+
+- **Encrypted/unsupported input:** export the internal game-data file through Save Wizard first. Other PS4 layouts and PC-format saves are not supported by this preview.
+- **No free slots:** stage deletions, choose another character/locker, or use Replace Weapon.
+- **Startup failure:** inspect `startup.log` in the Application Support folder above.
+- **Private GitHub download fails:** sign into GitHub in the browser and confirm repository access. For automated checks, the Mac's `gh` login needs that same access.
+- **Install build error:** copy the compiler output. The installer builds before replacing the app.
+
+Saves are handled locally by a service listening only on 127.0.0.1 at a random session address. The service stops when the app quits. Updates contact GitHub; save contents are not sent to GitHub. Personal save files are excluded from this repository.

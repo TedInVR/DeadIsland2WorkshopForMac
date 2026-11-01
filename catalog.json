@@ -1,0 +1,1625 @@
+{
+  "weapons": [
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedPreorderMace/DA_MeleeWeaponArchetype_NamedPreorderMace.DA_MeleeWeaponArchetype_NamedPreorderMace",
+      "name": "ABUELA'S ASHES",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Shotgun/TacticalShotgun/DA_RangedWeaponArchetype_TacticalShotgun.DA_RangedWeaponArchetype_TacticalShotgun",
+      "name": "ASSAULT SHOTGUN",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Rifles/AutoCarbine/DA_RangedWeaponArchetype_AutoCarbine.DA_RangedWeaponArchetype_AutoCarbine",
+      "name": "AUTO CARBINE",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/Axe/DA_MeleeWeaponArchetype_Axe.DA_MeleeWeaponArchetype_Axe",
+      "name": "AXE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedPreorderBaseballBat/DA_MeleeWeaponArchetype_NamedPreorderBaseballBat.DA_MeleeWeaponArchetype_NamedPreorderBaseballBat",
+      "name": "BANOI BASEBALL BAT",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/WarClub/DA_MeleeWeaponArchetype_WarClub.DA_MeleeWeaponArchetype_WarClub",
+      "name": "BANOI WAR CLUB",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/WoodBaseballBat/DA_MeleeWeaponArchetype_WoodBaseballBat.DA_MeleeWeaponArchetype_WoodBaseballBat",
+      "name": "BASEBALL BAT",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Legendary/LegendaryRevolver/DA_RangedWeaponArchetype_LegendaryRevolver.DA_RangedWeaponArchetype_LegendaryRevolver",
+      "name": "BIG SHOT",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/VoodooPitch/DA_MeleeWeaponArchetype_Named_VoodooPitch.DA_MeleeWeaponArchetype_Named_VoodooPitch",
+      "name": "BLACK MAGIC",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Daggers/Legendary/Stiletto/DA_MeleeWeaponArchetype_Legendary_Stiletto.DA_MeleeWeaponArchetype_Legendary_Stiletto",
+      "name": "BLOOD RAGE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Staffs/BoStaff/DA_MeleeWeaponArchetype_BoStaff.DA_MeleeWeaponArchetype_BoStaff",
+      "name": "BO STAFF",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Staffs/BoStaff/PreModded/DA_MeleeWeaponArchetype_BoStaff_Bleed.DA_MeleeWeaponArchetype_BoStaff_Bleed",
+      "name": "BO STAFF",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Legendary/Bodycount/DA_RangedWeaponArchetype_Legendary_Bodycount.DA_RangedWeaponArchetype_Legendary_Bodycount",
+      "name": "BODYCOUNT",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Knives/BowieKnife/DA_MeleeWeaponArchetype_BowieKnife.DA_MeleeWeaponArchetype_BowieKnife",
+      "name": "BOWIE KNIFE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Fists/BrassKnuckles/DA_MeleeWeaponArchetype_BrassKnuckles.DA_MeleeWeaponArchetype_BrassKnuckles",
+      "name": "BRASS KNUCKLES",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Legendary/LegendaryMachete/DA_MeleeWeaponArchetype_LegendaryMachete.DA_MeleeWeaponArchetype_LegendaryMachete",
+      "name": "BRUTALIZER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/BurntTimberBeam/DA_MeleeWeaponArchetype_BurntTimberBeam.DA_MeleeWeaponArchetype_BurntTimberBeam",
+      "name": "BURNT TIMBER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Rifles/Carbine/DA_RangedWeaponArchetype_Carbine.DA_RangedWeaponArchetype_Carbine",
+      "name": "BURST-FIRE CARBINE",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCPack04/BalancingData/Weapons/DA_MeleeWeaponArchetype_PremiumMattock.DA_MeleeWeaponArchetype_PremiumMattock",
+      "name": "Brainzzz-Biter",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Knives/ChefsKnife/DA_MeleeWeaponArchetype_ChefKnife.DA_MeleeWeaponArchetype_ChefKnife",
+      "name": "CHEF'S KNIFE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/ClawHammer/DA_MeleeWeaponArchetype_ClawHammer.DA_MeleeWeaponArchetype_ClawHammer",
+      "name": "CLAW HAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/ClawHammer/PreModded/DA_MeleeWeaponArchetype_ClawHammer_Fire.DA_MeleeWeaponArchetype_ClawHammer_Fire",
+      "name": "CLAW HAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Fists/Claws/DA_MeleeWeaponArchetype_Claws.DA_MeleeWeaponArchetype_Claws",
+      "name": "CLAWS",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Claymore/DA_MeleeWeaponArchetype_Claymore.DA_MeleeWeaponArchetype_Claymore",
+      "name": "CLAYMORE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Knives/Cleaver/DA_MeleeWeaponArchetype_Cleaver.DA_MeleeWeaponArchetype_Cleaver",
+      "name": "CLEAVER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/Cudgel/DA_MeleeWeaponArchetype_Cudgel.DA_MeleeWeaponArchetype_Cudgel",
+      "name": "CLUB",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/CompositeSledgehammer/DA_MeleeWeaponArchetype_CompositeSledgehammer.DA_MeleeWeaponArchetype_CompositeSledgehammer",
+      "name": "COMPOSITE SLEDGEHAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Fists/CrescentBlade/DA_MeleeWeaponArchetype_CrescentBlade.DA_MeleeWeaponArchetype_CrescentBlade",
+      "name": "CRESCENT BLADES",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/CrossBow/DA_RangedWeaponArchetype_Crossbow.DA_RangedWeaponArchetype_Crossbow",
+      "name": "CROSSBOW",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/Crowbar/DA_MeleeWeaponArchetype_Crowbar.DA_MeleeWeaponArchetype_Crowbar",
+      "name": "CROWBAR",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCPack01/BalancingData/Weapons/PremiumKatana/DA_MeleeWeaponArchetype_PremiumKatana.DA_MeleeWeaponArchetype_PremiumKatana",
+      "name": "Casimir",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Daggers/Dagger/DA_MeleeWeaponArchetype_Dagger.DA_MeleeWeaponArchetype_Dagger",
+      "name": "DAGGER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/NamedMace/DA_MeleeWeaponArchetype_EXP1_NamedMace.DA_MeleeWeaponArchetype_EXP1_NamedMace",
+      "name": "DEAD ISLANDS",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Knives/DeerHornknife/DA_MeleeWeaponArchetype_DeerHornKnife.DA_MeleeWeaponArchetype_DeerHornKnife",
+      "name": "DEER HORN KNIFE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/Legendary/DA_MeleeWeaponArchetype_Legendary_Warhammer.DA_MeleeWeaponArchetype_Legendary_Warhammer",
+      "name": "EMMA'S WRATH",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/LumpHammer/DA_MeleeWeaponArchetype_LumpHammer.DA_MeleeWeaponArchetype_LumpHammer",
+      "name": "ENGINEER'S HAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Named/NamedHeavyRevolver/DA_RangedWeaponArchetype_NamedHeavyRevolver.DA_RangedWeaponArchetype_NamedHeavyRevolver",
+      "name": "EXTINCTION EVENT",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedPreorderHayfork/DA_MeleeWeaponArchetype_NamedPreorderHayFork.DA_MeleeWeaponArchetype_NamedPreorderHayFork",
+      "name": "EYE-OPENER",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Named/NamedPreorderShortShotgun/DA_RangedWeaponArchetype_NamedPreorderShortShotgun.DA_RangedWeaponArchetype_NamedPreorderShortShotgun",
+      "name": "FENRIR'S HOWL",
+      "type": "Ranged",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/FireAxe/DA_MeleeWeaponArchetype_FireAxe.DA_MeleeWeaponArchetype_FireAxe",
+      "name": "FIRE AXE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCBasePack01/BalancingData/Weapons/DaniClaws/DA_MeleeWeaponArchetype_BasePackClaws.DA_MeleeWeaponArchetype_BasePackClaws",
+      "name": "FOMOrian Claws",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/GastricBypass/DA_MeleeWeaponArchetype_Named_GastricBypass.DA_MeleeWeaponArchetype_Named_GastricBypass",
+      "name": "GASTRIC BYPASS",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/GolfClub/DA_MeleeWeaponArchetype_GolfClub.DA_MeleeWeaponArchetype_GolfClub",
+      "name": "GOLF CLUB",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/NamedGuitarAxe/DA_MeleeWeaponArchetype_EXP2_NamedGuitarAxe.DA_MeleeWeaponArchetype_EXP2_NamedGuitarAxe",
+      "name": "HEAVY METAL",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Handgun/HeavyRevolver/DA_RangedWeaponArchetype_HeavyRevolver.DA_RangedWeaponArchetype_HeavyRevolver",
+      "name": "HEAVY REVOLVER",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/HeavyWrench/DA_MeleeWeaponArchetype_HeavyWrench.DA_MeleeWeaponArchetype_HeavyWrench",
+      "name": "HEAVY WRENCH",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/NamedAxe/DA_MeleeWeaponArchetype_EXP1_NamedAxe.DA_MeleeWeaponArchetype_EXP1_NamedAxe",
+      "name": "HOG ROASTER",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedPreorderSledgehammer/DA_MeleeWeaponArchetype_NamedPreorderWoodSledgehammer.DA_MeleeWeaponArchetype_NamedPreorderWoodSledgehammer",
+      "name": "HOMEWRECKER",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Daggers/HuntingKnife/DA_MeleeWeaponArchetype_HuntingKnife.DA_MeleeWeaponArchetype_HuntingKnife",
+      "name": "HUNTING KNIFE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Rifles/HuntingRifle/DA_RangedWeaponArchetype_HuntingRifle.DA_RangedWeaponArchetype_HuntingRifle",
+      "name": "HUNTING RIFLE",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/ImprovHammer/DA_MeleeWeaponArchetype_ImprovHammer.DA_MeleeWeaponArchetype_ImprovHammer",
+      "name": "IMPROVISED HAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedWhisperingBlade/DA_MeleeWeaponArchetype_NamedWhisperingBlade.DA_MeleeWeaponArchetype_NamedWhisperingBlade",
+      "name": "JADE DRAGON",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCPack01/BalancingData/Weapons/PremiumWakizashi/DA_MeleeWeaponArchetype_PremiumWakizashi.DA_MeleeWeaponArchetype_PremiumWakizashi",
+      "name": "Julienne",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/NamedCrossbow/CrossbowVariant/DA_RangedWeaponArchetype_EXP1_NamedCrossbow_V2.DA_RangedWeaponArchetype_EXP1_NamedCrossbow_V2",
+      "name": "K-PROTOTYPE",
+      "type": "Ranged",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/NamedCrossbow/DA_RangedWeaponArchetype_EXP1_NamedCrossbow.DA_RangedWeaponArchetype_EXP1_NamedCrossbow",
+      "name": "K-ROSSBOW",
+      "type": "Ranged",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Katana/DA_MeleeWeaponArchetype_Katana.DA_MeleeWeaponArchetype_Katana",
+      "name": "KATANA",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Fists/Katar/DA_MeleeWeaponArchetype_Katar.DA_MeleeWeaponArchetype_Katar",
+      "name": "KATARS",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/Legendary/Scythe/DA_MeleeWeaponArchetype_LegendaryScythe.DA_MeleeWeaponArchetype_LegendaryScythe",
+      "name": "KRAKATOA",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Knives/Kukri/DA_MeleeWeaponArchetype_Kukri.DA_MeleeWeaponArchetype_Kukri",
+      "name": "KUKRI",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/NamedPrecisionHammer/DA_MeleeWeaponArchetype_EXP2_NamedClawHammer.DA_MeleeWeaponArchetype_EXP2_NamedClawHammer",
+      "name": "LASER GUIDED HAMMER",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/Mace/DA_MeleeWeaponArchetype_Mace.DA_MeleeWeaponArchetype_Mace",
+      "name": "MACE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Machete/DA_MeleeWeaponArchetype_Machete.DA_MeleeWeaponArchetype_Machete",
+      "name": "MACHETE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Machete/PreModded/DA_MeleeWeaponArchetype_Machete_Shock.DA_MeleeWeaponArchetype_Machete_Shock",
+      "name": "MACHETE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Handgun/MachinePistol/DA_RangedWeaponArchetype_MachinePistol.DA_RangedWeaponArchetype_MachinePistol",
+      "name": "MACHINE PISTOL",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/ImprovSword/DA_MeleeWeaponArchetype_ImprovSword.DA_MeleeWeaponArchetype_ImprovSword",
+      "name": "MAKESHIFT SWORD",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/Mattock/DA_MeleeWeaponArchetype_Mattock.DA_MeleeWeaponArchetype_Mattock",
+      "name": "MATTOCK",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/MeatHammer/DA_MeleeWeaponArchetype_MeatHammer.DA_MeleeWeaponArchetype_MeatHammer",
+      "name": "MEAT HAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/MetalBaseballBat/DA_MeleeWeaponArchetype_BaseballBatMetal.DA_MeleeWeaponArchetype_BaseballBatMetal",
+      "name": "METAL BAT",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/MilitaryAxe/DA_MeleeWeaponArchetype_MilitaryAxe.DA_MeleeWeaponArchetype_MilitaryAxe",
+      "name": "MILITARY AXE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Daggers/MilitaryKnife/DA_MeleeWeaponArchetype_MilitaryKnife.DA_MeleeWeaponArchetype_MilitaryKnife",
+      "name": "MILITARY KNIFE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCBasePack02/BalancingData/Weapons/AmyBaton/DA_MeleeWeaponArchetype_BasePackBaton.DA_MeleeWeaponArchetype_BasePackBaton",
+      "name": "Maulibu Nights(tick)",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/DLCBasePack02/BalancingData/Weapons/BrunoMachete/DA_MeleeWeaponArchetype_BasePackMachete.DA_MeleeWeaponArchetype_BasePackMachete",
+      "name": "Maulibu Panga",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/NamedNailGun/DA_RangedWeaponArchetype_EXP2_NamedNailgun.DA_RangedWeaponArchetype_EXP2_NamedNailgun",
+      "name": "NAILBITER",
+      "type": "Ranged",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Handgun/Nailgun/DA_RangedWeaponArchetype_Nailgun.DA_RangedWeaponArchetype_Nailgun",
+      "name": "NAILGUN",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/ExtNightStick/DA_MeleeWeaponArchetype_ExtNightStick.DA_MeleeWeaponArchetype_ExtNightStick",
+      "name": "NIGHTSTICK",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedKatana/DA_MeleeWeaponArchetype_NamedKatana.DA_MeleeWeaponArchetype_NamedKatana",
+      "name": "O-KAMI AND WHISKEY",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/OfficersSword/DA_MeleeWeaponArchetype_OfficersSword.DA_MeleeWeaponArchetype_OfficersSword",
+      "name": "OFFICER'S SWORD",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Named/NamedPistol/DA_RangedWeaponArchetype_NamedPistol.DA_RangedWeaponArchetype_NamedPistol",
+      "name": "ONE HIT WONDER",
+      "type": "Ranged",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Fists/Legendary/PartyStarter/DA_MeleeWeaponArchetype_LegendaryFireKnuckles.DA_MeleeWeaponArchetype_LegendaryFireKnuckles",
+      "name": "PARTY STARTER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Named/CurtisRifle/DA_RangedWeaponArchetype_NamedCurtisRifle.DA_RangedWeaponArchetype_NamedCurtisRifle",
+      "name": "PEGGY",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/PickAxe/DA_MeleeWeaponArchetype_Pickaxe.DA_MeleeWeaponArchetype_Pickaxe",
+      "name": "PICKAXE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Polearms/Pike/DA_MeleeWeaponArchetype_Pike.DA_MeleeWeaponArchetype_Pike",
+      "name": "PIKE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/NamedImpactHammer/DA_MeleeWeaponArchetype_EXP2_NamedImprovHammer.DA_MeleeWeaponArchetype_EXP2_NamedImprovHammer",
+      "name": "PILEDRIVER",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/SmallWrench/DA_MeleeWeaponArchetype_SmallWrench.DA_MeleeWeaponArchetype_SmallWrench",
+      "name": "PIPE WRENCH",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Handgun/Pistol/DA_RangedWeaponArchetype_Pistol.DA_RangedWeaponArchetype_Pistol",
+      "name": "PISTOL",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Polearms/HayFork/DA_MeleeWeaponArchetype_HayFork.DA_MeleeWeaponArchetype_HayFork",
+      "name": "PITCHFORK",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Polearms/SingleBladeStaff/DA_MeleeWeaponArchetype_SingleBladeStaff.DA_MeleeWeaponArchetype_SingleBladeStaff",
+      "name": "POLE SAW",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Polearms/SingleBladeStaff/PreModded/DA_MeleeWeaponArchetype_SingleBladeStaff_Tearing.DA_MeleeWeaponArchetype_SingleBladeStaff_Tearing",
+      "name": "POLE SAW",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/PoliceBaton/DA_MeleeWeaponArchetype_PoliceBaton.DA_MeleeWeaponArchetype_PoliceBaton",
+      "name": "POLICE BATON",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Polearms/PoolCue/DA_MeleeWeaponArchetype_PoolCue.DA_MeleeWeaponArchetype_PoolCue",
+      "name": "POOL CUE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCBasePack01/BalancingData/Weapons/JacobBoStaff/DA_MeleeWeaponArchetype_BasePackBoStaff.DA_MeleeWeaponArchetype_BasePackBoStaff",
+      "name": "Plaid Whacker",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Polearms/Rake/DA_MeleeWeaponArchetype_Rake.DA_MeleeWeaponArchetype_Rake",
+      "name": "RAKE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Named/NamedSportingRifle/DA_RangedWeaponArchetype_NamedSportingRifle.DA_RangedWeaponArchetype_NamedSportingRifle",
+      "name": "RAVEN",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Named/NamedShotgun/DA_RangedWeaponArchetype_NamedShotgun.DA_RangedWeaponArchetype_NamedShotgun",
+      "name": "RED DRAGON",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/Legendary/LegendarySawBat/DA_MeleeWeaponArchetype_LegendarySawBat.DA_MeleeWeaponArchetype_LegendarySawBat",
+      "name": "RIPPER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCSteamPack01/BalancingData/Weapons/SteamCrowbar/DA_MeleeWeaponArchetype_SteamLaunch_NamedCrowbar.DA_MeleeWeaponArchetype_SteamLaunch_NamedCrowbar",
+      "name": "RISE AND SHINE",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedExpansionPassKatana/DA_MeleeWeaponArchetype_Named_ExpansionKatana.DA_MeleeWeaponArchetype_Named_ExpansionKatana",
+      "name": "Red's Demise",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Legendary/SawbladeLauncher/DA_RangedWeaponArchetype_LegendarySawbladeLauncher.DA_RangedWeaponArchetype_LegendarySawbladeLauncher",
+      "name": "SAWBLADE LAUNCHER",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Staffs/ScaffoldPole/DA_MeleeWeaponArchetype_ScaffoldPole.DA_MeleeWeaponArchetype_ScaffoldPole",
+      "name": "SCAFFOLD POLE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedTacticalSword/DA_MeleeWeaponArchetype_NamedTacticalSword.DA_MeleeWeaponArchetype_NamedTacticalSword",
+      "name": "SHARK TOOTH",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/NamedMicClaws/DA_MeleeWeaponArchetype_EXP2_NamedMicClaws.DA_MeleeWeaponArchetype_EXP2_NamedMicClaws",
+      "name": "SHOGUN SLICER",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Shotgun/ShortShotgun/DA_RangedWeaponArchetype_ShortShotgun.DA_RangedWeaponArchetype_ShortShotgun",
+      "name": "SHORT-BARRELED SHOTGUN",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Shotgun/ShotGun/DA_RangedWeaponArchetype_Shotgun.DA_RangedWeaponArchetype_Shotgun",
+      "name": "SHOTGUN",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/Shovel/DA_MeleeWeaponArchetype_Shovel.DA_MeleeWeaponArchetype_Shovel",
+      "name": "SHOVEL",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/RebarInConcrete/DA_MeleeWeaponArchetype_RebarInConcrete.DA_MeleeWeaponArchetype_RebarInConcrete",
+      "name": "SIGN POLE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/Sledgehammers/PreModded/DA_MeleeWeaponArchetype_Sledgehammer_Acid.DA_MeleeWeaponArchetype_Sledgehammer_Acid",
+      "name": "SLEDGEHAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/Sledgehammers/PreModded/DA_MeleeWeaponArchetype_Sledgehammer_Impact.DA_MeleeWeaponArchetype_Sledgehammer_Impact",
+      "name": "SLEDGEHAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Hammers/Sledgehammers/Wood/DA_MeleeWeaponArchetype_Sledgehammer_Wood.DA_MeleeWeaponArchetype_Sledgehammer_Wood",
+      "name": "SLEDGEHAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedMilitaryKnife/DA_MeleeWeaponArchetype_NamedMilitaryKnife.DA_MeleeWeaponArchetype_NamedMilitaryKnife",
+      "name": "SPECIAL FORCES KNIFE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/SplittingAxe/DA_MeleeWeaponArchetype_SplittingAxe.DA_MeleeWeaponArchetype_SplittingAxe",
+      "name": "SPLITTING AXE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Ranged/Rifles/SportingRifle/DA_RangedWeaponArchetype_SportingRifle.DA_RangedWeaponArchetype_SportingRifle",
+      "name": "SPORTING RIFLE",
+      "type": "Ranged",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/SteelPipe/DA_MeleeWeaponArchetype_SteelPipe.DA_MeleeWeaponArchetype_SteelPipe",
+      "name": "STEEL PIPE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/Rebar/DA_MeleeWeaponArchetype_Rebar.DA_MeleeWeaponArchetype_Rebar",
+      "name": "STEEL REBAR",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/DLCPack02/BalancingData/Weapons/DA_MeleeWeaponArchetype_PremiumGolfClub.DA_MeleeWeaponArchetype_PremiumGolfClub",
+      "name": "Skull Driver",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/TacticalSword/DA_MeleeWeaponArchetype_TacticalSword.DA_MeleeWeaponArchetype_TacticalSword",
+      "name": "TACTICAL SWORD",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Claymore/Legendary/DA_MeleeWeaponArchetype_Legendary2HSword.DA_MeleeWeaponArchetype_Legendary2HSword",
+      "name": "THE ONE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/Tenderiser/DA_MeleeWeaponArchetype_Named_Tenderiser.DA_MeleeWeaponArchetype_Named_Tenderiser",
+      "name": "THE TENDERIZER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Clubs/TireIron/DA_MeleeWeaponArchetype_TireIron.DA_MeleeWeaponArchetype_TireIron",
+      "name": "TIRE IRON",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedPreorderDagger/DA_MeleeWeaponArchetype_NamedPreorderDagger.DA_MeleeWeaponArchetype_NamedPreorderDagger",
+      "name": "TRICKSTER'S SMILE",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/DLCPack05/BalancingData/Weapons/DA_MeleeWeaponArchetype_Chakram.DA_MeleeWeaponArchetype_Chakram",
+      "name": "The Devil's Horseshoes",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/DLCPack06/BalancingData/Weapons/DA_MeleeWeaponArchetype_PremiumBowieKnife.DA_MeleeWeaponArchetype_PremiumBowieKnife",
+      "name": "The Old Man",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/DLCPack03/BalancingData/Weapons/DA_MeleeWeaponArchetype_PremiumImprovSword.DA_MeleeWeaponArchetype_PremiumImprovSword",
+      "name": "Van Flensing",
+      "type": "Melee",
+      "dlc": true
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/Wakizashi/DA_MeleeWeaponArchetype_Wakizashi.DA_MeleeWeaponArchetype_Wakizashi",
+      "name": "WAKIZASHI",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/WhisperingBlade/DA_MeleeWeaponArchetype_WhisperingBlade.DA_MeleeWeaponArchetype_WhisperingBlade",
+      "name": "WHISPERING BLADE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedFireAxe/DA_MeleeWeaponArchetype_NamedFireAxe.DA_MeleeWeaponArchetype_NamedFireAxe",
+      "name": "WILDSTYLE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Prologue/WreckageHammer/DA_MeleeWeaponArchetype_PrologueWeapon_WreckageHammer.DA_MeleeWeaponArchetype_PrologueWeapon_WreckageHammer",
+      "name": "WRECKAGE HAMMER",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Prologue/DA_MeleeWeaponArchetype_FirstWeapon_Prologue.DA_MeleeWeaponArchetype_FirstWeapon_Prologue",
+      "name": "WRECKAGE MACHETE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Named/NamedExtNightStick/DA_MeleeWeaponArchetype_NamedExtNightStick.DA_MeleeWeaponArchetype_NamedExtNightStick",
+      "name": "ZOM-B-GON",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Axes/ZombieAxe/DA_MeleeWeaponArchetype_ZombieAxe.DA_MeleeWeaponArchetype_ZombieAxe",
+      "name": "ZOMBIE AXE",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/ZombieSword/DA_MeleeWeaponArchetype_ZombieSword.DA_MeleeWeaponArchetype_ZombieSword",
+      "name": "ZOMBIE SWORD",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/ZombieSword/PreModded/DA_MeleeWeaponArchetype_ZombieSword_Fire.DA_MeleeWeaponArchetype_ZombieSword_Fire",
+      "name": "ZOMBIE SWORD",
+      "type": "Melee",
+      "dlc": false
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Melee/Swords/ZombieSword/PreModded/DA_MeleeWeaponArchetype_ZombieSword_Acid.DA_MeleeWeaponArchetype_ZombieSword_Acid",
+      "name": "ZOMBIE SWORD",
+      "type": "Melee",
+      "dlc": false
+    }
+  ],
+  "upgrades": [
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseAccuracyWhenAimDownSights.DA_ItemUpgradeData_IncreaseAccuracyWhenAimDownSights",
+      "name": "ACCURATE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AcidRain.DA_ItemUpgradeData_AcidRain",
+      "name": "ACID RAIN",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseAgilityOnWeaponKill.DA_ItemUpgradeData_IncreaseAgilityOnWeaponKill",
+      "name": "AGILE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Balanced.DA_ItemUpgradeData_Balanced",
+      "name": "BALANCED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Provisioning.DA_ItemUpgradeData_EXP2_Provisioning",
+      "name": "BANDOLIER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryMachete.DA_ItemUpgradeData_LegendaryMachete",
+      "name": "BLOODLUST",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageAndFuryGainOnWeaponKill.DA_ItemUpgradeData_IncreaseDamageAndFuryGainOnWeaponKill",
+      "name": "BLOODTHIRSTY",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryRevolver.DA_ItemUpgradeData_LegendaryRevolver",
+      "name": "BOOMSTICK",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Bullseye.DA_ItemUpgradeData_EXP2_Bullseye",
+      "name": "BULLSEYE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Powerhit.DA_ItemUpgradeData_EXP2_PowerHit",
+      "name": "CONCUSSION",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Contagious.DA_ItemUpgradeData_Contagious",
+      "name": "CONTAGIOUS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_LegendaryFireKnuckles.DA_ItemUpgradeData_FireMod_LegendaryFireKnuckles",
+      "name": "SUPERIOR MELEE CREMATOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_LegendaryScythe.DA_ItemUpgradeData_FireMod_LegendaryScythe",
+      "name": "SUPERIOR MELEE CREMATOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level1_Melee.DA_ItemUpgradeData_FireMod_Level1_Melee",
+      "name": "UNCOMMON MELEE CREMATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level2_Melee.DA_ItemUpgradeData_FireMod_Level2_Melee",
+      "name": "RARE MELEE CREMATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level3_Melee.DA_ItemUpgradeData_FireMod_Level3_Melee",
+      "name": "SUPERIOR MELEE CREMATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level1_Ranged.DA_ItemUpgradeData_FireMod_Level1_Ranged",
+      "name": "UNCOMMON RANGED CREMATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level2_Ranged.DA_ItemUpgradeData_FireMod_Level2_Ranged",
+      "name": "RARE RANGED CREMATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level3_Ranged.DA_ItemUpgradeData_FireMod_Level3_Ranged",
+      "name": "SUPERIOR RANGED CREMATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamage.DA_ItemUpgradeData_IncreaseDamage",
+      "name": "DAMAGING",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Toughness.DA_ItemUpgradeData_Toughness",
+      "name": "DEPRECATED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_SpawnExplosionOnWeaponKill.DA_ItemUpgradeData_SpawnExplosionOnWeaponKill",
+      "name": "DESTRUCTIVE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Siphon.DA_ItemUpgradeData_EXP2_Siphon",
+      "name": "DISARMER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseOwnerDamageOnOwnerLowHealth.DA_ItemUpgradeData_IncreaseOwnerDamageOnOwnerLowHealth",
+      "name": "DO OR DIE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_Hardball.DA_ItemUpgradeData_EXP1_Hardball",
+      "name": "DONKINATOR",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseCriticalChanceDecreaseDurability.DA_ItemUpgradeData_IncreaseCriticalChanceDecreaseDurability",
+      "name": "DOUBLE-EDGED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level1_Melee.DA_ItemUpgradeData_ShockMod_Level1_Melee",
+      "name": "UNCOMMON MELEE ELECTROCUTOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level2_Melee.DA_ItemUpgradeData_ShockMod_Level2_Melee",
+      "name": "RARE MELEE ELECTROCUTOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level3_Melee.DA_ItemUpgradeData_ShockMod_Level3_Melee",
+      "name": "SUPERIOR MELEE ELECTROCUTOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level1_Ranged.DA_ItemUpgradeData_ShockMod_Level1_Ranged",
+      "name": "UNCOMMON RANGED ELECTROCUTOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level2_Ranged.DA_ItemUpgradeData_ShockMod_Level2_Ranged",
+      "name": "RARE RANGED ELECTROCUTOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level3_Ranged.DA_ItemUpgradeData_ShockMod_Level3_Ranged",
+      "name": "SUPERIOR RANGED ELECTROCUTOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Empowering.DA_ItemUpgradeData_Empowering",
+      "name": "EMPOWERING",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Energizing.DA_ItemUpgradeData_Energizing",
+      "name": "ENERGIZING",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseWeaponDamageDecreaseWeaponDurabilty.DA_ItemUpgradeData_IncreaseWeaponDamageDecreaseWeaponDurabilty",
+      "name": "ENHANCED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_ExitWound.DA_ItemUpgradeData_Legendary_ExitWound",
+      "name": "EXIT WOUND",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseMagazineSize.DA_ItemUpgradeData_IncreaseMagazineSize",
+      "name": "EXTENDED MAG",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddFuryOnWeaponKill.DA_ItemUpgradeData_AddFuryOnWeaponKill",
+      "name": "FEROCIOUS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseOwnerDefence.DA_ItemUpgradeData_IncreaseOwnerDefence",
+      "name": "GUARDIAN",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseRateOfFireAndRecoil.DA_ItemUpgradeData_IncreaseRateOfFireAndRecoil",
+      "name": "HAIR-TRIGGER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Pentup.DA_ItemUpgradeData_EXP2_Pentup",
+      "name": "HARD AND FAST",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Hazardous.DA_ItemUpgradeData_Hazardous",
+      "name": "HAZARDOUS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Headhunter.DA_ItemUpgradeData_Headhunter",
+      "name": "HEADHUNTER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseForce.DA_ItemUpgradeData_IncreaseForce",
+      "name": "HIGH IMPACT",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageIncreaseRecoilDecreaseMagazineSize.DA_ItemUpgradeData_IncreaseDamageIncreaseRecoilDecreaseMagazineSize",
+      "name": "HIGH-CALIBER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Honed.DA_ItemUpgradeData_Honed",
+      "name": "HONED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_LegendaryRevolver.DA_ItemUpgradeData_ImpactMod_LegendaryRevolver",
+      "name": "SUPERIOR RANGED IMPACTOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_LegendaryWarhammer.DA_ItemUpgradeData_ImpactMod_LegendaryWarhammer",
+      "name": "SUPERIOR MELEE IMPACTOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level1_Melee.DA_ItemUpgradeData_ImpactMod_Level1_Melee",
+      "name": "UNCOMMON MELEE IMPACTOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level2_Melee.DA_ItemUpgradeData_ImpactMod_Level2_Melee",
+      "name": "RARE MELEE IMPACTOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level3_Melee.DA_ItemUpgradeData_ImpactMod_Level3_Melee",
+      "name": "SUPERIOR MELEE IMPACTOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level1_Ranged.DA_ItemUpgradeData_ImpactMod_Level1_Ranged",
+      "name": "UNCOMMON RANGED IMPACTOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level2_Ranged.DA_ItemUpgradeData_ImpactMod_Level2_Ranged",
+      "name": "RARE RANGED IMPACTOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level3_Ranged.DA_ItemUpgradeData_ImpactMod_Level3_Ranged",
+      "name": "SUPERIOR RANGED IMPACTOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Infectious.DA_ItemUpgradeData_Infectious",
+      "name": "INFECTIOUS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddHealthRegenOnDamage.DA_ItemUpgradeData_AddHealthRegenOnDamage",
+      "name": "LEECH",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreasedAttackSpeedDecreaseForce.DA_ItemUpgradeData_IncreasedAttackSpeedDecreaseForce",
+      "name": "LIGHTWEIGHT",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level1_Melee.DA_ItemUpgradeData_AcidMod_Level1_Melee",
+      "name": "UNCOMMON MELEE LIQUIDATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level2_Melee.DA_ItemUpgradeData_AcidMod_Level2_Melee",
+      "name": "RARE MELEE LIQUIDATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level3_Melee.DA_ItemUpgradeData_AcidMod_Level3_Melee",
+      "name": "SUPERIOR MELEE LIQUIDATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level1_Ranged.DA_ItemUpgradeData_AcidMod_Level1_Ranged",
+      "name": "UNCOMMON RANGED LIQUIDATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level2_Ranged.DA_ItemUpgradeData_AcidMod_Level2_Ranged",
+      "name": "RARE RANGED LIQUIDATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level3_Ranged.DA_ItemUpgradeData_AcidMod_Level3_Ranged",
+      "name": "SUPERIOR RANGED LIQUIDATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_Opportunist.DA_ItemUpgradeData_EXP1_Opportunist",
+      "name": "MERCILESS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_HeadExplodeOnKill.DA_ItemUpgradeData_HeadExplodeOnKill",
+      "name": "MIND-BLOWING",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Legendary2Machete.DA_ItemUpgradeData_TearingMod_Legendary2Machete",
+      "name": "SUPERIOR MELEE MUTILATOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Legendary2HSword.DA_ItemUpgradeData_TearingMod_Legendary2HSword",
+      "name": "SUPERIOR MELEE MUTILATOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level1_Melee.DA_ItemUpgradeData_TearingMod_Level1_Melee",
+      "name": "UNCOMMON MELEE MUTILATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level2_Melee.DA_ItemUpgradeData_TearingMod_Level2_Melee",
+      "name": "RARE MELEE MUTILATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level3_Melee.DA_ItemUpgradeData_TearingMod_Level3_Melee",
+      "name": "SUPERIOR MELEE MUTILATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level1_Ranged.DA_ItemUpgradeData_TearingMod_Level1_Ranged",
+      "name": "UNCOMMON RANGED MUTILATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level2_Ranged.DA_ItemUpgradeData_TearingMod_Level2_Ranged",
+      "name": "RARE RANGED MUTILATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level3_Ranged.DA_ItemUpgradeData_TearingMod_Level3_Ranged",
+      "name": "SUPERIOR RANGED MUTILATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseAccuracy.DA_ItemUpgradeData_IncreaseAccuracy",
+      "name": "MUZZLE BRAKE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_Overkill.DA_ItemUpgradeData_Legendary_Overkill",
+      "name": "OVERKILL",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_PrecisionShots.DA_ItemUpgradeData_PrecisionShots",
+      "name": "PRECISION SHOTS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_PrecisionStrikes.DA_ItemUpgradeData_PrecisionStrikes",
+      "name": "PRECISION STRIKES",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Primed.DA_ItemUpgradeData_Primed",
+      "name": "PRIMED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Legendary_Bodycount.DA_ItemUpgradeData_BleedMod_Legendary_Bodycount",
+      "name": "SUPERIOR RANGED PUNCTURATOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_LegendaryStiletto.DA_ItemUpgradeData_BleedMod_LegendaryStiletto",
+      "name": "SUPERIOR MELEE PUNCTURATOR MOD",
+      "type": "any",
+      "kind": "mod",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level1_Melee.DA_ItemUpgradeData_BleedMod_Level1_Melee",
+      "name": "UNCOMMON MELEE PUNCTURATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level2_Melee.DA_ItemUpgradeData_BleedMod_Level2_Melee",
+      "name": "RARE MELEE PUNCTURATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level3_Melee.DA_ItemUpgradeData_BleedMod_Level3_Melee",
+      "name": "SUPERIOR MELEE PUNCTURATOR MOD",
+      "type": "melee",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level1_Ranged.DA_ItemUpgradeData_BleedMod_Level1_Ranged",
+      "name": "UNCOMMON RANGED PUNCTURATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level2_Ranged.DA_ItemUpgradeData_BleedMod_Level2_Ranged",
+      "name": "RARE RANGED PUNCTURATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level3_Ranged.DA_ItemUpgradeData_BleedMod_Level3_Ranged",
+      "name": "SUPERIOR RANGED PUNCTURATOR MOD",
+      "type": "ranged",
+      "kind": "mod",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_Stiletto.DA_ItemUpgradeData_Legendary_Stiletto",
+      "name": "PUNCTURE WOUND",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryScythe.DA_ItemUpgradeData_LegendaryScythe",
+      "name": "REAPER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDurabilityIncreaseStaminaCost.DA_ItemUpgradeData_IncreaseDurabilityIncreaseStaminaCost",
+      "name": "REINFORCED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseOwnerDamageOnWeaponCriticalHit.DA_ItemUpgradeData_IncreaseOwnerDamageOnWeaponCriticalHit",
+      "name": "RELENTLESS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddStaminaOnWeaponKillOrCriticalHit.DA_ItemUpgradeData_AddStaminaOnWeaponKillOrCriticalHit",
+      "name": "RESTORING",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendarySawBat.DA_ItemUpgradeData_LegendarySawBat",
+      "name": "REVOLUTIONARY",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_RubberBullets.DA_ItemUpgradeData_EXP2_RubberBullets",
+      "name": "RUBBER BULLETS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageOnLowAmmo.DA_ItemUpgradeData_IncreaseDamageOnLowAmmo",
+      "name": "RUSSIAN ROULETTE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Barbaric.DA_ItemUpgradeData_EXP2_Barbaric",
+      "name": "SAVAGE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseWeaponDamageWhenAimDownSights.DA_ItemUpgradeData_IncreaseWeaponDamageWhenAimDownSights",
+      "name": "SHARPSHOOTER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Shockwave.DA_ItemUpgradeData_Shockwave",
+      "name": "SHOCKWAVE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_Sizzler.DA_ItemUpgradeData_EXP1_Sizzler",
+      "name": "SIZZLER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Skilled.DA_ItemUpgradeData_Skilled",
+      "name": "SKILLED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDurabilityIncreaseLImbDamage.DA_ItemUpgradeData_IncreaseDurabilityIncreaseLimbDamage",
+      "name": "SLAUGHTER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_HunterKiller.DA_ItemUpgradeData_EXP1_HunterKiller",
+      "name": "SPECIAL SAUCE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseReloadSpeed.DA_ItemUpgradeData_IncreaseReloadSpeed",
+      "name": "SPEEDLOADER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryFireKnuckles.DA_ItemUpgradeData_LegendaryFireKnuckles",
+      "name": "SPITTING FIRE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_StaticCharge.DA_ItemUpgradeData_StaticCharge",
+      "name": "STATIC CHARGE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_MakeItCount.DA_ItemUpgradeData_EXP1_MakeItCount",
+      "name": "STOPPING POWER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDurability.DA_ItemUpgradeData_IncreaseDurability",
+      "name": "STURDY HANDLE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_DecreaseHeavyAttackChargeTime.DA_ItemUpgradeData_DecreaseHeavyAttackChargeTime",
+      "name": "SWIFT BLOW",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseReloadSpeedOnWeaponKill.DA_ItemUpgradeData_IncreaseReloadSpeedOnWeaponKill",
+      "name": "TACTICAL RELOAD",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_TearNSear.DA_ItemUpgradeData_TearNSear",
+      "name": "TEAR 'N SEAR",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseWeaponDamageWhenOwnerLowHealth.DA_ItemUpgradeData_IncreaseWeaponDamageWhenOwnerLowHealth",
+      "name": "TENACIOUS",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_SawbladeLauncher.DA_ItemUpgradeData_Legendary_SawbladeLauncher",
+      "name": "THREEFER",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "legendary"
+    },
+    {
+      "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Timeout.DA_ItemUpgradeData_EXP2_Timeout",
+      "name": "TOP UP",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Unstable.DA_ItemUpgradeData_Unstable",
+      "name": "UNSTABLE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddHealthRegenOnWeaponKill.DA_ItemUpgradeData_AddHealthRegenOnWeaponKill",
+      "name": "VAMPIRE",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageWhenOwnerStunned.DA_ItemUpgradeData_IncreaseDamageWhenOwnerStunned",
+      "name": "VENGEFUL",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "superior"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Vigilant.DA_ItemUpgradeData_Vigilant",
+      "name": "VIGILANT",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageOnWeaponKill.DA_ItemUpgradeData_IncreaseDamageOnWeaponKill",
+      "name": "VIOLENT",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "rare"
+    },
+    {
+      "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseForceAndReducedAttackSpeed.DA_ItemUpgradeData_IncreaseForceAndReducedAttackSpeed",
+      "name": "WEIGHTED",
+      "type": "any",
+      "kind": "perk",
+      "rarity": "uncommon"
+    }
+  ],
+  "source": "SteffenL game-data identifiers and names, as published in Fristet/Dead-Island-2-Save-Editor-GUI data/inventory (0.10.0); supplemented with the opened save."
+}

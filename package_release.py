@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""Build versioned/latest installer ZIPs and update.json without personal files."""
+import hashlib,json,plistlib,zipfile
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent
+FILES=('Install.command','Workshop.swift','server.py','save_core.py','index.html','Info.plist','Workshop.icns','catalog.json','updater.py','User-Guide.html','USER_GUIDE.md','README.txt','THIRD_PARTY_NOTICES.md')
+def main():
+    with (ROOT/'Info.plist').open('rb') as f:version=plistlib.load(f)['CFBundleShortVersionString']
+    output=ROOT/'downloads';output.mkdir(exist_ok=True)
+    name='Dead-Island-2-Workshop-Mac-'+version+'.zip';path=output/name
+    with zipfile.ZipFile(path,'w',zipfile.ZIP_DEFLATED) as z:
+        for file in FILES:
+            if not (ROOT/file).is_file():raise FileNotFoundError(file)
+            info=zipfile.ZipInfo('Dead-Island-2-Workshop-Mac-'+version+'/'+file,(2026,1,1,0,0,0))
+            info.compress_type=zipfile.ZIP_DEFLATED;info.create_system=3
+            info.external_attr=((0o100755 if file=='Install.command' else 0o100644)<<16)
+            z.writestr(info,(ROOT/file).read_bytes())
+    (output/'Dead-Island-2-Workshop-Mac-Latest.zip').write_bytes(path.read_bytes())
+    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='GitHub updates, user guide, and save-encryption explanation. See CHANGELOG.md for details.')
+    (ROOT/'update.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    print(json.dumps(dict(file=str(path),size=path.stat().st_size,**manifest)))
+if __name__=='__main__':main()

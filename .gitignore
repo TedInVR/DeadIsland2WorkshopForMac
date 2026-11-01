@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.sav
+*.bin
+*.sfo
+*.log
+upload/
+node_modules/
+*.app/
