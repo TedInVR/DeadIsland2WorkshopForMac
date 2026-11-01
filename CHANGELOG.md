@@ -1,5 +1,12 @@
 # Version history
 
+## 0.4.0
+
+- Add short effect descriptions beneath every mod and perk, with hover details and clear labels for inferred or unverified effects.
+- Search descriptions as well as names.
+- Add Select All checkboxes in weapon editing, creation, and replacement. Includes the entire catalog regardless of filters, supports individual deselection, and shows a partial-selection state.
+- Keep unrecognized save upgrades visible with an explicit unverified-effect description.
+
 ## 0.3.0
 
 - GitHub-hosted versioned/latest installer packages and update manifest.

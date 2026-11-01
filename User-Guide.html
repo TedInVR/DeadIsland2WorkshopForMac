@@ -1,6 +1,6 @@
-<!doctype html><html><meta charset="utf-8"><title>Workshop User Guide</title><style>body{max-width:900px;margin:40px auto;padding:0 24px;font:17px/1.65 -apple-system,sans-serif;color:#172623;background:#f7faf7}h1,h2{line-height:1.25}h2{margin-top:40px}a{color:#216446}table{border-collapse:collapse;width:100%}td,th{border:1px solid #bdcec4;padding:9px;text-align:left}code{background:#e6eee8;padding:2px 5px;border-radius:4px}</style><pre style="white-space:pre-wrap"># Dead Island 2 Workshop for Mac — User Guide
+<!doctype html><meta charset="utf-8"><title>Workshop User Guide</title><style>body{max-width:850px;margin:40px auto;padding:0 24px;font:16px -apple-system,sans-serif;line-height:1.6;color:#17201d}h1,h2,h3{line-height:1.3}a{color:#276c44}code{background:#eef3ee;padding:2px 4px}</style><pre style="white-space:pre-wrap"># Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.3.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.4.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -35,9 +35,10 @@ The first preview&#x27;s Warrior/Berserker/Rogue labels were internal class meta
 
 1. Select a location, then select a weapon. Use **Find a weapon** to narrow the list.
 2. Change **Required weapon level** or **Weapon rarity**.
-3. Tick or untick entries under **Mods &amp; perks**. Search or use **Installed only** to shorten the list.
-4. **Copy perk set** copies the selected weapon&#x27;s upgrade list. Select another weapon and choose **Paste perk set** to apply it there.
-5. **Revert this weapon** cancels that weapon&#x27;s staged edits, replacement, or deletion.
+3. Tick or untick entries under **Mods &amp; perks**. Each entry has a short effect description; hover over it for more detail. Entries inferred from internal names are labeled as unverified. Search also finds words in descriptions, or use **Installed only** to shorten the list.
+4. **Select all mods &amp; perks** selects the entire catalog, including entries hidden by search or Installed only. Then untick anything you do not want. Clicking the fully checked box clears the selection. The same control and descriptions appear in Create Weapon and Replace Weapon. Different damage types and tiers are included; selecting an upgrade does not guarantee it will work with that weapon in-game.
+5. **Copy perk set** copies the selected weapon&#x27;s upgrade list. Select another weapon and choose **Paste perk set** to apply it there.
+6. **Revert this weapon** cancels that weapon&#x27;s staged edits, replacement, or deletion.
 
 The catalog combines named game data with special entries already in your save. Hover over a perk to see its internal identifier. A stored upgrade is not a guarantee of an active game effect. Duplicate upgrades cannot be added. Rarity changes do not offer a separate control for combat classes such as Bulldozer or Headhunter.
 
@@ -125,4 +126,4 @@ Shortcuts are fixed in this preview. Mouse-wheel input does not change number fi
 - **Install build error:** copy the compiler output. The installer builds before replacing the app.
 
 Saves are handled locally by a service listening only on 127.0.0.1 at a random session address. The service stops when the app quits. Updates contact GitHub; save contents are not sent to GitHub. Personal save files are excluded from this repository.
-</pre></html>
+</pre>

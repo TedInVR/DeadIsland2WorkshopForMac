@@ -1,6 +1,6 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.3.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.4.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -35,9 +35,10 @@ The first preview's Warrior/Berserker/Rogue labels were internal class metadata.
 
 1. Select a location, then select a weapon. Use **Find a weapon** to narrow the list.
 2. Change **Required weapon level** or **Weapon rarity**.
-3. Tick or untick entries under **Mods & perks**. Search or use **Installed only** to shorten the list.
-4. **Copy perk set** copies the selected weapon's upgrade list. Select another weapon and choose **Paste perk set** to apply it there.
-5. **Revert this weapon** cancels that weapon's staged edits, replacement, or deletion.
+3. Tick or untick entries under **Mods & perks**. Each entry has a short effect description; hover over it for more detail. Entries inferred from internal names are labeled as unverified. Search also finds words in descriptions, or use **Installed only** to shorten the list.
+4. **Select all mods & perks** selects the entire catalog, including entries hidden by search or Installed only. Then untick anything you do not want. Clicking the fully checked box clears the selection. The same control and descriptions appear in Create Weapon and Replace Weapon. Different damage types and tiers are included; selecting an upgrade does not guarantee it will work with that weapon in-game.
+5. **Copy perk set** copies the selected weapon's upgrade list. Select another weapon and choose **Paste perk set** to apply it there.
+6. **Revert this weapon** cancels that weapon's staged edits, replacement, or deletion.
 
 The catalog combines named game data with special entries already in your save. Hover over a perk to see its internal identifier. A stored upgrade is not a guarantee of an active game effect. Duplicate upgrades cannot be added. Rarity changes do not offer a separate control for combat classes such as Bulldozer or Headhunter.
 

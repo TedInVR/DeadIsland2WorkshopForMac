@@ -799,827 +799,1182 @@
       "name": "ACCURATE",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Improves accuracy while aiming down sights.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Accurate"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AcidRain.DA_ItemUpgradeData_AcidRain",
       "name": "ACID RAIN",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Weapon kills release a caustic cloud.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseAgilityOnWeaponKill.DA_ItemUpgradeData_IncreaseAgilityOnWeaponKill",
       "name": "AGILE",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills grant a temporary, stackable agility boost.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Agile"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Balanced.DA_ItemUpgradeData_Balanced",
       "name": "BALANCED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Charges heavy attacks faster and reduces their stamina cost.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Balanced"
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Provisioning.DA_ItemUpgradeData_EXP2_Provisioning",
       "name": "BANDOLIER",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Critical-hit kills can reload some ammunition.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Bandolier"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryMachete.DA_ItemUpgradeData_LegendaryMachete",
       "name": "BLOODLUST",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Rapid critical hits increase limb damage and weaken the target; stacks.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Bloodlust_(Perk)"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageAndFuryGainOnWeaponKill.DA_ItemUpgradeData_IncreaseDamageAndFuryGainOnWeaponKill",
       "name": "BLOODTHIRSTY",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills temporarily increase damage and generate extra Fury.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryRevolver.DA_ItemUpgradeData_LegendaryRevolver",
       "name": "BOOMSTICK",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Shots explode on impact and can traumatize zombies.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Boomstick"
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Bullseye.DA_ItemUpgradeData_EXP2_Bullseye",
       "name": "BULLSEYE",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Thrown headshots or rapid melee headshots cause a stunning, traumatizing explosion.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Bullseye"
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Powerhit.DA_ItemUpgradeData_EXP2_PowerHit",
       "name": "CONCUSSION",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Heavy attacks cause traumatizing explosions; striking traumatized zombies restores stamina.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Concussion"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Contagious.DA_ItemUpgradeData_Contagious",
       "name": "CONTAGIOUS",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Heavy attacks spread an affected zombie\u2019s status effects to nearby zombies.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_LegendaryFireKnuckles.DA_ItemUpgradeData_FireMod_LegendaryFireKnuckles",
       "name": "SUPERIOR MELEE CREMATOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Fire damage; repeated hits build the Ignited status. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_LegendaryScythe.DA_ItemUpgradeData_FireMod_LegendaryScythe",
       "name": "SUPERIOR MELEE CREMATOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Fire damage; repeated hits build the Ignited status. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level1_Melee.DA_ItemUpgradeData_FireMod_Level1_Melee",
       "name": "UNCOMMON MELEE CREMATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Fire damage; repeated hits build the Ignited status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level2_Melee.DA_ItemUpgradeData_FireMod_Level2_Melee",
       "name": "RARE MELEE CREMATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Fire damage; repeated hits build the Ignited status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level3_Melee.DA_ItemUpgradeData_FireMod_Level3_Melee",
       "name": "SUPERIOR MELEE CREMATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Fire damage; repeated hits build the Ignited status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level1_Ranged.DA_ItemUpgradeData_FireMod_Level1_Ranged",
       "name": "UNCOMMON RANGED CREMATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Fire damage; repeated hits build the Ignited status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level2_Ranged.DA_ItemUpgradeData_FireMod_Level2_Ranged",
       "name": "RARE RANGED CREMATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Fire damage; repeated hits build the Ignited status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_FireMod_Level3_Ranged.DA_ItemUpgradeData_FireMod_Level3_Ranged",
       "name": "SUPERIOR RANGED CREMATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Fire damage; repeated hits build the Ignited status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Cremator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamage.DA_ItemUpgradeData_IncreaseDamage",
       "name": "DAMAGING",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Increases weapon damage.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Damaging"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Toughness.DA_ItemUpgradeData_Toughness",
       "name": "DEPRECATED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Deprecated internal upgrade. No active gameplay effect has been verified.",
+      "description_basis": "unverified",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_SpawnExplosionOnWeaponKill.DA_ItemUpgradeData_SpawnExplosionOnWeaponKill",
       "name": "DESTRUCTIVE",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Weapon kills trigger a powerful explosion.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Siphon.DA_ItemUpgradeData_EXP2_Siphon",
       "name": "DISARMER",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Maiming triggers a weakening blast; hitting weakened zombies generates Fury.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Disarmer"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseOwnerDamageOnOwnerLowHealth.DA_ItemUpgradeData_IncreaseOwnerDamageOnOwnerLowHealth",
       "name": "DO OR DIE",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Improves toughness at low health, with a larger benefit as health falls.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_Hardball.DA_ItemUpgradeData_EXP1_Hardball",
       "name": "DONKINATOR",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Boosts weapon-throw damage and force; thrown headshots trigger an explosion.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Donkinator"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseCriticalChanceDecreaseDurability.DA_ItemUpgradeData_IncreaseCriticalChanceDecreaseDurability",
       "name": "DOUBLE-EDGED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases critical-hit chance at the cost of weapon durability.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level1_Melee.DA_ItemUpgradeData_ShockMod_Level1_Melee",
       "name": "UNCOMMON MELEE ELECTROCUTOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Shock damage; repeated hits build the Electrified status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Electrocutor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level2_Melee.DA_ItemUpgradeData_ShockMod_Level2_Melee",
       "name": "RARE MELEE ELECTROCUTOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Shock damage; repeated hits build the Electrified status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Electrocutor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level3_Melee.DA_ItemUpgradeData_ShockMod_Level3_Melee",
       "name": "SUPERIOR MELEE ELECTROCUTOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Shock damage; repeated hits build the Electrified status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Electrocutor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level1_Ranged.DA_ItemUpgradeData_ShockMod_Level1_Ranged",
       "name": "UNCOMMON RANGED ELECTROCUTOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Shock damage; repeated hits build the Electrified status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Electrocutor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level2_Ranged.DA_ItemUpgradeData_ShockMod_Level2_Ranged",
       "name": "RARE RANGED ELECTROCUTOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Shock damage; repeated hits build the Electrified status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Electrocutor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ShockMod_Level3_Ranged.DA_ItemUpgradeData_ShockMod_Level3_Ranged",
       "name": "SUPERIOR RANGED ELECTROCUTOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Shock damage; repeated hits build the Electrified status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Electrocutor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Empowering.DA_ItemUpgradeData_Empowering",
       "name": "EMPOWERING",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases damage from critical hits and heavy attacks.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Empowering"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Energizing.DA_ItemUpgradeData_Energizing",
       "name": "ENERGIZING",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills restore stamina; the benefit grows as your health falls.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Energizing"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseWeaponDamageDecreaseWeaponDurabilty.DA_ItemUpgradeData_IncreaseWeaponDamageDecreaseWeaponDurabilty",
       "name": "ENHANCED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases damage at the cost of durability.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Enhanced"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_ExitWound.DA_ItemUpgradeData_Legendary_ExitWound",
       "name": "EXIT WOUND",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Hits can cause nearby zombies to take bleed damage.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseMagazineSize.DA_ItemUpgradeData_IncreaseMagazineSize",
       "name": "EXTENDED MAG",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases the number of rounds the magazine holds.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddFuryOnWeaponKill.DA_ItemUpgradeData_AddFuryOnWeaponKill",
       "name": "FEROCIOUS",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Weapon kills generate extra Fury.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Ferocious"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseOwnerDefence.DA_ItemUpgradeData_IncreaseOwnerDefence",
       "name": "GUARDIAN",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Improves toughness while using this weapon.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Guardian"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseRateOfFireAndRecoil.DA_ItemUpgradeData_IncreaseRateOfFireAndRecoil",
       "name": "HAIR-TRIGGER",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Fires faster at the cost of accuracy.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Hair-Trigger"
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Pentup.DA_ItemUpgradeData_EXP2_Pentup",
       "name": "HARD AND FAST",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "A special attack briefly boosts agility and enables critical hits with this weapon.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Hard_and_Fast"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Hazardous.DA_ItemUpgradeData_Hazardous",
       "name": "HAZARDOUS",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Striking a zombie with a status effect triggers a forceful explosion.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Headhunter.DA_ItemUpgradeData_Headhunter",
       "name": "HEADHUNTER",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Decapitations cause an explosion and restore both health and stamina.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Headhunter_(Perk)"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseForce.DA_ItemUpgradeData_IncreaseForce",
       "name": "HIGH IMPACT",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases the force of weapon hits.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageIncreaseRecoilDecreaseMagazineSize.DA_ItemUpgradeData_IncreaseDamageIncreaseRecoilDecreaseMagazineSize",
       "name": "HIGH-CALIBER",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Boosts damage and force, but reduces magazine capacity and accuracy.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Honed.DA_ItemUpgradeData_Honed",
       "name": "HONED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases critical-hit damage at the cost of normal damage.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Honed"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_LegendaryRevolver.DA_ItemUpgradeData_ImpactMod_LegendaryRevolver",
       "name": "SUPERIOR RANGED IMPACTOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Superior tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_LegendaryWarhammer.DA_ItemUpgradeData_ImpactMod_LegendaryWarhammer",
       "name": "SUPERIOR MELEE IMPACTOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level1_Melee.DA_ItemUpgradeData_ImpactMod_Level1_Melee",
       "name": "UNCOMMON MELEE IMPACTOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level2_Melee.DA_ItemUpgradeData_ImpactMod_Level2_Melee",
       "name": "RARE MELEE IMPACTOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level3_Melee.DA_ItemUpgradeData_ImpactMod_Level3_Melee",
       "name": "SUPERIOR MELEE IMPACTOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level1_Ranged.DA_ItemUpgradeData_ImpactMod_Level1_Ranged",
       "name": "UNCOMMON RANGED IMPACTOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level2_Ranged.DA_ItemUpgradeData_ImpactMod_Level2_Ranged",
       "name": "RARE RANGED IMPACTOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_ImpactMod_Level3_Ranged.DA_ItemUpgradeData_ImpactMod_Level3_Ranged",
       "name": "SUPERIOR RANGED IMPACTOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Physical damage and force; traumatized targets can be knocked flying. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Impactor_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Infectious.DA_ItemUpgradeData_Infectious",
       "name": "INFECTIOUS",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Hits add bleed damage and spread bleeding to nearby zombies.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Infectious"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddHealthRegenOnDamage.DA_ItemUpgradeData_AddHealthRegenOnDamage",
       "name": "LEECH",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Dealing damage can restore health.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreasedAttackSpeedDecreaseForce.DA_ItemUpgradeData_IncreasedAttackSpeedDecreaseForce",
       "name": "LIGHTWEIGHT",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Attacks faster at the cost of force.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level1_Melee.DA_ItemUpgradeData_AcidMod_Level1_Melee",
       "name": "UNCOMMON MELEE LIQUIDATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Caustic damage; repeated hits build the Melting status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Liquidator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level2_Melee.DA_ItemUpgradeData_AcidMod_Level2_Melee",
       "name": "RARE MELEE LIQUIDATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Caustic damage; repeated hits build the Melting status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Liquidator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level3_Melee.DA_ItemUpgradeData_AcidMod_Level3_Melee",
       "name": "SUPERIOR MELEE LIQUIDATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Caustic damage; repeated hits build the Melting status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Liquidator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level1_Ranged.DA_ItemUpgradeData_AcidMod_Level1_Ranged",
       "name": "UNCOMMON RANGED LIQUIDATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Caustic damage; repeated hits build the Melting status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Liquidator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level2_Ranged.DA_ItemUpgradeData_AcidMod_Level2_Ranged",
       "name": "RARE RANGED LIQUIDATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Caustic damage; repeated hits build the Melting status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Liquidator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_AcidMod_Level3_Ranged.DA_ItemUpgradeData_AcidMod_Level3_Ranged",
       "name": "SUPERIOR RANGED LIQUIDATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Caustic damage; repeated hits build the Melting status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Liquidator_Mod"
     },
     {
       "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_Opportunist.DA_ItemUpgradeData_EXP1_Opportunist",
       "name": "MERCILESS",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Reloading soon after a critical hit grants a stackable damage boost.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Merciless"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_HeadExplodeOnKill.DA_ItemUpgradeData_HeadExplodeOnKill",
       "name": "MIND-BLOWING",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "A killing head strike triggers a forceful explosion.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Legendary2Machete.DA_ItemUpgradeData_TearingMod_Legendary2Machete",
       "name": "SUPERIOR MELEE MUTILATOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Legendary2HSword.DA_ItemUpgradeData_TearingMod_Legendary2HSword",
       "name": "SUPERIOR MELEE MUTILATOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level1_Melee.DA_ItemUpgradeData_TearingMod_Level1_Melee",
       "name": "UNCOMMON MELEE MUTILATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level2_Melee.DA_ItemUpgradeData_TearingMod_Level2_Melee",
       "name": "RARE MELEE MUTILATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level3_Melee.DA_ItemUpgradeData_TearingMod_Level3_Melee",
       "name": "SUPERIOR MELEE MUTILATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level1_Ranged.DA_ItemUpgradeData_TearingMod_Level1_Ranged",
       "name": "UNCOMMON RANGED MUTILATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level2_Ranged.DA_ItemUpgradeData_TearingMod_Level2_Ranged",
       "name": "RARE RANGED MUTILATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_TearingMod_Level3_Ranged.DA_ItemUpgradeData_TearingMod_Level3_Ranged",
       "name": "SUPERIOR RANGED MUTILATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Physical damage; weakens targets, then hits on weakened targets restore stamina. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Mutilator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseAccuracy.DA_ItemUpgradeData_IncreaseAccuracy",
       "name": "MUZZLE BRAKE",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Improves weapon accuracy.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_Overkill.DA_ItemUpgradeData_Legendary_Overkill",
       "name": "OVERKILL",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "A Skull Stomp or counter primes a shotgun blast on the next weapon hit.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Overkill"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_PrecisionShots.DA_ItemUpgradeData_PrecisionShots",
       "name": "PRECISION SHOTS",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Consecutive hits build a stackable damage boost.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_PrecisionStrikes.DA_ItemUpgradeData_PrecisionStrikes",
       "name": "PRECISION STRIKES",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Rapid critical hits build a stackable critical-damage boost.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Primed.DA_ItemUpgradeData_Primed",
       "name": "PRIMED",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills speed up the active Curveball\u2019s recharge.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Primed"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Legendary_Bodycount.DA_ItemUpgradeData_BleedMod_Legendary_Bodycount",
       "name": "SUPERIOR RANGED PUNCTURATOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_LegendaryStiletto.DA_ItemUpgradeData_BleedMod_LegendaryStiletto",
       "name": "SUPERIOR MELEE PUNCTURATOR MOD",
       "type": "any",
       "kind": "mod",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Legendary tier. Special weapon variant; exact tuning may differ.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level1_Melee.DA_ItemUpgradeData_BleedMod_Level1_Melee",
       "name": "UNCOMMON MELEE PUNCTURATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level2_Melee.DA_ItemUpgradeData_BleedMod_Level2_Melee",
       "name": "RARE MELEE PUNCTURATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level3_Melee.DA_ItemUpgradeData_BleedMod_Level3_Melee",
       "name": "SUPERIOR MELEE PUNCTURATOR MOD",
       "type": "melee",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level1_Ranged.DA_ItemUpgradeData_BleedMod_Level1_Ranged",
       "name": "UNCOMMON RANGED PUNCTURATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Uncommon tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level2_Ranged.DA_ItemUpgradeData_BleedMod_Level2_Ranged",
       "name": "RARE RANGED PUNCTURATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Rare tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/WeaponModUpgrades/DA_ItemUpgradeData_BleedMod_Level3_Ranged.DA_ItemUpgradeData_BleedMod_Level3_Ranged",
       "name": "SUPERIOR RANGED PUNCTURATOR MOD",
       "type": "ranged",
       "kind": "mod",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Bleed damage; repeated hits build the Bleeding status. Superior tier.",
+      "description_basis": "mod_family",
+      "description_source": "https://deadisland.fandom.com/wiki/Melee_Puncturator_Mod"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_Stiletto.DA_ItemUpgradeData_Legendary_Stiletto",
       "name": "PUNCTURE WOUND",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Rapid critical hits build extra critical damage and bleed damage; stacks.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryScythe.DA_ItemUpgradeData_LegendaryScythe",
       "name": "REAPER",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Hitting burning zombies primes stacked fire and limb damage for heavy attacks.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Reaper_(Perk)"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDurabilityIncreaseStaminaCost.DA_ItemUpgradeData_IncreaseDurabilityIncreaseStaminaCost",
       "name": "REINFORCED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Improves durability and force, but slows attacks.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseOwnerDamageOnWeaponCriticalHit.DA_ItemUpgradeData_IncreaseOwnerDamageOnWeaponCriticalHit",
       "name": "RELENTLESS",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Critical hits temporarily increase damage.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddStaminaOnWeaponKillOrCriticalHit.DA_ItemUpgradeData_AddStaminaOnWeaponKillOrCriticalHit",
       "name": "RESTORING",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Kills or critical hits restore stamina.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendarySawBat.DA_ItemUpgradeData_LegendarySawBat",
       "name": "REVOLUTIONARY",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Attacks spin the Ripper\u2019s blade faster; full speed supercharges its damage.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Revolutionary"
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_RubberBullets.DA_ItemUpgradeData_EXP2_RubberBullets",
       "name": "RUBBER BULLETS",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Hits cause forceful explosions, with a large damage penalty.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Rubber_Bullets"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageOnLowAmmo.DA_ItemUpgradeData_IncreaseDamageOnLowAmmo",
       "name": "RUSSIAN ROULETTE",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases damage when the magazine is running low.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Barbaric.DA_ItemUpgradeData_EXP2_Barbaric",
       "name": "SAVAGE",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Stomps or counters boost critical damage and heavy-attack charging; heavy attacks explode.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Savage"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseWeaponDamageWhenAimDownSights.DA_ItemUpgradeData_IncreaseWeaponDamageWhenAimDownSights",
       "name": "SHARPSHOOTER",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases damage while aiming down sights.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Shockwave.DA_ItemUpgradeData_Shockwave",
       "name": "SHOCKWAVE",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Knockdowns trigger a forceful explosion.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Shockwave"
     },
     {
       "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_Sizzler.DA_ItemUpgradeData_EXP1_Sizzler",
       "name": "SIZZLER",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Striking burning zombies spreads fire; also improves fire resilience while equipped.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Sizzler"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Skilled.DA_ItemUpgradeData_Skilled",
       "name": "SKILLED",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills strengthen heavy attacks and make them charge faster.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Skilled"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDurabilityIncreaseLImbDamage.DA_ItemUpgradeData_IncreaseDurabilityIncreaseLimbDamage",
       "name": "SLAUGHTER",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases limb damage and durability.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_HunterKiller.DA_ItemUpgradeData_EXP1_HunterKiller",
       "name": "SPECIAL SAUCE",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Improves damage, toughness, and resilience when fighting Apex variants.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Special_Sauce"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseReloadSpeed.DA_ItemUpgradeData_IncreaseReloadSpeed",
       "name": "SPEEDLOADER",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Reloads the weapon faster.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_LegendaryFireKnuckles.DA_ItemUpgradeData_LegendaryFireKnuckles",
       "name": "SPITTING FIRE",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Heavy-attack knockdowns or kills ignite nearby zombies and improve fire resilience.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Spitting_Fire"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_StaticCharge.DA_ItemUpgradeData_StaticCharge",
       "name": "STATIC CHARGE",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Builds electrification faster; repeated hits release a nearby electrifying blast.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Static_Charge"
     },
     {
       "path": "/Game/DI2/Expansion01/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP1_MakeItCount.DA_ItemUpgradeData_EXP1_MakeItCount",
       "name": "STOPPING POWER",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Reloading temporarily increases force.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Stopping_Power"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDurability.DA_ItemUpgradeData_IncreaseDurability",
       "name": "STURDY HANDLE",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases weapon durability.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_DecreaseHeavyAttackChargeTime.DA_ItemUpgradeData_DecreaseHeavyAttackChargeTime",
       "name": "SWIFT BLOW",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Reduces the time needed to charge heavy attacks.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseReloadSpeedOnWeaponKill.DA_ItemUpgradeData_IncreaseReloadSpeedOnWeaponKill",
       "name": "TACTICAL RELOAD",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills temporarily speed up reloading.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_TearNSear.DA_ItemUpgradeData_TearNSear",
       "name": "TEAR 'N SEAR",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Maiming leaves burning fuel beneath the zombie.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseWeaponDamageWhenOwnerLowHealth.DA_ItemUpgradeData_IncreaseWeaponDamageWhenOwnerLowHealth",
       "name": "TENACIOUS",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "At low health, increases damage and reduces stamina consumption.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Legendary_SawbladeLauncher.DA_ItemUpgradeData_Legendary_SawbladeLauncher",
       "name": "THREEFER",
       "type": "any",
       "kind": "perk",
-      "rarity": "legendary"
+      "rarity": "legendary",
+      "description": "Charged shots pierce multiple zombies with extra damage; tap shots boost limb damage.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Threefer"
     },
     {
       "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_EXP2_Timeout.DA_ItemUpgradeData_EXP2_Timeout",
       "name": "TOP UP",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Gradually reloads this weapon while it is stowed in the weapon wheel.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Top_Up"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Unstable.DA_ItemUpgradeData_Unstable",
       "name": "UNSTABLE",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Critical hits can trigger an explosion.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Perks"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_AddHealthRegenOnWeaponKill.DA_ItemUpgradeData_AddHealthRegenOnWeaponKill",
       "name": "VAMPIRE",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills can restore health.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageWhenOwnerStunned.DA_ItemUpgradeData_IncreaseDamageWhenOwnerStunned",
       "name": "VENGEFUL",
       "type": "any",
       "kind": "perk",
-      "rarity": "superior"
+      "rarity": "superior",
+      "description": "Being interrupted or knocked down temporarily increases damage.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_Vigilant.DA_ItemUpgradeData_Vigilant",
       "name": "VIGILANT",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Reloading temporarily increases damage.",
+      "description_basis": "game_description",
+      "description_source": "https://deadisland.fandom.com/wiki/Vigilant"
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseDamageOnWeaponKill.DA_ItemUpgradeData_IncreaseDamageOnWeaponKill",
       "name": "VIOLENT",
       "type": "any",
       "kind": "perk",
-      "rarity": "rare"
+      "rarity": "rare",
+      "description": "Weapon kills temporarily increase damage.",
+      "description_basis": "identifier",
+      "description_source": ""
     },
     {
       "path": "/Game/DI2/BalancingData/Weapons/Upgrades/DA_ItemUpgradeData_IncreaseForceAndReducedAttackSpeed.DA_ItemUpgradeData_IncreaseForceAndReducedAttackSpeed",
       "name": "WEIGHTED",
       "type": "any",
       "kind": "perk",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "description": "Increases force at the cost of attack speed.",
+      "description_basis": "identifier",
+      "description_source": ""
     }
   ],
-  "source": "SteffenL game-data identifiers and names, as published in Fristet/Dead-Island-2-Save-Editor-GUI data/inventory (0.10.0); supplemented with the opened save."
+  "source": "SteffenL game-data identifiers and names, as published in Fristet/Dead-Island-2-Save-Editor-GUI data/inventory (0.10.0); supplemented with the opened save.",
+  "description_note": "Qualitative summaries: quoted in-game effects or mod-family descriptions where sourced; internal-identifier interpretations and unverified entries are marked. No numerical bonuses are claimed."
 }

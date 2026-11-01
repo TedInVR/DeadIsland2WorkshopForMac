@@ -15,6 +15,7 @@ Requires macOS 12+, Python 3.9+, and Apple Command Line Tools. No pip dependenci
 - Actual character names with Regular/New Game Plus labels and active-character marking.
 - Shared lockers and Unclaimed Property separated by game mode.
 - Weapon level, rarity, mods, and perks; copy/paste perk sets.
+- Effect descriptions and hover help, plus Select All followed by individual deselection in editing and creation.
 - Create weapons from a searchable base-game/DLC catalog.
 - Delete/undo deletion to free slots in the same export.
 - Replace an existing weapon with a catalog weapon without using another slot.
@@ -29,7 +30,7 @@ For private-repository automation, an authenticated GitHub CLI (`gh`) with repos
 
 ## Preview status
 
-Version **0.3.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. Newer native builds, the first edited-save import, weapon creation, replacement, and deletion still need testing on the Mac/PS4.
+Version **0.4.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. Newer native builds, the first edited-save import, weapon creation, replacement, and deletion still need testing on the Mac/PS4.
 
 Workshop does **not** decrypt or re-encrypt the PS4 USB save container. Save Wizard is still needed for export/import in the current workflow. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

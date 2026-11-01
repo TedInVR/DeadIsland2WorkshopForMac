@@ -220,7 +220,7 @@ class Save:
         for w in self.weapons:
             if w.runtime:
                 for path in w.runtime.paths:
-                    if path not in perks:perks[path]=dict(path=path,name=label(path),type='unknown',kind='special',rarity='unknown')
+                    if path not in perks:perks[path]=dict(path=path,name=label(path),type='unknown',kind='special',rarity='unknown',description='Internal upgrade: '+label(path)+'. Its exact gameplay effect has not been verified.',description_basis='unverified',description_source='')
         return sorted(weapons.values(),key=lambda x:(x['name'].lower(),x['path'])),sorted(perks.values(),key=lambda x:(x['name'].lower(),x['path']))
     def info(self):
         wc,pc=self.catalogs();dest=[]

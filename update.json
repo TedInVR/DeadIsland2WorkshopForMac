@@ -1,6 +1,6 @@
 {
-  "version": "0.3.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.3.0.zip",
-  "sha256": "0486f85d4c5f799e918f7a192c3f4fa46ad5784b0922e5bce0a28d0034952c37",
-  "notes": "GitHub updates, user guide, and save-encryption explanation. See CHANGELOG.md for details."
+  "version": "0.4.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.4.0.zip",
+  "sha256": "7aefe64202ca17040ecaa1c9463b1bfb5017493fcf4e9d2cfd4b53d06e0549f1",
+  "notes": "Mod and perk descriptions, hover help, and Select All in the weapon editor and creation dialog."
 }
