@@ -7,7 +7,11 @@ def collect(folder):
     target=folder/'THIRD_PARTY_LICENSES';target.mkdir(exist_ok=True);packages=[]
     for dist in sorted(metadata.distributions(),key=lambda d:d.metadata.get('Name','').lower()):
         name=dist.metadata.get('Name','unknown');safe=re.sub(r'[^A-Za-z0-9._-]','_',name+'-'+dist.version);out=target/safe;out.mkdir(exist_ok=True)
-        (out/'METADATA.txt').write_text(str(dist.metadata),encoding='utf-8');copied=[]
+        # Preserve the installed metadata verbatim; serializing email headers can fail
+        # on valid package descriptions containing unindented multiline prose.
+        raw=dist.read_text('METADATA') or dist.read_text('PKG-INFO')
+        if raw is None:raw=json.dumps(list(dist.metadata.items()),ensure_ascii=False,indent=2)
+        (out/'METADATA.txt').write_text(raw,encoding='utf-8');copied=[]
         for file in dist.files or []:
             basename=Path(str(file)).name
             if not re.match(r'(?i)^(licen[cs]e|copying|copyright|notice|authors)([._-]|$)',basename):continue
