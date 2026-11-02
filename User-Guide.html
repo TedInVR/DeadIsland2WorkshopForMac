@@ -182,6 +182,8 @@ The downloaded package must include `sce_sys/param.sfo`. Workshop checks its acc
 3. When complete, click **Open Result Folder**. The folder contains the raw result ZIP, the edited decrypted package, and a separate **PS4/SAVEDATA/account-ID/CUSA…** tree with the matching encrypted pair, plus **Ready-For-USB.zip**. Original USB files are never overwritten by this operation.
 4. Copy that new PS4 folder to a spare USB drive and test importing it on the PS4 before replacing your working save. In-game validation is required; syntax checks do not prove the console will accept a remote service result.
 
+The active link between an opened decrypted result and its original container lasts for the current app session. Keep Workshop open through decryption, editing, and re-encryption. If you quit, the archives remain on disk, but this preview requires decryption again to establish a new editable service session.
+
 ### Retained files and failures
 
 Service sessions accumulate under **ServiceSessions** next to **Backups** in Workshop’s application-support folder. Each session and encryption attempt has a unique directory. These files contain private save data; they are not published to GitHub. A missing/invalid key, network outage, unavailable workers, service failure, unsafe ZIP, wrong account/title, or unsupported game-data format stops the operation with a status message. Downloaded ZIPs and submitted job IDs are retained where available. The remote service controls its queues and data retention.

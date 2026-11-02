@@ -22,7 +22,7 @@ def unpack(raw):
             if len(z.infolist())>2048:raise ServiceError('Too many files in result ZIP.')
             total=0;result={};seen=set()
             for entry in z.infolist():
-                name=entry.filename;p=PurePosixPath(name)
+                name=entry.orig_filename;p=PurePosixPath(name)
                 if not name or '\\' in name or p.is_absolute() or '..' in p.parts or ':' in name or '\x00' in name or any(ord(c)<32 for c in name):raise ServiceError('Unsafe path in result ZIP.')
                 if stat.S_ISLNK(entry.external_attr>>16) or entry.flag_bits&1:raise ServiceError('Links or encrypted entries are not supported in result ZIPs.')
                 if entry.is_dir():continue

@@ -66,7 +66,9 @@ class ArchiveTests(unittest.TestCase):
         if pair.exists():g.validate_pair(pair.with_suffix('').read_bytes(),pair.read_bytes())
     def test_traversal_duplicate_symlink_and_size_rejected(self):
         for name in ('../escape','/absolute','C:/bad','folder\\escape'):
-            with self.assertRaises(g.ServiceError):g.unpack(g.make_zip({name:b'bad'}))
+            raw=g.make_zip({name.replace('\\','/'):b'bad'})
+            if '\\' in name:raw=raw.replace(name.replace('\\','/').encode(),name.encode())
+            with self.assertRaises(g.ServiceError):g.unpack(raw)
         out=io.BytesIO()
         with zipfile.ZipFile(out,'w') as z:
             e=zipfile.ZipInfo('link');e.external_attr=(stat.S_IFLNK|0o777)<<16;z.writestr(e,'/tmp/bad')

@@ -1,6 +1,6 @@
 {
   "version": "0.10.0",
   "path": "downloads/Dead-Island-2-Workshop-Mac-0.10.0.zip",
-  "sha256": "ac322d158f10be65f83e2d584e2a5c009c48d026440ef71bdf1711655e55de7c",
+  "sha256": "994ba673c5a5a2f1237b993e15cccd04466ae1e1e2d366e1463b27afef4a5bc2",
   "notes": "Add optional GarlicSaves connection preview: private session key, connection test, USB decryption and separate encrypted copies. Live PS4 round-trip testing pending."
 }
