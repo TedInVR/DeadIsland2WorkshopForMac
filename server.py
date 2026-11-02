@@ -6,18 +6,20 @@ from save_core import Save,FormatError
 from urllib.parse import unquote
 import backup_storage
 import save_browser
+import garlic_service
+service=garlic_service.Manager()
 ROOT=Path(__file__).resolve().parent
 MAX=128*1024*1024
 DESKTOP_EVAL=False
 class App:
-    def __init__(self): self.save=None;self.name='ue4savegame.ps4.sav';self.output=None;self.source_paths=set();self.selected_usb=None
+    def __init__(self): self.save=None;self.name='ue4savegame.ps4.sav';self.output=None;self.source_paths=set();self.selected_usb=None;self.service_session=None
     def open_save(self,raw,name='ue4savegame.ps4.sav',source_path=None):
         save=Save(raw)
         if save.rebuild({})!=raw:raise FormatError('No-edit validation failed')
         info=save.info();info['backup']=backup_storage.snapshot(raw,'opened',name)
         if source_path is not None:
             info['source_path']=str(Path(source_path).resolve());self.source_paths.add(str(Path(source_path).resolve()).casefold())
-        self.save=save;self.output=None;self.name=name
+        self.save=save;self.output=None;self.name=name;self.service_session=None
         return info
 app=App(); token=secrets.token_urlsafe(32)
 class Handler(BaseHTTPRequestHandler):
@@ -35,6 +37,8 @@ class Handler(BaseHTTPRequestHandler):
         elif p=='saves':
             try:self.reply(200,save_browser.scan())
             except Exception as e:self.reply(400,{'error':str(e)})
+        elif p=='service-status':self.reply(200,service.view())
+        elif p=='service-folder':self.reply(200,{'path':str(service.folder) if service.folder else None})
         elif p=='export' and app.output is not None:self.reply(200,app.output,'application/octet-stream')
         else:self.reply(404,{'error':'Not found'})
     def do_POST(self):
@@ -42,13 +46,36 @@ class Handler(BaseHTTPRequestHandler):
         origin=self.headers.get('Origin')
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
-        if p not in ('open','prepare','profile-name','import-profiles','open-found','select-found'):return self.reply(404,{'error':'Not found'})
+        if p not in ('open','prepare','profile-name','import-profiles','open-found','select-found','service-key','service-test','service-decrypt','service-open','service-encrypt'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
             raw=self.rfile.read(n)
             if len(raw)!=n:raise ValueError('Upload was interrupted')
-            if p in ('profile-name','import-profiles'):
+            if p.startswith('service-'):
+                value=json.loads(raw)
+                if not isinstance(value,dict):raise ValueError('Invalid service request.')
+                if p=='service-key':
+                    if len(raw)>2048:raise ValueError('Worker key is too long.')
+                    self.reply(200,service.set_key(value.get('key')))
+                elif p=='service-test':self.reply(200,service.test())
+                elif p=='service-decrypt':
+                    if value.get('consent') is not True:raise ValueError('Confirm sending this encrypted pair to GarlicSaves.')
+                    entry=save_browser.find_save(value.get('key'))
+                    if entry['kind']!='encrypted':raise ValueError('Choose a complete encrypted pair.')
+                    for source in (entry['path'],entry['bin_path']):app.source_paths.add(str(Path(source).resolve()).casefold())
+                    self.reply(200,service.decrypt(entry))
+                elif p=='service-open':
+                    if service.running or service.session is None:raise ValueError('Wait for a successful decryption first.')
+                    session=service.session;name=session['name'];info=app.open_save(session['files'][name],Path(name).name)
+                    app.service_session=session
+                    self.reply(200,{'data':info,'name':Path(name).name})
+                else:
+                    if value.get('consent') is not True:raise ValueError('Confirm sending this edited package to GarlicSaves.')
+                    if app.service_session is None or app.service_session is not service.session:raise ValueError('Open the decrypted GarlicSaves result in this editor before encrypting it.')
+                    if app.output is None:raise ValueError('Review and validate your edited save first.')
+                    self.reply(200,service.encrypt(app.output))
+            elif p in ('profile-name','import-profiles'):
                 if len(raw)>65536:raise ValueError('Profile-name imports must be smaller than 64 KB.')
                 value=json.loads(raw)
                 if p=='profile-name':

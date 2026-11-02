@@ -11,10 +11,11 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var logHandle: FileHandle?
     var exporting = false
     var startedNormally = false
+    var allowTermination = false
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.9.1"
+    let version = "0.10.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -69,7 +70,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         help.addItem(withTitle:"Update Status…", action:#selector(updateStatus), keyEquivalent:"").target=self
         help.addItem(withTitle:"Download Updates…", action:#selector(downloadUpdates), keyEquivalent:"").target=self
         let auto=help.addItem(withTitle:"Automatic Updates", action:#selector(toggleAutomaticUpdates), keyEquivalent:"");auto.target=self;auto.state=automaticUpdatesEnabled() ? .on : .off;autoUpdateItem=auto
-        help.addItem(withTitle:"Save Encryption", action:#selector(encryptionInfo), keyEquivalent:"").target=self
+        help.addItem(withTitle:"PS4 Decrypt / Encrypt…", action:#selector(encryptionInfo), keyEquivalent:"").target=self
     }
     @objc func about(){alert("Dead Island 2 Workshop \(version)","Independent Mac preview for decrypted PS4 Save Wizard exports. No affiliation with the game developer, Save Wizard, or SteffenL. Save format checks passed against your supplied file; PS4 in-game validation is still required.")}
     @objc func helpText(){alert("Using Workshop", "1. Open a copy of your decrypted PS4 export.\n2. Select a locker or carried inventory and a weapon.\n3. Adjust level, rarity, or perks. Copy/Paste Perk Set transfers upgrades between weapons.\n4. Review & Export creates a separate edited file.\n5. Import that file in Save Wizard on your PC, apply it, then test on PS4.\n\nKeep your original backup. Create Weapon adds a new catalog weapon to the selected character or shared locker. Replace Weapon switches an existing weapon to a catalog model in the same slot. Delete Weapon marks it for removal; Undo Delete restores it before export. Duplicate Weapon copies complete saved weapon state with fresh IDs. Slots after export shows capacity by location. Apply / Remove beside a perk opens scoped batch editing. Reserve Ammo edits existing reserve stacks, not loaded magazines. Melee durability is experimental. Separate combat-class overrides are not included. Profiles show actual slayer names and Regular/New Game Plus. The weapon and perk catalog combines published game identifiers with your opened save.")}
@@ -92,7 +93,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         if let path=Bundle.main.url(forResource:"User-Guide",withExtension:"html"){NSWorkspace.shared.open(path)}
         else{NSWorkspace.shared.open(URL(string:"https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/USER_GUIDE.md")!)}
     }
-    @objc func encryptionInfo(){alert("PS4 Save Encryption", "Workshop edits the decrypted game-data file. It currently cannot decrypt or re-encrypt the PS4 USB save container. Continue using Save Wizard to export and import that file. No Save Wizard password or license key is stored in Workshop. Console-side homebrew alternatives require a separate compatible PS4 setup.")}
+    @objc func encryptionInfo(){web.evaluateJavaScript("window.openService()",completionHandler:nil)}
     @objc func downloadUpdates(){NSWorkspace.shared.open(URL(string:"https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true")!)}
     @objc func toggleAutomaticUpdates(){
         let enabled = !automaticUpdatesEnabled()
@@ -181,8 +182,12 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
                 let a=NSAlert();a.messageText="Quit Workshop?";a.informativeText="Edits are kept in memory. If you have not exported them, they will be discarded.";a.addButton(withTitle:"Keep Editing");a.addButton(withTitle:"Quit")
                 if a.runModal() != .alertSecondButtonReturn{return}
             }
-            NSApp.terminate(nil)
+            self.allowTermination=true;NSApp.terminate(nil)
         }
+    }
+    func applicationShouldTerminate(_ sender:NSApplication)->NSApplication.TerminateReply{
+        if !startedNormally || allowTermination{return .terminateNow}
+        quitApp();return .terminateCancel
     }
     func windowShouldClose(_ sender: NSWindow)->Bool{quitApp();return false}
     func applicationWillTerminate(_ notification: Notification){startPendingUpdate();worker?.terminate();if applicationLock >= 0 {flock(applicationLock, LOCK_UN);Darwin.close(applicationLock)};if let r=ready{try? FileManager.default.removeItem(at:r)};try? logHandle?.close()}
@@ -227,6 +232,12 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         guard let body=message.body as? [String:Any] else{return}
         if body["action"] as? String == "rememberSource",let path=body["path"] as? String {sourcePaths.insert(URL(fileURLWithPath:path).resolvingSymlinksInPath().standardizedFileURL.path);return}
         if body["action"] as? String == "revealSource",let path=body["path"] as? String {NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath:path)]);return}
+        if body["action"] as? String == "serviceFolder",let base=base{
+            URLSession.shared.dataTask(with:base.appendingPathComponent("service-folder")){data,response,error in
+                guard error==nil,(response as? HTTPURLResponse)?.statusCode==200,let data=data,let obj=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],let path=obj["path"] as? String else{return}
+                DispatchQueue.main.async{NSWorkspace.shared.open(URL(fileURLWithPath:path,isDirectory:true))}
+            }.resume();return
+        }
         guard body["action"] as? String == "export",let base=base,!exporting else{return}
         let panel=NSSavePanel();panel.nameFieldStringValue=body["name"] as? String ?? "ue4savegame.ps4_Edited.sav";panel.message="Save a separate edited copy. Keep your original save backup.";panel.canCreateDirectories=true
         panel.beginSheetModal(for:window){r in

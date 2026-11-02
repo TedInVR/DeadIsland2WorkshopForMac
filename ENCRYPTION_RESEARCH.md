@@ -1,29 +1,15 @@
-# External PS4 encryption service research
+# GarlicSaves integration preview — 0.10.0
 
-Workshop does not currently decrypt or re-encrypt PS4 USB save containers. Save Wizard remains the tested extraction/import workflow for this project.
+Workshop now includes an opt-in client for the published [GarlicSaves REST API](https://github.com/earthonion/HTOS-web/blob/main/API.md), implemented independently using Python standard-library HTTPS and ZIP handling. API protocol and authentication were checked against [routes/api_v1.py](https://github.com/earthonion/HTOS-web/blob/main/routes/api_v1.py). The server processes jobs using remote console workers; the desktop app does not perform local console cryptography.
 
-## A documented integration candidate
+Users enter their private worker key locally. Test Connection reads /jobs without uploading a save. Decrypt submits only the selected original PS4 pair after confirmation and local backups, requesting include_sce_sys=true. Encrypt submits the validated edited file together with every original companion file and sce_sys metadata, using the original account ID. Results are retained in unique private local session folders. The key stays in process memory and is not stored on disk, sent in URLs, logged, or included in result archives. Cross-origin redirects are refused so credentials cannot be forwarded to another host.
 
-[GarlicSaves](https://garlicsaves.com/) runs online PS4/PS5 save tools based on [HTOS-web](https://github.com/earthonion/HTOS-web). Its published [API documentation](https://github.com/earthonion/HTOS-web/blob/main/API.md) describes REST jobs for decrypt, encrypt, and resign, with status polling and a result ZIP. Requests require an `X-Worker-Key` obtained through the service's Contribute page. The availability and intended use of that access for an ordinary desktop-app user still needs confirmation with the service; documentation alone does not establish that a key will be granted.
+## Verification and limitations
 
-The backend uses participating jailbroken consoles. The person using the hosted service need not be the person supplying a console, but running the same server software on a Mac does not provide the missing console worker.
+- The user supplied an original encrypted pair for private local inspection. Its 96-byte .bin has the expected pfsSKKey header. That does not establish that the pair cryptographically matches.
+- Local tests cover the API wire format, status polling, credential handling, malicious ZIP boundaries, metadata account/title matching, source preservation, and a simulated service round trip using the existing decrypted fixture.
+- No worker key is available in this development session. No user saves have been uploaded to GarlicSaves by the developer. Live service authentication, actual decrypted output compatibility, and a console-accepted encryption round trip remain untested.
+- The game-data reader supports sectioned uncompressed PS4 exports. If GarlicSaves returns another representation, the app retains its full ZIP and reports unsupported format. A real decrypted result is needed to add and verify any conversion.
+- The provided console-worker config is unnecessary for this desktop API integration.
 
-## Proposed file flow
-
-1. Choose the original encrypted PS4 save and its paired `.bin` file.
-2. With API access and the user's approval to send these files to the named service, submit a decrypt job and request the `sce_sys` metadata.
-3. Keep the original container, account metadata, and all extracted companion files together locally. Confirm the returned Dead Island 2 game-data format is supported by Workshop; it may differ from the sectioned uncompressed Save Wizard export currently tested.
-4. Edit a separate game-data copy, retain the other files and metadata, then submit the complete package for encryption back to the same account.
-5. Download the new encrypted pair into a separate PS4 folder and test importing it on the console. Preserve the original backup.
-
-No account has been created, API key obtained, or personal save uploaded during this research. No live encryption integration is included in the current release. A compatible service account/key, confirmation of automation support, and an end-to-end Dead Island 2 round trip are needed before the app can offer this as a working feature. A web frontend or Discord interface alone is not evidence of an unauthenticated automation endpoint.
-
-Primary sources: [HTOS](https://github.com/hzhreal/HTOS), [HTOS-web](https://github.com/earthonion/HTOS-web), [REST API](https://github.com/earthonion/HTOS-web/blob/main/API.md), [GarlicSaves About](https://garlicsaves.com/about).
-
-## What an access key means
-
-It is a private text credential issued by GarlicSaves for submitting jobs under a service account. The API documentation calls it a **worker key** and directs users to the service's **Contribute** page. The published Contribute route requires login and a key name, and creates a key shown once; a live service account/key is still needed to verify actual access.
-
-User setup: register/sign in at https://garlicsaves.com/, then open https://garlicsaves.com/contribute and create a key with a recognizable name such as Workshop. Keep it private; do not put it in GitHub, screenshots, or chat. A future Workshop connection should accept it locally and store it through the operating system's credential store.
-
-A real round-trip test also needs the original encrypted PS4 save file and its matching `.bin` file. The existing decrypted development fixture is not enough to test container decryption. Service processing would send those selected files to GarlicSaves; that is separate from the current local-only editor and backups.
+See [User Guide](USER_GUIDE.md#ps4-encryption-and-save-wizard) for the step-by-step workflow and retained-file handling. The third-party service controls availability, remote processing, and retention.

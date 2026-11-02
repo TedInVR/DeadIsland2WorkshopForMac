@@ -41,9 +41,9 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.9.1**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.10.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
-Workshop does **not** decrypt or re-encrypt the PS4 USB save container. Save Wizard is still needed for export/import in the current workflow. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
+Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 
 Personal saves are not included. The app implementation is independent. Game-data name/identifier attribution is recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Not affiliated with the game publisher, Save Wizard, or SteffenL.
 
@@ -53,6 +53,6 @@ Source files are at repository root. Run `python3 test_core.py /path/to/decrypte
 
 To publish a new update, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
-External encryption services are being investigated; see [current findings and requirements](ENCRYPTION_RESEARCH.md). An online decryption connection is not included yet.
+See [GarlicSaves setup, privacy, and test limits](ENCRYPTION_RESEARCH.md). Worker keys are kept in memory for the current app session; they are never bundled or stored in settings.
 
 If an older version repeatedly queues an update but never installs it, quit Workshop and run `Repair-Updates.command` from the latest Mac package. It uses the existing helper to verify/download/install the latest version immediately and checks the resulting Applications version.

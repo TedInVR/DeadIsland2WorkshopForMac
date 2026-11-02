@@ -1,6 +1,6 @@
-<!doctype html><meta charset="utf-8"><title>Workshop User Guide</title><style>body{max-width:850px;margin:40px auto;padding:0 24px;font:16px -apple-system,sans-serif;line-height:1.6;color:#17201d}h1,h2,h3{line-height:1.3}a{color:#276c44}code{background:#eef3ee;padding:2px 4px}</style><pre style="white-space:pre-wrap"># Dead Island 2 Workshop for Mac — User Guide
+<!doctype html><html><head><meta charset="utf-8"><title>Dead Island 2 Workshop User Guide</title><style>body{max-width:960px;margin:40px auto;padding:0 28px;background:#101618;color:#e7f0ed;font:16px/1.6 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}</style></head><body><pre># Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.9.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.10.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -42,7 +42,7 @@ Choose **USB Saves…** in the toolbar or **File → Browse USB Saves…**. The 
 Each row shows the profile label, account ID, drive, game ID, filename, size, modified date, and save type. Use **Show folder** to reveal it in Finder or File Explorer.
 
 - **Decrypted save:** select it and choose **Open selected save**. Workshop validates it, makes an automatic backup, and opens it directly without a file-navigation dialog.
-- **Encrypted PS4 pair:** the main `DeadIsland2SaveGame` file and matching `.bin` are listed together. **Select encrypted pair** remembers the chosen source and protects both paths from manual exports. This identifies the pair; it does not decrypt or load it into the weapon editor. Until online decryption is connected, use an external decryption workflow and open its decrypted export.
+- **Encrypted PS4 pair:** the main `DeadIsland2SaveGame` file and matching `.bin` are listed together. **Select encrypted pair** remembers the chosen source and protects both paths from manual exports. This identifies the pair and opens **PS4 Decrypt / Encrypt**, where an optional GarlicSaves job can be started with confirmation.
 - **Incomplete pair:** the `.bin` is missing, so selection is disabled. Copy the complete pair from the PS4.
 
 If a drive is removed, the next refresh removes its entries; opening a stale selection produces a clear refresh message. If macOS reports access denied, allow Workshop access to removable volumes in System Settings. Discovery reads metadata and short file headers; it does not edit, rename, decrypt, upload, or automatically back up encrypted USB files.
@@ -163,13 +163,30 @@ Workshop refuses to export over a file opened as an input during the session. It
 
 ## PS4 encryption and Save Wizard
 
-**Built-in PS4 container decryption/re-encryption is not implemented.** The file Workshop edits is the game data inside the PS4&#x27;s encrypted USB save container. Editing that data and preparing a container the PS4 accepts are separate tasks.
+Workshop 0.10.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
 
-No documented Save Wizard integration API was identified during this implementation. Desktop Apollo Save Patcher also requires PS4 saves to arrive already decrypted; its console-side companion provides the extraction workflow on a compatible homebrew-enabled PS4. Workshop does not bundle that console software or claim to replace Save Wizard.
+### Connect and decrypt
 
-Continue using Save Wizard for export/import in the current workflow. No Save Wizard password, license, PSN credential, or console encryption key is requested or stored by Workshop.
+1. Click **PS4 Decrypt / Encrypt…** in the header (or Help menu).
+2. Paste your GarlicSaves **worker key** and click **Test Connection**. This sends a read-only API request; no save files are uploaded. The key is kept only in memory until Workshop quits. Re-enter it next session; **Forget Key** clears it sooner. Never include it in screenshots, GitHub, or shared files. The console-worker config file is not needed.
+3. Choose an encrypted save in **USB Saves**. The matching `DeadIsland2SaveGame.bin` must be present in the same game folder. The profile/account and title are displayed for checking.
+4. Click **Decrypt Selected Pair…** and confirm sending those two files to **garlicsaves.com**. Workshop saves an original-pair ZIP and automatic snapshots locally before submission. Keep Workshop open while the job is queued/running. The app does not automatically upload any saves just because a drive is connected.
+5. When decryption succeeds and its structure is validated, click **Open Decrypted Save**. Existing staged edits require a discard confirmation before replacement.
 
-References: [Apollo desktop guide](https://bucanero.github.io/apollo-patcher/guide.html), [Apollo PS4 project](https://github.com/bucanero/apollo-ps4), [Apollo PS4 usage documentation](https://github.com/bucanero/apollo-ps4/blob/main/docs/usage.md).
+The downloaded package must include `sce_sys/param.sfo`. Workshop checks its account and title against the selected source, preserves companion files, and requires the exact supported game-data format with a byte-for-byte no-edit validation. If the returned game data is compressed or otherwise unsupported, Workshop stops and retains **Decrypted-Result.zip** for inspection; it does not claim successful editing or silently convert the data.
+
+### Re-encrypt an edited copy
+
+1. Edit the decrypted result normally. Open **PS4 Decrypt / Encrypt…** again.
+2. Click **Encrypt Edited Copy…**. Confirm the edit count, destination account, and upload to GarlicSaves. This validates the currently staged edits and submits the full package, retaining metadata and companion files. A standalone Save Wizard file opened separately is not bound to this session and cannot accidentally be encrypted into the wrong container.
+3. When complete, click **Open Result Folder**. The folder contains the raw result ZIP, the edited decrypted package, and a separate **PS4/SAVEDATA/account-ID/CUSA…** tree with the matching encrypted pair, plus **Ready-For-USB.zip**. Original USB files are never overwritten by this operation.
+4. Copy that new PS4 folder to a spare USB drive and test importing it on the PS4 before replacing your working save. In-game validation is required; syntax checks do not prove the console will accept a remote service result.
+
+### Retained files and failures
+
+Service sessions accumulate under **ServiceSessions** next to **Backups** in Workshop’s application-support folder. Each session and encryption attempt has a unique directory. These files contain private save data; they are not published to GitHub. A missing/invalid key, network outage, unavailable workers, service failure, unsafe ZIP, wrong account/title, or unsupported game-data format stops the operation with a status message. Downloaded ZIPs and submitted job IDs are retained where available. The remote service controls its queues and data retention.
+
+Workshop does not automatically retry a failed submission, which avoids creating duplicate jobs after uncertain network failures. If you quit or force-close during a job, check its status/results on GarlicSaves before resubmitting. Normal quit is blocked while the operation is in progress. Polling stops after 30 minutes; the remote job may still finish. Closing the settings dialog alone does not cancel the job.
 
 ## Updates
 
@@ -208,4 +225,4 @@ Saves are handled locally by a service listening only on 127.0.0.1 at a random s
 ## Repair older Mac update queues
 
 Versions through 0.9.0 queued downloads for the 15-minute background agent and did not launch installation on quit. Reopening could postpone installation repeatedly. Quit the app and run **Repair-Updates.command** from a newly downloaded Mac package to install the latest version immediately. Keep the app closed until the repair prints the installed version, then open the copy in Applications. If it fails, retain the Terminal output. The repair does not modify saves, backups, or profile names.
-</pre>
+</pre></body></html>

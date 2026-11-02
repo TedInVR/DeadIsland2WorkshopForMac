@@ -1,6 +1,6 @@
 {
-  "version": "0.9.1",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.9.1.zip",
-  "sha256": "758f3daf8e691ebdf2473332b57c3cfcf73c233044082a6a11cdda29fe9ddf6a",
-  "notes": "Fix queued Mac updates: install immediately on quit, verify the installed version, and retain installation status and logs."
+  "version": "0.10.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.10.0.zip",
+  "sha256": "ac322d158f10be65f83e2d584e2a5c009c48d026440ef71bdf1711655e55de7c",
+  "notes": "Add optional GarlicSaves connection preview: private session key, connection test, USB decryption and separate encrypted copies. Live PS4 round-trip testing pending."
 }

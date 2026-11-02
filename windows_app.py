@@ -50,13 +50,19 @@ class DesktopAPI:
         try:
             entry=save_browser.find_save(key);subprocess.Popen(['explorer.exe','/select,'+entry['path']]);return {'message':'Save folder opened.'}
         except (OSError,save_browser.BrowserError) as e:return {'error':str(e)}
+    def open_service_folder(self):
+        try:
+            if server.service.folder is None:raise ValueError('No service result folder yet.')
+            os.startfile(server.service.folder)
+            return {'message':'Service folder opened.'}
+        except (OSError,ValueError) as e:return {'error':str(e)}
     def open_backups(self):
         try:
             directory=backup_storage.folder();directory.mkdir(parents=True,exist_ok=True);os.startfile(directory)
             return {'message':'Backup folder opened.'}
         except OSError as e:return {'error':str(e)}
     def _closing(self):
-        if self._exporting:return False
+        if self._exporting or server.service.running:return False
         try:
             dirty=self._window.evaluate_js('typeof ammoDirty==="function" && (Object.keys(changes).length+additions.length+deletions.length+ammoDirty())')
             if dirty:return self._window.create_confirmation_dialog('Quit Workshop?','Unexported edits are kept only in memory. Quit and discard them?')
@@ -86,7 +92,7 @@ def main():
     def guide():webbrowser.open((ROOT/'User-Guide.html').as_uri())
     def updates():webbrowser.open(RELEASES)
     def about():api._window.create_confirmation_dialog('Dead Island 2 Workshop '+version(),'Windows preview. Edits decrypted PS4 saves. In-game effects of experimental edits still require testing.')
-    menus=[Menu('File',[MenuAction('Browse USB Saves…',lambda:js('openUSB()')),MenuAction('Open Decrypted Save…',lambda:js('openSave()')),MenuAction('Create Weapon…',lambda:js('openCreate()')),MenuAction('Duplicate Selected Weapon…',lambda:js('openDuplicate()')),MenuAction('Reserve Ammo…',lambda:js('openAmmo()')),MenuAction('Review & Export Copy…',lambda:js('review()')),MenuSeparator(),MenuAction('Quit',lambda:api._window.destroy())]),Menu('Help',[MenuAction('Open Backup Folder',api.open_backups),MenuAction('User Guide',guide),MenuAction('Check for Updates…',updates),MenuAction('About Workshop',about)])]
+    menus=[Menu('File',[MenuAction('Browse USB Saves…',lambda:js('openUSB()')),MenuAction('Open Decrypted Save…',lambda:js('openSave()')),MenuAction('Create Weapon…',lambda:js('openCreate()')),MenuAction('Duplicate Selected Weapon…',lambda:js('openDuplicate()')),MenuAction('Reserve Ammo…',lambda:js('openAmmo()')),MenuAction('Review & Export Copy…',lambda:js('review()')),MenuSeparator(),MenuAction('Quit',lambda:api._window.destroy())]),Menu('Help',[MenuAction('PS4 Decrypt / Encrypt…',lambda:js('openService()')),MenuAction('Open Backup Folder',api.open_backups),MenuAction('User Guide',guide),MenuAction('Check for Updates…',updates),MenuAction('About Workshop',about)])]
     window=webview.create_window('Dead Island 2 Workshop',url='http://127.0.0.1:'+str(http.server_port)+'/'+server.token+'/',js_api=api,width=1220,height=850,min_size=(900,650),background_color='#101618',menu=menus)
     api._bind(window);window.events.closing+=api._closing
     profile=Path(os.environ.get('LOCALAPPDATA',str(Path.home())))/'Dead Island 2 Workshop'/'WebView2'

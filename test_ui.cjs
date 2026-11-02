@@ -96,7 +96,7 @@ const assert=require('assert');
   w.openUSB();w.editProfileName(account);d.querySelector('#profile-name').value='Example_Player';await w.saveProfileName();
   assert([...d.querySelectorAll('#usb-list strong')].every(x=>x.textContent==='Example_Player'));
   const encrypted=w.eval('usbState.entries.find(e=>e.kind==="encrypted")');w.eval('selectedUSB='+JSON.stringify(encrypted.key));w.renderUSB();
-  await w.openSelectedUSB();assert(w.eval('selectedEncrypted.account_id')===account);assert(d.querySelector('#status').textContent.includes('decryption is still required'));
+  await w.openSelectedUSB();assert(w.eval('selectedEncrypted.account_id')===account);assert(d.querySelector('#status').textContent.includes('for GarlicSaves decryption'));
   // It is deliberately impossible to open an encrypted container as a decrypted export.
   const refused=await fetch(base+'open-found',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:encrypted.key})});assert.equal(refused.status,400);
   const plain=w.eval('usbState.entries.find(e=>e.kind==="decrypted")');w.eval('selectedUSB='+JSON.stringify(plain.key));await w.openSelectedUSB();
@@ -104,6 +104,13 @@ const assert=require('assert');
   fs.unlinkSync(path.join(game,'DeadIsland2SaveGame'));fs.unlinkSync(path.join(game,'DeadIsland2SaveGame.bin'));fs.unlinkSync(path.join(game,'export.sav'));await w.refreshUSB(true);assert.equal(w.eval('usbState.entries.length'),0);
   // Exercise the Windows bridge through the same shared page.
   let winName=null;const originalData=w.eval('data');w.pywebview={api:{open_save:async()=>({name:'windows.sav',data:originalData}),export_save:async name=>{winName=name;return {message:'Windows native export completed.'}}}};
+  // Consent and session binding are enforced on the backend, before submission.
+  const denied=await fetch(base+'service-decrypt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:encrypted.key})});assert.equal(denied.status,400);
+  const unbound=await fetch(base+'service-encrypt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({consent:true})});assert.equal(unbound.status,400);
+  // Exercise the visible connection dialog without contacting the real service.
+  const oldFetch=w.fetch;const secret='test_worker_key_00000000000000000000';let serviceCalls=[];
+  w.fetch=async (url,o={})=>{if(!url.startsWith('service-'))return oldFetch(url,o);serviceCalls.push({url,body:o.body});const v=url==='service-test'?{status:'working',has_key:true,message:'Checking…'}:{status:'done',has_key:true,has_session:false,has_folder:false,message:'Connected. No save files were sent.'};return {ok:true,json:async()=>v}};
+  await w.openService();assert(d.querySelector('#service-dialog').open);assert.equal(d.querySelector('#service-key').type,'password');d.querySelector('#service-key').value=secret;await w.serviceConnect();assert.equal(d.querySelector('#service-key').value,'');assert(!d.querySelector('#service-status').textContent.includes(secret));assert(serviceCalls.some(c=>c.url==='service-test'));assert(!w.eval('busy'));assert(d.querySelector('#service-encrypt').disabled);w.fetch=oldFetch;d.querySelector('#service-dialog').close();
   w.dispatchEvent(new w.Event('pywebviewready'));assert(d.querySelector('#platformbadge').textContent.includes('Windows'));
   await w.openSave();assert.equal(w.eval('fileName'),'windows.sav');assert.equal(w.ammoDirty(),0);
   w.review();await w.exportSave();assert.equal(winName,'windows_Edited.sav');assert.equal(d.querySelector('#status').textContent,'Windows native export completed.');

@@ -1,5 +1,13 @@
 # Version history
 
+## 0.10.0
+
+- Add an opt-in GarlicSaves API connection preview with session-only worker key and a read-only connection test.
+- Decrypt a selected USB pair after confirmation and verified local backup; preserve complete returned metadata and companions.
+- Validate original account/title and supported game-data structure before opening; retain unsupported result ZIPs for inspection.
+- Re-encrypt validated staged edits into a separate result folder for the original account. Keep original USB files untouched.
+- Live GarlicSaves output compatibility and PS4 console round-trip validation remain pending.
+
 ## 0.9.1
 
 - Fix queued Mac updates that previously depended on the 15-minute background timer. Quit & Install starts a detached helper immediately; Keep Editing installs when the user later quits.

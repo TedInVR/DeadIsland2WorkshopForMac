@@ -11,6 +11,8 @@ on:
       - 'index.html'
       - 'save_core.py'
       - 'server.py'
+      - 'garlic_service.py'
+      - 'test_garlic_service.py'
       - 'backup_storage.py'
       - 'save_browser.py'
       - 'test_save_browser.py'
@@ -33,7 +35,7 @@ jobs:
       - name: Install build dependencies
         run: python -m pip install -r requirements-windows.txt
       - name: Test desktop file operations
-        run: python -m unittest test_windows.py test_backups.py test_save_browser.py -v
+        run: python -m unittest test_windows.py test_backups.py test_save_browser.py test_garlic_service.py -v
       - name: Build Windows executable
         run: python build_windows.py
       - name: Smoke-test the bundled executable
@@ -52,7 +54,7 @@ jobs:
           $tag = "v$version"
           gh release view $tag *> $null
           if ($LASTEXITCODE -ne 0) {
-            gh release create $tag --target "$env:GITHUB_SHA" --title "Workshop $version - Mac and Windows" --notes "Windows preview built by GitHub Actions. Extract the complete Windows ZIP and run Install-Windows.cmd, or run the executable from its folder. Mac installers remain in the repository downloads folder. See README.md and USER_GUIDE.md. Save Wizard or a compatible external PS4 container workflow is still required."
+            gh release create $tag --target "$env:GITHUB_SHA" --title "Workshop $version - Mac and Windows" --notes "Windows preview built by GitHub Actions. Extract the complete Windows ZIP and run Install-Windows.cmd, or run the executable from its folder. Mac installers remain in the repository downloads folder. See README.md and USER_GUIDE.md. Includes an optional GarlicSaves API connection preview; live PS4 round-trip testing is still pending. Save Wizard remains available as an external workflow."
             if ($LASTEXITCODE -ne 0) { throw 'Could not create release.' }
           }
           $assets = @((Get-ChildItem windows-dist/*.zip).FullName) + @((Resolve-Path windows-dist/WINDOWS-SHA256SUMS.txt).Path)
