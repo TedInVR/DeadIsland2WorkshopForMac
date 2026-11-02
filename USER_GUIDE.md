@@ -1,6 +1,14 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.11.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+## First use, credits and risks
+
+On first launch, read the Experimental Use Agreement, check the acknowledgment box and choose **I Agree & Continue**, or quit. Workshop stores only an acceptance flag, agreement version/hash and time locally; there is no registration or central user list. Ordinary updates remember acceptance. **Help → Usage Agreement & Risks** reopens the notice; **Help → Credits & Licenses** opens named credits, reference links and license boundaries.
+
+Workshop is a free, independent experimental hobby project maintained by TedInVR with OpenAI ChatGPT/Codex assistance. Modified gameplay must remain offline. Users must follow applicable laws and platform, game and service terms. The notice explains save corruption, account/console bans, penalties and legal-action risks and limits warranties/liability only to the extent permitted by law. It cannot bind Sony or publishers, remove non-waivable rights, authorize prohibited activity or guarantee legal protection. Free/offline use is not itself legal clearance.
+
+With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
+
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.12.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -193,7 +201,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.11.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
+Workshop 0.12.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 

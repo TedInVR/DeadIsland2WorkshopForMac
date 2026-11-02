@@ -6,6 +6,7 @@ from save_core import Save,FormatError
 from urllib.parse import unquote
 import backup_storage
 import save_browser
+import legal_state
 import garlic_service
 import ps4_backups
 usb_busy=False
@@ -36,6 +37,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         p=self.endpoint()
         if p=='':self.reply(200,(ROOT/'index.html').read_bytes(),'text/html; charset=utf-8')
+        elif p=='legal-status':self.reply(200,legal_state.status())
+        elif p=='credits':self.reply(200,{'text':(ROOT/'CREDITS.md').read_text(encoding='utf-8')+'\n\n'+(ROOT/'THIRD_PARTY_NOTICES.md').read_text(encoding='utf-8')})
+        elif not legal_state.is_accepted():self.reply(403,{'error':'Read and acknowledge the first-use agreement first.'})
         elif p=='saves':
             try:self.reply(200,save_browser.scan())
             except Exception as e:self.reply(400,{'error':str(e)})
@@ -52,13 +56,15 @@ class Handler(BaseHTTPRequestHandler):
         origin=self.headers.get('Origin')
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
-        if p not in ('open','prepare','profile-name','import-profiles','open-found','select-found','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
+        if p!='legal-accept' and not legal_state.is_accepted():return self.reply(403,{'error':'Read and acknowledge the first-use agreement first.'})
+        if p not in ('legal-accept','open','prepare','profile-name','import-profiles','open-found','select-found','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
             raw=self.rfile.read(n)
             if len(raw)!=n:raise ValueError('Upload was interrupted')
-            if p in ('named-backup','restore-backup','open-backup'):
+            if p=='legal-accept':self.reply(200,legal_state.accept(json.loads(raw)))
+            elif p in ('named-backup','restore-backup','open-backup'):
                 value=json.loads(raw)
                 if p=='named-backup':self.reply(200,ps4_backups.capture(save_browser.find_save(value.get('key')),value.get('name')))
                 else:

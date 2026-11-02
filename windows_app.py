@@ -5,6 +5,7 @@ import server
 from save_core import Save
 import backup_storage
 import save_browser
+import legal_state
 import subprocess
 
 ROOT=Path(__file__).resolve().parent
@@ -20,6 +21,7 @@ class DesktopAPI:
     def _bind(self,window):self._window=window
     def open_save(self):
         try:
+            legal_state.require()
             paths=self._window.create_file_dialog(self._webview.FileDialog.OPEN,allow_multiple=False,file_types=('Save files (*.sav;*.dat)','All files (*.*)'))
             if not paths:return None
             path=Path(paths[0] if isinstance(paths,(list,tuple)) else paths)
@@ -32,6 +34,7 @@ class DesktopAPI:
         if self._exporting:return {'error':'An export is already in progress.'}
         self._exporting=True
         try:
+            legal_state.require()
             if server.app.output is None:raise ValueError('Validate the edited save before exporting.')
             # The page supplies a suggested basename only; all paths come from the native dialog.
             name=Path(str(name).replace('\\','/')).name
@@ -50,6 +53,11 @@ class DesktopAPI:
         try:
             entry=save_browser.find_save(key);subprocess.Popen(['explorer.exe','/select,'+entry['path']]);return {'message':'Save folder opened.'}
         except (OSError,save_browser.BrowserError) as e:return {'error':str(e)}
+    def quit_without_agreement(self):
+        self._window.destroy()
+    def open_credits(self):
+        webbrowser.open((ROOT/'Credits.html').as_uri())
+        return {'message':'Credits and licenses opened.'}
     def open_named_backups(self):
         try:
             import ps4_backups
@@ -80,6 +88,9 @@ def self_test():
     assert len(server.ROOT.joinpath('catalog.json').read_bytes())>1000
     assert '<html' in server.ROOT.joinpath('index.html').read_text(encoding='utf-8')
     assert version()
+    for name in ("USAGE_TERMS.md","CREDITS.md","Credits.html","THIRD_PARTY_NOTICES.md","LICENSING_REVIEW.md"):
+        assert ROOT.joinpath(name).is_file(),name
+    assert legal_state.digest()
     result=json.dumps({'status':'ok','version':version(),'catalog_weapons':len(__import__('save_core').CATALOG['weapons'])})
     if '--self-test' in sys.argv and len(sys.argv)>sys.argv.index('--self-test')+1:Path(sys.argv[sys.argv.index('--self-test')+1]).write_text(result)
     elif sys.stdout is not None:print(result)
@@ -97,8 +108,8 @@ def main():
     def js(code):api._window.evaluate_js(code)
     def guide():webbrowser.open((ROOT/'User-Guide.html').as_uri())
     def updates():webbrowser.open(RELEASES)
-    def about():api._window.create_confirmation_dialog('Dead Island 2 Workshop '+version(),'Windows preview. Edits decrypted PS4 saves. In-game effects of experimental edits still require testing.')
-    menus=[Menu('File',[MenuAction('Browse USB Saves…',lambda:js('openUSB()')),MenuAction('Open Decrypted Save…',lambda:js('openSave()')),MenuAction('Create Weapon…',lambda:js('openCreate()')),MenuAction('Duplicate Selected Weapon…',lambda:js('openDuplicate()')),MenuAction('Reserve Ammo…',lambda:js('openAmmo()')),MenuAction('Review & Export Copy…',lambda:js('review()')),MenuSeparator(),MenuAction('Quit',lambda:api._window.destroy())]),Menu('Help',[MenuAction('PS4 Decrypt / Encrypt…',lambda:js('openService()')),MenuAction('Open Backup Folder',api.open_backups),MenuAction('User Guide',guide),MenuAction('Check for Updates…',updates),MenuAction('About Workshop',about)])]
+    def about():api._window.create_confirmation_dialog('Dead Island 2 Workshop '+version(),'Free experimental hobby project, maintained by TedInVR. No purchase or subscription. Independent and unaffiliated with Sony/PlayStation or PLAION/Deep Silver/Dambuster. With appreciation to the creators and community. See Help > Credits & Licenses and Usage Agreement & Risks. Third-party licenses and permissions remain separate.')
+    menus=[Menu('File',[MenuAction('Browse USB Saves…',lambda:js('openUSB()')),MenuAction('Open Decrypted Save…',lambda:js('openSave()')),MenuAction('Create Weapon…',lambda:js('openCreate()')),MenuAction('Duplicate Selected Weapon…',lambda:js('openDuplicate()')),MenuAction('Reserve Ammo…',lambda:js('openAmmo()')),MenuAction('Review & Export Copy…',lambda:js('review()')),MenuSeparator(),MenuAction('Quit',lambda:api._window.destroy())]),Menu('Help',[MenuAction('Usage Agreement & Risks',lambda:js('showUsageTerms()')),MenuAction('Credits & Licenses',api.open_credits),MenuAction('PS4 Decrypt / Encrypt…',lambda:js('openService()')),MenuAction('Open Backup Folder',api.open_backups),MenuAction('User Guide',guide),MenuAction('Check for Updates…',updates),MenuAction('About Workshop',about)])]
     window=webview.create_window('Dead Island 2 Workshop',url='http://127.0.0.1:'+str(http.server_port)+'/'+server.token+'/',js_api=api,width=1220,height=850,min_size=(900,650),background_color='#101618',menu=menus)
     api._bind(window);window.events.closing+=api._closing
     profile=Path(os.environ.get('LOCALAPPDATA',str(Path.home())))/'Dead Island 2 Workshop'/'WebView2'

@@ -1,5 +1,13 @@
 # Dead Island 2 Workshop — Mac and Windows
 
+## First use, credits and risks
+
+On first launch, read the Experimental Use Agreement, check the acknowledgment box and choose **I Agree & Continue**, or quit. Workshop stores only an acceptance flag, agreement version/hash and time locally; there is no registration or central user list. Ordinary updates remember acceptance. **Help → Usage Agreement & Risks** reopens the notice; **Help → Credits & Licenses** opens named credits, reference links and license boundaries.
+
+Workshop is a free, independent experimental hobby project maintained by TedInVR with OpenAI ChatGPT/Codex assistance. Modified gameplay must remain offline. Users must follow applicable laws and platform, game and service terms. The notice explains save corruption, account/console bans, penalties and legal-action risks and limits warranties/liability only to the extent permitted by law. It cannot bind Sony or publishers, remove non-waivable rights, authorize prohibited activity or guarantee legal protection. Free/offline use is not itself legal clearance.
+
+With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
+
 A **Dead Island 2 save editor** for characters, cash, materials, consumables and weapons, plus named backups and optional GarlicSaves tools for PS4 save containers from other games.
 
 [Windows download](https://github.com/TedInVR/DeadIsland2WorkshopForMac/releases/latest/download/Dead-Island-2-Workshop-Windows-Latest.zip) · [Windows guide](README-WINDOWS.md) · [Download the latest Mac installer](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true) · [User guide](USER_GUIDE.md) · [Version history](CHANGELOG.md)
@@ -47,7 +55,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.11.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.12.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

@@ -15,7 +15,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.11.0"
+    let version = "0.12.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -62,6 +62,8 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         edit.addItem(withTitle:"Paste", action:#selector(NSText.paste(_:)), keyEquivalent:"v")
         edit.addItem(withTitle:"Select All", action:#selector(NSText.selectAll(_:)), keyEquivalent:"a")
         let helpItem=NSMenuItem();bar.addItem(helpItem);let help=NSMenu(title:"Help");helpItem.submenu=help
+        help.addItem(withTitle:"Usage Agreement & Risks", action:#selector(usageTerms), keyEquivalent:"").target=self
+        help.addItem(withTitle:"Credits & Licenses", action:#selector(credits), keyEquivalent:"").target=self
         help.addItem(withTitle:"Open Backup Folder", action:#selector(openBackups), keyEquivalent:"").target=self
         help.addItem(withTitle:"User Guide", action:#selector(userGuide), keyEquivalent:"").target=self
         help.addItem(withTitle:"Using Workshop", action:#selector(helpText), keyEquivalent:"").target=self
@@ -72,7 +74,12 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         let auto=help.addItem(withTitle:"Automatic Updates", action:#selector(toggleAutomaticUpdates), keyEquivalent:"");auto.target=self;auto.state=automaticUpdatesEnabled() ? .on : .off;autoUpdateItem=auto
         help.addItem(withTitle:"PS4 Decrypt / Encrypt…", action:#selector(encryptionInfo), keyEquivalent:"").target=self
     }
-    @objc func about(){alert("Dead Island 2 Workshop \(version)","Dead Island 2 character, resource and weapon editor with general PS4 save tools. No affiliation with the game developer, Save Wizard, or SteffenL. Save format checks passed against your supplied file; PS4 in-game validation is still required.")}
+    @objc func about(){
+        let a=NSAlert();a.messageText="Dead Island 2 Workshop \(version)";a.informativeText="Free experimental hobby project, maintained by TedInVR. No purchase or subscription.\n\nIndependent and unaffiliated with Sony/PlayStation or PLAION/Deep Silver/Dambuster. With appreciation to the platform, game creators and community contributors.\n\nSee Credits & Licenses for actual dependencies, reference projects and unresolved permission questions. The usage notice does not guarantee legal protection."
+        a.addButton(withTitle:"Close");a.addButton(withTitle:"Credits & Licenses");if a.runModal() == .alertSecondButtonReturn{credits()}
+    }
+    @objc func credits(){if let url=Bundle.main.url(forResource:"Credits",withExtension:"html"){NSWorkspace.shared.open(url)}}
+    @objc func usageTerms(){web.evaluateJavaScript("window.showUsageTerms()",completionHandler:nil)}
     @objc func helpText(){alert("Using Workshop", "1. Open a copy of your decrypted PS4 export.\n2. Select a locker or carried inventory and a weapon.\n3. Adjust level, rarity, or perks. Copy/Paste Perk Set transfers upgrades between weapons.\n4. Review & Export creates a separate edited file.\n5. Import that file in Save Wizard on your PC, apply it, then test on PS4.\n\nKeep your original backup. Create Weapon adds a new catalog weapon to the selected character or shared locker. Replace Weapon switches an existing weapon to a catalog model in the same slot. Delete Weapon marks it for removal; Undo Delete restores it before export. Duplicate Weapon copies complete saved weapon state with fresh IDs. Slots after export shows capacity by location. Apply / Remove beside a perk opens scoped batch editing. Reserve Ammo edits existing reserve stacks, not loaded magazines. Melee durability is experimental. Separate combat-class overrides are not included. Profiles show actual slayer names and Regular/New Game Plus. The weapon and perk catalog combines published game identifiers with your opened save.")}
     @objc func shortcuts(){alert("Keyboard Shortcuts", "Command–O: Open save\nCommand–N: Create weapon\nCommand–S: Review and export\nCommand–W: Close window and quit\nCommand–Q: Quit\nCommand–C / V / X / A: Text editing\n\nKeyboard shortcuts are fixed in this preview.")}
     func automaticUpdatesEnabled() -> Bool {
@@ -231,6 +238,8 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     func webView(_ webView:WKWebView,runJavaScriptConfirmPanelWithMessage message:String,initiatedByFrame frame:WKFrameInfo,completionHandler:@escaping (Bool)->Void){let a=NSAlert();a.messageText=message;a.addButton(withTitle:"Continue");a.addButton(withTitle:"Cancel");completionHandler(a.runModal() == .alertFirstButtonReturn)}
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage){
         guard let body=message.body as? [String:Any] else{return}
+        if body["action"] as? String == "declineAgreement"{allowTermination=true;NSApp.terminate(nil);return}
+        if body["action"] as? String == "credits"{credits();return}
         if body["action"] as? String == "rememberSource",let path=body["path"] as? String {sourcePaths.insert(URL(fileURLWithPath:path).resolvingSymlinksInPath().standardizedFileURL.path);return}
         if body["action"] as? String == "revealSource",let path=body["path"] as? String {NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath:path)]);return}
         if ["serviceFolder","backupFolder"].contains(body["action"] as? String ?? ""),let base=base{

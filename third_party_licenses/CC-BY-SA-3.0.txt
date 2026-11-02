@@ -1,0 +1,8 @@
+Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+
+Official full legal code: https://creativecommons.org/licenses/by-sa/3.0/legalcode.en
+License summary: https://creativecommons.org/licenses/by-sa/3.0/
+
+This file supplies the official license URI; it is not a replacement or abridgment of the legal code. Refer to the full legal code for its conditions.
+
+Applicable Workshop material: wiki-derived perk-effect prose and Workshop's shortened/paraphrased adaptations of that prose, subject to page-specific exceptions. Original contributors/source URLs and the changes made are identified in CREDITS.md and catalog.json. This notice does not purport to license game assets, unclear-license table compilations, or the independently written application under Creative Commons.

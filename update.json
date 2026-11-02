@@ -1,6 +1,6 @@
 {
-  "version": "0.11.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.11.0.zip",
-  "sha256": "a48e4567b5a7a423a707f73106b7ce95e492b93236b62aa8b1ead7e42ee4039e",
-  "notes": "Named backups and guarded restore; general PS4 package tools and profile resigning; DI2 character levels, capped cash and resource fills. Live service/console testing pending."
+  "version": "0.12.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.12.0.zip",
+  "sha256": "88c31445bd0e95521daf8c31ff345498f17d27b62e5ab0b4bb04e2ebb55c40ab",
+  "notes": "First-use agreement with local acknowledgment; expanded credits, source attribution and dependency notices. No legal clearance or ban protection is promised."
 }

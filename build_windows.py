@@ -2,12 +2,13 @@
 import hashlib,json,os,shutil,subprocess,sys,zipfile
 from pathlib import Path
 from windows_app import version
+import license_bundle
 ROOT=Path(__file__).resolve().parent
 
 def main():
     if sys.platform!='win32':raise SystemExit('Build the Windows executable on Windows, using the GitHub Actions workflow.')
     os.chdir(ROOT);v=version();output=ROOT/'windows-dist';output.mkdir(exist_ok=True)
-    resources=['resource_catalog.json','index.html','catalog.json','Info.plist','User-Guide.html','USER_GUIDE.md','README-WINDOWS.md','THIRD_PARTY_NOTICES.md']
+    resources=['USAGE_TERMS.md','CREDITS.md','Credits.html','LICENSING_REVIEW.md','resource_catalog.json','index.html','catalog.json','Info.plist','User-Guide.html','USER_GUIDE.md','README-WINDOWS.md','THIRD_PARTY_NOTICES.md']
     command=[sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onedir','--windowed','--name','Dead Island 2 Workshop','--icon','Workshop.icns','--copy-metadata','pywebview','--copy-metadata','pythonnet','--exclude-module','tkinter']
     for name in resources:command+=['--add-data',name+':.']
     command+=['windows_app.py'];subprocess.run(command,check=True)
@@ -18,6 +19,8 @@ def main():
         if license.is_file():shutil.copyfile(license,folder/'PYTHON-LICENSE.txt');break
     shutil.copyfile(ROOT/'THIRD_PARTY_NOTICES.md',folder/'THIRD_PARTY_NOTICES.md')
     shutil.copyfile(ROOT/'README-WINDOWS.md',folder/'README-WINDOWS.md')
+    for n in ('USAGE_TERMS.md','CREDITS.md','Credits.html','LICENSING_REVIEW.md'):shutil.copyfile(ROOT/n,folder/n)
+    packages=license_bundle.collect(folder);license_bundle.finish(folder,packages)
     name='Dead-Island-2-Workshop-Windows-'+v;archive=output/(name+'.zip')
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
         for p in folder.rglob('*'):

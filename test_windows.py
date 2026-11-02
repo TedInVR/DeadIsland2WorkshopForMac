@@ -12,8 +12,8 @@ class FakeWindow:
 
 class DesktopTests(unittest.TestCase):
     def setUp(self):
-        self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name);self.backup_patch=patch.object(backup_storage,'folder',return_value=self.root/'Backups');self.backup_patch.start();self.api=w.DesktopAPI(FakeView);w.server.app.output=b'validated edited bytes'
-    def tearDown(self):self.backup_patch.stop();self.temp.cleanup();w.server.app.output=None
+        self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name);self.backup_patch=patch.object(backup_storage,'folder',return_value=self.root/'Backups');self.backup_patch.start();self.agreement_patch=patch.object(w.legal_state,'require');self.agreement_patch.start();self.api=w.DesktopAPI(FakeView);w.server.app.output=b'validated edited bytes'
+    def tearDown(self):self.agreement_patch.stop();self.backup_patch.stop();self.temp.cleanup();w.server.app.output=None
     def test_original_cannot_be_overwritten(self):
         p=self.root/'original.sav';p.write_bytes(b'original');self.api._sources.add(str(p.resolve()).casefold());self.api._bind(FakeWindow(p))
         self.assertIn('error',self.api.export_save('edited.sav'));self.assertEqual(p.read_bytes(),b'original')

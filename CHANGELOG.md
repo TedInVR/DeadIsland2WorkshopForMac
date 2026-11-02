@@ -1,3 +1,11 @@
+# Version 0.12.0 — 2 November 2026
+
+- First-use agreement with unchecked acknowledgment and explicit accept/quit choices; local acceptance survives ordinary updates without registration.
+- Editing and service requests remain locked until acknowledgment; Help reopens the agreement and credits.
+- Expanded named credits, per-page wiki attribution/license boundaries, gratitude/non-affiliation notices, guide and README coverage.
+- Mac packages retain notice files; Windows packages include available dependency licenses and distribution inventories.
+- Limited provenance review records no identified bundled Sony SDK/firmware/console keys and the unresolved catalog-table redistribution permission. No legal clearance or ban protection is asserted.
+
 # Version history
 
 ## 0.11.0

@@ -1,5 +1,13 @@
 # Dead Island 2 Workshop — Windows preview
 
+## First use, credits and risks
+
+On first launch, read the Experimental Use Agreement, check the acknowledgment box and choose **I Agree & Continue**, or quit. Workshop stores only an acceptance flag, agreement version/hash and time locally; there is no registration or central user list. Ordinary updates remember acceptance. **Help → Usage Agreement & Risks** reopens the notice; **Help → Credits & Licenses** opens named credits, reference links and license boundaries.
+
+Workshop is a free, independent experimental hobby project maintained by TedInVR with OpenAI ChatGPT/Codex assistance. Modified gameplay must remain offline. Users must follow applicable laws and platform, game and service terms. The notice explains save corruption, account/console bans, penalties and legal-action risks and limits warranties/liability only to the extent permitted by law. It cannot bind Sony or publishers, remove non-waivable rights, authorize prohibited activity or guarantee legal protection. Free/offline use is not itself legal clearance.
+
+With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
+
 Windows 10/11 x64. Uses the same save reader, editor, catalog, duplication, batch-perk tools, durability/reserve-ammo controls, and silhouette UI as the Mac app. Works with **decrypted PS4 game-data saves**; this is not a PC-game-save converter.
 
 ## Download and install
@@ -43,4 +51,4 @@ The `Build Windows app` GitHub Actions workflow performs the build, smoke-tests 
 
 Click **PS4 Decrypt / Encrypt** to enter and securely save a worker key on this computer and test the connection. Decrypt a selected USB pair only after confirming upload to GarlicSaves. The app backs up the originals, preserves returned metadata, and can submit validated edits for encryption back to the source account. Results go into a separate PS4 folder. Live service output compatibility and PS4 import still need testing. See the shared User Guide for setup and limitations.
 
-0.11.0 adds named PS4 backups/restore, all-game CUSA discovery, profile-to-profile and batch resigning, and DI2 Character & Resources. See USER_GUIDE.md for limits and destination backup behavior.
+0.12.0 adds named PS4 backups/restore, all-game CUSA discovery, profile-to-profile and batch resigning, and DI2 Character & Resources. See USER_GUIDE.md for limits and destination backup behavior.

@@ -1,15 +1,19 @@
-# Third-party notices
+# Third-party notices and license boundaries
 
-Workshop's save reader, editor, Mac shell, installer, and updater are independent implementations. No third-party editor executable is bundled.
+See CREDITS.md / Credits.html for named acknowledgments, original source pages, modifications and license links. USAGE_TERMS.md does not override separately licensed third-party material.
 
-`catalog.json` contains factual game item names and internal asset identifiers obtained from the game-data tables published by Steffen André Langnes (SteffenL), as made available in the `data/inventory` directory of [Fristet/Dead-Island-2-Save-Editor-GUI](https://github.com/Fristet/Dead-Island-2-Save-Editor-GUI), version 0.10.0. It contains selected factual fields rather than that project's GUI code. Additional identifiers are read locally from the user's opened save.
+## Independently implemented code; limited provenance review
 
-The catalog is not guaranteed to cover every game version or DLC release. Game names, trademarks, and asset identifiers belong to their respective owners. Workshop is not affiliated with the game publisher, Save Wizard, SteffenL, or Fristet.
+Workshop's parser/editor, desktop shells, updater and GarlicSaves HTTP client are independently implemented. No third-party editor executable is bundled. Static source/dependency and archive-name checks found no Sony SDK code, firmware, console executable or console-key database in the app. This is not a forensic certification or a warranty of legal clearance. User-provided saves/credentials are not distributed in the app.
 
-No broad license grant for third-party game data is asserted. This repository currently has no project-wide open-source license chosen by its owner; repository visibility and source access alone are not a license grant.
+## Data and documentation
 
-Perk effect summaries are short paraphrases of in-game descriptions transcribed at the [Dead Island Wiki](https://deadisland.fandom.com/wiki/Perks), with per-entry source URLs in `catalog.json`. Mod-family summaries describe standard elemental or physical effects. Entries whose effects are inferred from internal asset names, and entries with no verified effect, are labeled accordingly. No numerical bonuses or stacking guarantees are asserted.
+Selected factual catalog fields were obtained from Steffen André Langnes' game-data tables as hosted in Fristet/Dead-Island-2-Save-Editor-GUI (0.10.0). Additional identifiers may be read locally from opened saves. **A redistribution license for the hosted tables has not been verified.** Credit is not a substitute for permission or a blanket grant of rights in game data, compilations or databases. No third-party editor GUI implementation was copied into Workshop.
 
-The weapon silhouettes in `index.html` are original schematic SVG illustrations created for Workshop. They represent weapon families and are not extracted game artwork. Type labels are derived from game model names/identifiers and intentionally fall back to an unverified type where no specific family is established.
+Perk-effect prose was shortened/paraphrased from Dead Island Wiki contributors' pages, with original per-entry URLs retained in catalog.json and CREDITS.md. Wiki-derived prose and Workshop's adaptations of that prose are distributed under CC BY-SA 3.0 Unported, subject to any page-specific exceptions; see third_party_licenses/CC-BY-SA-3.0.txt and https://creativecommons.org/licenses/by-sa/3.0/. This does not assert that underlying game assets or the entire catalog/software are covered by that license. Numerical XP references are credited separately. Silhouettes and the Workshop icon are original schematic artwork; no game artwork is extracted or bundled.
 
-The Windows desktop shell uses [pywebview](https://github.com/r0x0r/pywebview) (BSD-3-Clause), pythonnet and its dependencies, and the Python runtime. The Windows executable is built with PyInstaller under its redistribution exception. Dependency package metadata and the Python license accompany the packaged build. Microsoft Edge WebView2 Runtime is a separately installed Microsoft component. The Windows icon is converted from the same original Workshop icon used on Mac.
+## Software dependencies
+
+Mac builds use a separately installed Python runtime and Apple's OS frameworks. Windows builds distribute Python, pywebview (BSD-3-Clause), pythonnet and related packages, the PyInstaller bootloader under its redistribution exception, and applicable Microsoft components. THIRD_PARTY_LICENSES in each Windows release retains available installed-package license/notice files and metadata, plus runtime-specific notices and Microsoft WebView2 terms. Its inventory distinguishes the build environment from the final file list. WebView2 Runtime is a separately installed Microsoft product. Third-party licenses and copyright notices remain in force.
+
+The project has not adopted a project-wide open-source license. Public source visibility is not a license grant, and the experimental-use acknowledgment does not create rights in third-party materials. No affiliation, sponsorship, permission or endorsement is implied by crediting Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the save-tooling community, GarlicSaves, Apple, Microsoft or any dependency author.
