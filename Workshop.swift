@@ -13,7 +13,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.8.0"
+    let version = "0.9.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -42,6 +42,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         app.addItem(NSMenuItem.separator())
         app.addItem(withTitle:"Quit Dead Island 2 Workshop", action:#selector(quitApp), keyEquivalent:"q").target=self
         let fileItem=NSMenuItem();bar.addItem(fileItem);let file=NSMenu(title:"File");fileItem.submenu=file
+        file.addItem(withTitle:"Browse USB Saves…", action:#selector(browseUSB), keyEquivalent:"").target=self
         file.addItem(withTitle:"Open Decrypted Save…", action:#selector(openFile), keyEquivalent:"o").target=self
         file.addItem(withTitle:"Review & Export Copy…", action:#selector(exportFile), keyEquivalent:"s").target=self
         file.addItem(withTitle:"Create Weapon…", action:#selector(createWeapon), keyEquivalent:"n").target=self
@@ -116,6 +117,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
             }
         }
     }
+    @objc func browseUSB(){web.evaluateJavaScript("window.openUSB()",completionHandler:nil)}
     @objc func openFile(){web.evaluateJavaScript("window.openSave()",completionHandler:nil)}
     @objc func createWeapon(){web.evaluateJavaScript("window.createWeapon()",completionHandler:nil)}
     @objc func exportFile(){web.evaluateJavaScript("window.reviewSave()",completionHandler:nil)}
@@ -165,12 +167,15 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         }catch{alert("Workshop could not start",error.localizedDescription)}
     }
     func webView(_ webView:WKWebView,runOpenPanelWith parameters:WKOpenPanelParameters,initiatedByFrame frame:WKFrameInfo,completionHandler:@escaping ([URL]?)->Void){
-        let p=NSOpenPanel();p.canChooseDirectories=false;p.canChooseFiles=true;p.allowsMultipleSelection=false;p.message="Choose your decrypted PS4 save exported from Save Wizard."
+        let p=NSOpenPanel();p.canChooseDirectories=false;p.canChooseFiles=true;p.allowsMultipleSelection=false;p.message="Choose the save export or profile-name JSON file requested by Workshop."
         p.beginSheetModal(for:window){r in if r == .OK, let url=p.url {self.sourcePaths.insert(url.resolvingSymlinksInPath().standardizedFileURL.path)};completionHandler(r == .OK ? p.urls:nil)}
     }
     func webView(_ webView:WKWebView,runJavaScriptConfirmPanelWithMessage message:String,initiatedByFrame frame:WKFrameInfo,completionHandler:@escaping (Bool)->Void){let a=NSAlert();a.messageText=message;a.addButton(withTitle:"Continue");a.addButton(withTitle:"Cancel");completionHandler(a.runModal() == .alertFirstButtonReturn)}
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage){
-        guard let body=message.body as? [String:Any], body["action"] as? String == "export",let base=base,!exporting else{return}
+        guard let body=message.body as? [String:Any] else{return}
+        if body["action"] as? String == "rememberSource",let path=body["path"] as? String {sourcePaths.insert(URL(fileURLWithPath:path).resolvingSymlinksInPath().standardizedFileURL.path);return}
+        if body["action"] as? String == "revealSource",let path=body["path"] as? String {NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath:path)]);return}
+        guard body["action"] as? String == "export",let base=base,!exporting else{return}
         let panel=NSSavePanel();panel.nameFieldStringValue=body["name"] as? String ?? "ue4savegame.ps4_Edited.sav";panel.message="Save a separate edited copy. Keep your original save backup.";panel.canCreateDirectories=true
         panel.beginSheetModal(for:window){r in
             guard r == .OK,let target=panel.url else{self.finish("Export canceled. Edits are still staged.");return}

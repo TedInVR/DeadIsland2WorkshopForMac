@@ -1,6 +1,6 @@
 {
-  "version": "0.8.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.8.0.zip",
-  "sha256": "44e9729c009041f0430626d7d778e683abf12ad6d984893009d9f72e6edcc518",
-  "notes": "Automatic dated backups on save opening and validated export; protected backup folder on Mac and Windows."
+  "version": "0.9.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.9.0.zip",
+  "sha256": "2ee8c0976a0e6c753022710164600b557406c4977d3cb6d59884ee66ac3ba7e2",
+  "notes": "Automatic USB save discovery, local profile display names, private profile-name imports, and direct opening of decrypted exports."
 }

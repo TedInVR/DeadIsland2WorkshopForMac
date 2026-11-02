@@ -1,4 +1,4 @@
-DEAD ISLAND 2 WORKSHOP FOR MAC 0.8.0
+DEAD ISLAND 2 WORKSHOP FOR MAC 0.9.0
 
 Quit Workshop, extract this package, and double-click Install.command.
 It updates /Applications/Dead Island 2 Workshop.app and opens the same app.

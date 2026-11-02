@@ -12,6 +12,8 @@ on:
       - 'save_core.py'
       - 'server.py'
       - 'backup_storage.py'
+      - 'save_browser.py'
+      - 'test_save_browser.py'
       - 'test_backups.py'
       - 'catalog.json'
       - 'Info.plist'
@@ -31,7 +33,7 @@ jobs:
       - name: Install build dependencies
         run: python -m pip install -r requirements-windows.txt
       - name: Test desktop file operations
-        run: python -m unittest test_windows.py test_backups.py -v
+        run: python -m unittest test_windows.py test_backups.py test_save_browser.py -v
       - name: Build Windows executable
         run: python build_windows.py
       - name: Smoke-test the bundled executable

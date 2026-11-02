@@ -1,5 +1,13 @@
 # Version history
 
+## 0.9.0
+
+- Add automatic, read-only discovery of PS4 Dead Island 2 saves on mounted Mac volumes and Windows removable/fixed drive roots. Check only PS4/SAVEDATA/account-ID/known-title-ID folders, and refresh every 10 seconds while the app is visible.
+- Add USB Saves browser with account labels/IDs, drive, title, filename, size, modified date, and encrypted/decrypted/incomplete status. Rescan on demand and reveal the selected file in Finder/Explorer.
+- Open supported decrypted exports directly from the list with automatic backups and source-file overwrite protection. Encrypted pairs can be selected and identified but still require a separate decryption workflow; missing .bin files are marked incomplete.
+- Add local profile-name editing and JSON import. Labels persist across updates without renaming PS4 folders or publishing personal mappings in the repository.
+- Add USB discovery, persistence, no-write, unplug, symlink, invalid-import, and shared UI integration checks.
+
 ## 0.8.0
 
 - Automatically create a full-file backup after successful validation on every save open and before making each validated export available. Both desktop shells use the shared open/backup logic.

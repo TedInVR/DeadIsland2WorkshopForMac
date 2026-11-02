@@ -3,7 +3,11 @@ const fs=require('fs'), cp=require('child_process'),os=require('os'),path=requir
 const assert=require('assert');
 (async()=>{
  const ready=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'di2-ui-')),'ready');
- const proc=cp.spawn('python',[path.join(__dirname,'server.py'),'--ready',ready],{env:{...process.env,DI2_WORKSHOP_BACKUP_DIR:path.join(path.dirname(ready),'backups')}});
+ const usbRoot=path.join(path.dirname(ready),'USB'),account='0000000000000001',game=path.join(usbRoot,'PS4','SAVEDATA',account,'CUSA01014');fs.mkdirSync(game,{recursive:true});
+ fs.writeFileSync(path.join(game,'DeadIsland2SaveGame'),'encrypted example');fs.writeFileSync(path.join(game,'DeadIsland2SaveGame.bin'),'bin example');
+ fs.copyFileSync(process.env.DI2_TEST_SAVE||'../upload/ue4savegame.ps4.sav',path.join(game,'export.sav'));
+ const proc=cp.spawn('python',[path.join(__dirname,'server.py'),'--ready',ready],{env:{...process.env,DI2_WORKSHOP_BACKUP_DIR:path.join(path.dirname(ready),'backups'),DI2_WORKSHOP_SCAN_ROOTS:JSON.stringify([usbRoot])}});
+
  try{
   for(let i=0;i<100&&!fs.existsSync(ready);i++)await new Promise(r=>setTimeout(r,40));
   const base=fs.readFileSync(ready,'utf8');const source=fs.readFileSync(process.env.DI2_TEST_SAVE||'../upload/ue4savegame.ps4.sav');
@@ -87,12 +91,23 @@ const assert=require('assert');
   w.openAmmo();const input=d.querySelector('#ammolist input');assert(input);input.value=9999;input.onchange();assert.equal(w.ammoDirty(),1);
   w.review();assert(d.querySelector('#reviewitems').textContent.includes('DUPLICATE:'));assert(d.querySelector('#reviewitems').textContent.includes('RESERVE AMMO:'));
   await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
+  // The USB list locates exports and encrypted pairs, and names survive rescans.
+  await w.refreshUSB(true);assert.equal(w.eval('usbState.entries.length'),2);
+  w.openUSB();w.editProfileName(account);d.querySelector('#profile-name').value='Example_Player';await w.saveProfileName();
+  assert([...d.querySelectorAll('#usb-list strong')].every(x=>x.textContent==='Example_Player'));
+  const encrypted=w.eval('usbState.entries.find(e=>e.kind==="encrypted")');w.eval('selectedUSB='+JSON.stringify(encrypted.key));w.renderUSB();
+  await w.openSelectedUSB();assert(w.eval('selectedEncrypted.account_id')===account);assert(d.querySelector('#status').textContent.includes('decryption is still required'));
+  // It is deliberately impossible to open an encrypted container as a decrypted export.
+  const refused=await fetch(base+'open-found',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:encrypted.key})});assert.equal(refused.status,400);
+  const plain=w.eval('usbState.entries.find(e=>e.kind==="decrypted")');w.eval('selectedUSB='+JSON.stringify(plain.key));await w.openSelectedUSB();
+  assert.equal(w.eval('fileName'),'export.sav');assert.equal(w.eval('data.source_path'),plain.path);assert(fs.readFileSync(w.eval('data.backup.path')).equals(source));
+  fs.unlinkSync(path.join(game,'DeadIsland2SaveGame'));fs.unlinkSync(path.join(game,'DeadIsland2SaveGame.bin'));fs.unlinkSync(path.join(game,'export.sav'));await w.refreshUSB(true);assert.equal(w.eval('usbState.entries.length'),0);
   // Exercise the Windows bridge through the same shared page.
   let winName=null;const originalData=w.eval('data');w.pywebview={api:{open_save:async()=>({name:'windows.sav',data:originalData}),export_save:async name=>{winName=name;return {message:'Windows native export completed.'}}}};
   w.dispatchEvent(new w.Event('pywebviewready'));assert(d.querySelector('#platformbadge').textContent.includes('Windows'));
   await w.openSave();assert.equal(w.eval('fileName'),'windows.sav');assert.equal(w.ammoDirty(),0);
   w.review();await w.exportSave();assert.equal(winName,'windows_Edited.sav');assert.equal(d.querySelector('#status').textContent,'Windows native export completed.');
-  console.log('PASS: automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
+  console.log('PASS: USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}
 })().catch(e=>{console.error(e);process.exit(1)});

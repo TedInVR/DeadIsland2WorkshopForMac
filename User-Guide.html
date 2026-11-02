@@ -1,6 +1,6 @@
 <!doctype html><meta charset="utf-8"><title>Workshop User Guide</title><style>body{max-width:850px;margin:40px auto;padding:0 24px;font:16px -apple-system,sans-serif;line-height:1.6;color:#17201d}h1,h2,h3{line-height:1.3}a{color:#276c44}code{background:#eef3ee;padding:2px 4px}</style><pre style="white-space:pre-wrap"># Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.8.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.9.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -34,6 +34,30 @@ The first preview&#x27;s Warrior/Berserker/Rogue labels were internal class meta
 ## Windows edition
 
 The Windows edition uses the same editing controls described here. Download the Windows ZIP from GitHub Releases, extract it, and run **Install-Windows.cmd**. Native file dialogs handle Open Save and exporting a separate copy. **Help → Check for Updates** opens release downloads; Windows does not yet have the Mac background installer. See [the Windows guide](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/README-WINDOWS.md).
+
+## Find saves on a USB drive
+
+Choose **USB Saves…** in the toolbar or **File → Browse USB Saves…**. The home screen also shows connected-save counts. Workshop checks mounted drive roots for `PS4/SAVEDATA/&lt;16-character account ID&gt;/&lt;game title ID&gt;` without recursively searching the drive. Known Dead Island 2 title IDs checked are CUSA01014, CUSA27043, and CUSA35681. The list refreshes every 10 seconds while the app is visible, or immediately with **Refresh drives**.
+
+Each row shows the profile label, account ID, drive, game ID, filename, size, modified date, and save type. Use **Show folder** to reveal it in Finder or File Explorer.
+
+- **Decrypted save:** select it and choose **Open selected save**. Workshop validates it, makes an automatic backup, and opens it directly without a file-navigation dialog.
+- **Encrypted PS4 pair:** the main `DeadIsland2SaveGame` file and matching `.bin` are listed together. **Select encrypted pair** remembers the chosen source and protects both paths from manual exports. This identifies the pair; it does not decrypt or load it into the weapon editor. Until online decryption is connected, use an external decryption workflow and open its decrypted export.
+- **Incomplete pair:** the `.bin` is missing, so selection is disabled. Copy the complete pair from the PS4.
+
+If a drive is removed, the next refresh removes its entries; opening a stale selection produces a clear refresh message. If macOS reports access denied, allow Workshop access to removable volumes in System Settings. Discovery reads metadata and short file headers; it does not edit, rename, decrypt, upload, or automatically back up encrypted USB files.
+
+## Name your PSN profiles
+
+Choose **Edit profile name…** beside an account in the USB list, enter its PSN screen name or any recognizable label, and save. A blank name restores the displayed account ID. Workshop keeps labels under the local application-support folder in `profile-names.json`, separately from automatic save backups. Updates preserve them. PS4 directory names must remain account IDs and are never renamed by this feature.
+
+For several accounts, choose **Import profile names…** in the USB browser and select a private JSON file with this shape:
+
+```json
+{&quot;profiles&quot;:{&quot;0000000000000001&quot;:&quot;Example_Player&quot;}}
+```
+
+Imports merge with existing names; blank values remove individual labels. IDs must be 16 hexadecimal characters and labels at most 64 characters. Invalid imports leave the existing names unchanged. A personal import file is not bundled in the public app or repository; import it once on each computer you use. A profile name in GarlicSaves is stored separately and does not automatically synchronize with Workshop.
 
 ## Identify weapons by picture and type
 

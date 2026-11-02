@@ -16,6 +16,8 @@ Download the Windows ZIP above, choose **Extract All**, and run **Install-Window
 
 ## Features
 
+- Automatically discover PS4 save pairs on connected drives; show editable local PSN profile labels without renaming folders. Import private profile names once per computer.
+
 - Actual character names with Regular/New Game Plus labels and active-character marking.
 - Shared lockers and Unclaimed Property separated by game mode.
 - Weapon level, rarity, mods, and perks; copy/paste perk sets.
@@ -39,7 +41,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.8.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.9.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop does **not** decrypt or re-encrypt the PS4 USB save container. Save Wizard is still needed for export/import in the current workflow. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

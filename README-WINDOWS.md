@@ -14,6 +14,8 @@ The app uses Microsoft Edge WebView2 Runtime. Windows normally already has it; i
 
 ## Use
 
+**USB Saves…** finds PS4 Dead Island 2 saves on connected removable/fixed drive roots. Edit profile names in that list or import your private JSON mappings; names stay on this computer and the PS4 folders stay unchanged. Encrypted pairs are listed but still need a separate decryption workflow.
+
 Open the decrypted save exported by Save Wizard, make edits, then Review & Export Copy. Every successful open and every validated export creates a dated full-file backup under `%LOCALAPPDATA%\Dead Island 2 Workshop\Backups`; Help → Open Backup Folder opens it. Backups accumulate without automatic deletion or overwrite. Windows uses native Open/Save dialogs and prevents overwriting a save opened during this session. Exported files still need to be imported into a valid PS4 save container through Save Wizard or another compatible external workflow. The shared [user guide](USER_GUIDE.md) explains editing features.
 
 **Help → Check for Updates** opens the latest GitHub release. Download, extract, quit the app, and run the new Windows installer to update the same shortcuts. Windows background automatic installation is not included in this first preview; the existing Mac updater remains available.
