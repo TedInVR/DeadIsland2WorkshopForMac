@@ -12,6 +12,8 @@ on:
       - 'save_core.py'
       - 'server.py'
       - 'garlic_service.py'
+      - 'credential_store.py'
+      - 'test_credentials.py'
       - 'test_garlic_service.py'
       - 'backup_storage.py'
       - 'save_browser.py'
@@ -35,7 +37,7 @@ jobs:
       - name: Install build dependencies
         run: python -m pip install -r requirements-windows.txt
       - name: Test desktop file operations
-        run: python -m unittest test_windows.py test_backups.py test_save_browser.py test_garlic_service.py -v
+        run: python -m unittest test_windows.py test_backups.py test_save_browser.py test_garlic_service.py test_credentials.py -v
       - name: Build Windows executable
         run: python build_windows.py
       - name: Smoke-test the bundled executable

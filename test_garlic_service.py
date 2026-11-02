@@ -12,6 +12,11 @@ def sfo(account='0000000000000001',title='CUSA01014'):
     header=struct.pack('<4sIIII',b'\0PSF',0x101,52,52+len(keys),2)
     entries=struct.pack('<HHIII',0,0x204,len(title)+1,len(title)+1,0)+struct.pack('<HHIII',9,4,8,8,len(title)+1)
     return header+entries+keys+data
+class MemoryStore:
+    def __init__(self):self.value=None
+    def load(self):return self.value
+    def save(self,value):self.value=value
+    def delete(self):self.value=None
 class Response(io.BytesIO):pass
 class WireTests(unittest.TestCase):
     def test_connection_is_read_only_and_credential_not_in_url_or_body(self):
@@ -51,7 +56,7 @@ class WireTests(unittest.TestCase):
             self.assertEqual(c.result('job',progress.append),b'zip')
             self.assertEqual(len(progress),2);self.assertEqual(call.call_args.args[0],'/jobs/job/result')
     def test_busy_and_missing_key_prevent_operations(self):
-        m=g.Manager()
+        m=g.Manager(store=MemoryStore())
         with self.assertRaises(g.ServiceError):m.test()
         m.set_key(KEY);m.running=True
         with self.assertRaises(g.ServiceError):m.test()
@@ -100,7 +105,7 @@ class FailureRetentionTests(unittest.TestCase):
             root=Path(tmp);a=root/'DeadIsland2SaveGame';b=root/'DeadIsland2SaveGame.bin'
             a.write_bytes(b'original');b.write_bytes(b'pfsSKKey'+b'\0'*88)
             returned=g.make_zip({'sce_sys/param.sfo':sfo(),'ue4savegame.ps4.sav':b'unsupported-compressed-data'})
-            m=g.Manager();m.set_key(KEY)
+            m=g.Manager(store=MemoryStore());m.set_key(KEY)
             with patch.object(g.Client,'submit',return_value='job'),patch.object(g.Client,'result',return_value=returned):
                 m.decrypt(dict(path=str(a),bin_path=str(b),account_id='0000000000000001',title_id='CUSA01014'))
                 deadline=time.monotonic()+5
@@ -123,7 +128,7 @@ class RealSaveTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'DI2_WORKSHOP_BACKUP_DIR':str(Path(tmp)/'Backups')}):
             root=Path(tmp);a=root/'DeadIsland2SaveGame';b=root/'DeadIsland2SaveGame.bin';a.write_bytes(b'encrypted-original');b.write_bytes(sealed)
             entry=dict(path=str(a),bin_path=str(b),account_id='0000000000000001',title_id='CUSA01014')
-            m=g.Manager();m.set_key(KEY)
+            m=g.Manager(store=MemoryStore());m.set_key(KEY)
             encrypted=g.make_zip({'DeadIsland2SaveGame':b'encrypted-edited','DeadIsland2SaveGame.bin':sealed})
             with patch.object(g.Client,'submit',return_value='job'),patch.object(g.Client,'result',side_effect=[g.make_zip(files),encrypted,encrypted]) as result:
                 m.decrypt(entry);self.wait(m);self.assertEqual(m.session['files']['companion.dat'],b'untouched')

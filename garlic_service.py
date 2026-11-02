@@ -1,8 +1,9 @@
-"""Opt-in GarlicSaves API client. Credentials live in memory, never on disk."""
+"""Opt-in GarlicSaves API client. Credentials are stored privately in the operating system credential store."""
 import io,json,os,re,stat,struct,threading,time,uuid,zipfile
 from pathlib import Path,PurePosixPath
 from urllib import request,error
 import backup_storage
+import credential_store
 
 BASE='https://garlicsaves.com/api/v1'
 LIMIT=128*1024*1024
@@ -136,17 +137,33 @@ class Client:
             time.sleep(5)
 
 class Manager:
-    def __init__(self):
+    def __init__(self,store=None):
+        self.store=store if store is not None else credential_store.default_store();self.key_loaded=False;self.key_saved=False;self.key_error=None
         self.client=None;self.state={'status':'idle','message':'Enter your worker key and test the connection.'};self.lock=threading.Lock();self.session=None;self.folder=None;self.context=None;self.running=False
+    def load_key(self):
+        if self.key_loaded:return
+        try:
+            value=self.store.load()
+            if value:self.client=Client(value);self.key_saved=True;self.state['message']='Saved worker key loaded. You can decrypt a USB save or test the connection.'
+            self.key_loaded=True;self.key_error=None
+        except (credential_store.CredentialError,ServiceError):
+            self.key_error='The saved worker key could not be read. Allow secure credential-store access if prompted, then reopen this screen.'
     def view(self):
-        with self.lock:return dict(self.state,has_key=self.client is not None,has_session=self.session is not None,has_folder=self.folder is not None,account_id=(self.context or {}).get('account_id'),title_id=(self.context or {}).get('title_id'))
+        if not self.running:self.load_key()
+        with self.lock:return dict(self.state,key_saved=self.key_saved,key_error=self.key_error,has_key=self.client is not None,has_session=self.session is not None,has_folder=self.folder is not None,account_id=(self.context or {}).get('account_id'),title_id=(self.context or {}).get('title_id'))
     def message(self,text):
         with self.lock:self.state['message']=text
     def set_key(self,key):
         if self.running:raise ServiceError('Wait for the current service operation to finish.')
-        self.client=Client(key) if key else None
+        client=Client(key) if key else None
+        # Save/delete first; a denied OS operation must not replace a working key.
+        if client:self.store.save(client.key)
+        else:self.store.delete()
+        self.client=client;self.key_loaded=True;self.key_saved=client is not None;self.key_error=None
+        self.state={'status':'idle','message':'Worker key saved securely on this computer. It will load automatically next time.' if client else 'Saved worker key removed from this computer.'}
         return self.view()
     def start(self,operation,task):
+        if not self.running:self.load_key()
         with self.lock:
             if self.running:raise ServiceError('A service operation is already running.')
             if self.client is None:raise ServiceError('Enter your GarlicSaves worker key first.')

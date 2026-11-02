@@ -3,7 +3,7 @@
 import hashlib,json,plistlib,zipfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
-FILES=('Install.command','Repair-Updates.command','Workshop.swift','server.py','garlic_service.py','save_browser.py','backup_storage.py','save_core.py','index.html','Info.plist','Workshop.icns','catalog.json','updater.py','User-Guide.html','USER_GUIDE.md','README.txt','THIRD_PARTY_NOTICES.md')
+FILES=('Install.command','Repair-Updates.command','Workshop.swift','server.py','credential_store.py','garlic_service.py','save_browser.py','backup_storage.py','save_core.py','index.html','Info.plist','Workshop.icns','catalog.json','updater.py','User-Guide.html','USER_GUIDE.md','README.txt','THIRD_PARTY_NOTICES.md')
 def main():
     with (ROOT/'Info.plist').open('rb') as f:version=plistlib.load(f)['CFBundleShortVersionString']
     output=ROOT/'downloads';output.mkdir(exist_ok=True)
@@ -16,7 +16,7 @@ def main():
             info.external_attr=((0o100755 if file.endswith('.command') else 0o100644)<<16)
             z.writestr(info,(ROOT/file).read_bytes())
     (output/'Dead-Island-2-Workshop-Mac-Latest.zip').write_bytes(path.read_bytes())
-    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Add optional GarlicSaves connection preview: private session key, connection test, USB decryption and separate encrypted copies. Live PS4 round-trip testing pending.')
+    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Remember worker keys securely across launches using macOS Keychain or Windows Credential Manager. Includes save, replace, and remove controls.')
     (ROOT/'update.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(dict(file=str(path),size=path.stat().st_size,**manifest)))
 if __name__=='__main__':main()

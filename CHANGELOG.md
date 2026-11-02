@@ -1,5 +1,11 @@
 # Version history
 
+## 0.10.1
+
+- Remember each user's GarlicSaves worker key privately in macOS Keychain or Windows Credential Manager and load it automatically on later launches.
+- Add Save Key, saved-key status, replacement and removal; never include credentials in settings, backups, logs, source, or app downloads.
+- Report secure-store access errors and retain the previous key if a replacement cannot be saved.
+
 ## 0.10.0
 
 - Add an opt-in GarlicSaves API connection preview with session-only worker key and a read-only connection test.

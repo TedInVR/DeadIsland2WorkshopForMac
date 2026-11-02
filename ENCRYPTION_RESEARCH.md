@@ -1,8 +1,8 @@
-# GarlicSaves integration preview — 0.10.0
+# GarlicSaves integration preview — 0.10.1
 
 Workshop now includes an opt-in client for the published [GarlicSaves REST API](https://github.com/earthonion/HTOS-web/blob/main/API.md), implemented independently using Python standard-library HTTPS and ZIP handling. API protocol and authentication were checked against [routes/api_v1.py](https://github.com/earthonion/HTOS-web/blob/main/routes/api_v1.py). The server processes jobs using remote console workers; the desktop app does not perform local console cryptography.
 
-Users enter their private worker key locally. Test Connection reads /jobs without uploading a save. Decrypt submits only the selected original PS4 pair after confirmation and local backups, requesting include_sce_sys=true. Encrypt submits the validated edited file together with every original companion file and sce_sys metadata, using the original account ID. Results are retained in unique private local session folders. The key stays in process memory and is not stored on disk, sent in URLs, logged, or included in result archives. Cross-origin redirects are refused so credentials cannot be forwarded to another host.
+Users enter their private worker key locally. Test Connection reads /jobs without uploading a save. Decrypt submits only the selected original PS4 pair after confirmation and local backups, requesting include_sce_sys=true. Encrypt submits the validated edited file together with every original companion file and sce_sys metadata, using the original account ID. Results are retained in unique private local session folders. The key is saved privately by macOS Keychain or Windows Credential Manager and automatically loaded on later launches. It is not stored in app settings, sent in URLs, logged, included in result archives, or bundled in GitHub source/downloads. Cross-origin redirects are refused so credentials cannot be forwarded to another host.
 
 ## Verification and limitations
 

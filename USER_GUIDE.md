@@ -1,6 +1,6 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.10.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.10.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -163,12 +163,12 @@ Workshop refuses to export over a file opened as an input during the session. It
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.10.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
+Workshop 0.10.1 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
 1. Click **PS4 Decrypt / Encrypt…** in the header (or Help menu).
-2. Paste your GarlicSaves **worker key** and click **Test Connection**. This sends a read-only API request; no save files are uploaded. The key is kept only in memory until Workshop quits. Re-enter it next session; **Forget Key** clears it sooner. Never include it in screenshots, GitHub, or shared files. The console-worker config file is not needed.
+2. Paste your GarlicSaves **worker key** and click **Test Connection**. This sends a read-only API request; no save files are uploaded. The key is saved in **macOS Keychain** or **Windows Credential Manager**, and loads automatically after quitting and reopening. Click **Save Key** to save without testing; **Test Connection** also saves a newly entered key. The field stays masked and shows **Saved key ready** when a key exists. Paste another key to replace it, or click **Remove Saved Key** to delete it. On Mac, allow Keychain access if prompted; choosing **Always Allow** avoids repeated access prompts for that Python executable. Never include it in screenshots, GitHub, or shared files. The console-worker config file is not needed.
 3. Choose an encrypted save in **USB Saves**. The matching `DeadIsland2SaveGame.bin` must be present in the same game folder. The profile/account and title are displayed for checking.
 4. Click **Decrypt Selected Pair…** and confirm sending those two files to **garlicsaves.com**. Workshop saves an original-pair ZIP and automatic snapshots locally before submission. Keep Workshop open while the job is queued/running. The app does not automatically upload any saves just because a drive is connected.
 5. When decryption succeeds and its structure is validated, click **Open Decrypted Save**. Existing staged edits require a discard confirmation before replacement.

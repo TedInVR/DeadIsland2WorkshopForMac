@@ -1,4 +1,4 @@
-DEAD ISLAND 2 WORKSHOP FOR MAC 0.10.0
+DEAD ISLAND 2 WORKSHOP FOR MAC 0.10.1
 
 Quit Workshop, extract this package, and double-click Install.command.
 It updates /Applications/Dead Island 2 Workshop.app and opens the same app.
@@ -19,4 +19,4 @@ Automatic checks require authenticated GitHub CLI (gh) access on this Mac.
 They run every 15 minutes with the app closed and leave it closed after updating.
 No GitHub token or Save Wizard credentials are bundled in this package.
 
-Optional GarlicSaves preview: PS4 Decrypt / Encrypt accepts your worker key for the current session. Test Connection sends no saves. Decryption/encryption requires explicit upload confirmation. Live output compatibility and PS4 import still need testing.
+Optional GarlicSaves preview: PS4 Decrypt / Encrypt remembers your worker key securely on this computer. Test Connection sends no saves. Decryption/encryption requires explicit upload confirmation. Live output compatibility and PS4 import still need testing.

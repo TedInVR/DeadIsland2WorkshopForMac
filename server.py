@@ -57,6 +57,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not isinstance(value,dict):raise ValueError('Invalid service request.')
                 if p=='service-key':
                     if len(raw)>2048:raise ValueError('Worker key is too long.')
+                    if not isinstance(value.get('key'),str):raise ValueError('Enter a worker key, or explicitly remove the saved key.')
                     self.reply(200,service.set_key(value.get('key')))
                 elif p=='service-test':self.reply(200,service.test())
                 elif p=='service-decrypt':
