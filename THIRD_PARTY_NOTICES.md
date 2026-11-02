@@ -9,3 +9,5 @@ The catalog is not guaranteed to cover every game version or DLC release. Game n
 No broad license grant for third-party game data is asserted. This repository currently has no project-wide open-source license chosen by its owner; repository visibility and source access alone are not a license grant.
 
 Perk effect summaries are short paraphrases of in-game descriptions transcribed at the [Dead Island Wiki](https://deadisland.fandom.com/wiki/Perks), with per-entry source URLs in `catalog.json`. Mod-family summaries describe standard elemental or physical effects. Entries whose effects are inferred from internal asset names, and entries with no verified effect, are labeled accordingly. No numerical bonuses or stacking guarantees are asserted.
+
+The weapon silhouettes in `index.html` are original schematic SVG illustrations created for Workshop. They represent weapon families and are not extracted game artwork. Type labels are derived from game model names/identifiers and intentionally fall back to an unverified type where no specific family is established.

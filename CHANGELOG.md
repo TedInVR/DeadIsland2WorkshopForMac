@@ -1,5 +1,12 @@
 # Version history
 
+## 0.5.0
+
+- Add original weapon-family silhouettes beside inventory entries and a larger selected-weapon preview.
+- Add plain-language type labels (for example, Raven → Sporting rifle), inferred from game model identifiers. Unknown types remain explicitly unverified.
+- Add live silhouette previews and type labels in Create Weapon and Replace Weapon.
+- Search both inventory and creation catalog by weapon type as well as name. Illustrations are representative silhouettes, not exact game renders; no external images or network requests are needed.
+
 ## 0.4.0
 
 - Add short effect descriptions beneath every mod and perk, with hover details and clear labels for inferred or unverified effects.

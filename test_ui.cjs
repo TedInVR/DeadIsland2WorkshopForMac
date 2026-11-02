@@ -11,6 +11,11 @@ const assert=require('assert');
   const w=dom.window,d=w.document;
   Object.defineProperty(d.querySelector('#file'),'files',{value:[{name:'test.sav'}]});await d.querySelector('#file').onchange({target:d.querySelector('#file')});
   assert.equal(w.eval('data.profiles.length'),10);assert([...d.querySelectorAll('#group option')].some(x=>x.textContent.includes('Ryan — New Game Plus (active)')));
+  const raven=w.eval('data.weapon_catalog.find(w=>w.name.toUpperCase()==="RAVEN")');
+  assert.equal(w.weaponVisual(raven).label,'Sporting rifle');
+  assert(d.querySelector('#list .weapon svg[role="img"]'));
+  assert.equal(w.weaponVisual({path:'/Game/DI2/Weapons/Melee/DA_MeleeWeaponArchetype_Unknown.Unknown',name:'Unknown'}).icon,'unknown');
+  assert.equal(w.eval('Object.keys(changes).length'),0);
   const full=w.eval('data.destinations.find(d=>d.name==="Shared storage locker — New Game Plus")');
   const weapon=w.eval('data.weapons.find(w=>w.group==="Shared storage locker — New Game Plus"&&w.editable)');
   w.select(weapon.key);assert.equal(d.querySelector('#deleteweapon').textContent,'Delete Weapon');
@@ -31,6 +36,14 @@ const assert=require('assert');
 
   w.toggleDelete();assert.equal(d.querySelector('#deleteweapon').textContent,'Undo Delete');assert.equal(w.eval('deletions.length'),1);
   d.querySelector('#group').value=full.name;w.openCreate();assert.equal(Number(d.querySelector('#newdest').value),full.key);assert.equal(w.creationFree(),1);
+  const previousChanges=w.eval('JSON.stringify(changes)');
+  d.querySelector('#newtype').value=raven.path;d.querySelector('#newtype').onchange();
+  assert(d.querySelector('#newweaponpreview').textContent.includes('Sporting rifle'));
+  assert(d.querySelector('#newweaponpreview svg').getAttribute('aria-label').includes('representative silhouette'));
+  assert.equal(w.eval('JSON.stringify(changes)'),previousChanges);
+  d.querySelector('#newsearch').value='sporting rifle';w.renderWeaponChoices();
+  assert([...d.querySelector('#newtype').options].some(x=>x.value===raven.path));
+  assert([...d.querySelector('#newtype').options].every(x=>x.textContent.includes('Sporting rifle')));
   assert(d.querySelector('#newperks .perk-description').textContent.length>10);
   d.querySelector('#newperksearch').value='Acid Rain';w.renderNewPerks();
   d.querySelector('#allnewperks').click();assert.equal(w.eval('newPerks.length'),w.eval('data.catalog.length'));
@@ -44,9 +57,9 @@ const assert=require('assert');
   let out=await fetch(base+'export');assert(out.ok);let bytes=await out.arrayBuffer();assert(bytes.byteLength>0);
   // Undo deletion and queued creation, then replace a weapon in a full slot.
   w.toggleDelete();w.eval('additions=[]');w.openReplace();assert(d.querySelector('#newdestlabel').hidden);assert.equal(w.creationFree(),1);
-  d.querySelector('#newsearch').value='Peggy';w.renderWeaponChoices();assert(d.querySelector('#newtype').options.length);w.queueWeapon();assert.equal(w.eval('Object.keys(changes).length'),1);assert(d.querySelector('#name').textContent.includes('PEGGY'));
+  d.querySelector('#newsearch').value='Peggy';w.renderWeaponChoices();assert(d.querySelector('#newtype').options.length);w.queueWeapon();assert.equal(w.eval('Object.keys(changes).length'),1);assert(d.querySelector('#name').textContent.includes('PEGGY'));assert(d.querySelector('#weaponpreview').textContent.includes('Hunting rifle'));
   w.review();await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
-  console.log('PASS: inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
+  console.log('PASS: weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}
 })().catch(e=>{console.error(e);process.exit(1)});

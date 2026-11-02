@@ -16,7 +16,7 @@ def main():
             info.external_attr=((0o100755 if file=='Install.command' else 0o100644)<<16)
             z.writestr(info,(ROOT/file).read_bytes())
     (output/'Dead-Island-2-Workshop-Mac-Latest.zip').write_bytes(path.read_bytes())
-    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Mod and perk descriptions, hover help, and Select All in the weapon editor and creation dialog.')
+    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Weapon silhouettes, plain-language weapon types, and live creation/replacement previews.')
     (ROOT/'update.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(dict(file=str(path),size=path.stat().st_size,**manifest)))
 if __name__=='__main__':main()

@@ -1,6 +1,6 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.4.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.5.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -30,6 +30,14 @@ Workshop does not modify the file you open. Edits stay in memory until you expor
 | (active) | The character marked active in the opened save |
 
 The first preview's Warrior/Berserker/Rogue labels were internal class metadata. Current versions show the actual slayer names and read NG+ status from the saved profile privileges. Empty legacy character-specific stash entries are not shown as shared lockers. Only character saves actually present in the file are listed.
+
+## Identify weapons by picture and type
+
+Each weapon in the list has a small silhouette and a plain-language type label. Selecting a weapon shows a larger silhouette. For example, **Raven** is labeled **Sporting rifle**. The creation and replacement windows show the same preview, which updates when you choose a different weapon.
+
+These are original, representative illustrations of the weapon family, not exact pictures of each named variant, finish, or attachment. Labels are inferred from the game's model identifiers. If the identifier does not establish a more specific type, Workshop shows **type unverified** with a question-mark image instead of guessing. Silhouettes are bundled in the app and work offline.
+
+Use **Find a weapon** or the creation search to look for a type such as **shotgun**, **sporting rifle**, or **katana**, as well as a weapon name.
 
 ## Edit a weapon
 
