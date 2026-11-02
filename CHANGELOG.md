@@ -1,5 +1,12 @@
 # Version history
 
+## 0.7.0
+
+- Add a Windows desktop shell with WebView2, native save dialogs, source-file overwrite protection, and unsaved-edit close confirmation. Shared save/editing logic and interface remain the same on Mac and Windows.
+- Add Windows packaging, per-user installation with shortcuts, dependency notices, file-operation tests, and a GitHub Actions executable/release build.
+- Make catalog text decoding explicitly UTF-8 for Windows.
+- Record the researched GarlicSaves/HTOS REST integration candidate and the remaining access/compatibility requirements. No online save uploads or encryption integration are included yet.
+
 ## 0.6.0
 
 - Duplicate complete weapons, preserving generation seed, runtime state, and unknown fields while assigning fresh item and persistent IDs. Copies snapshot staged level/rarity/perk/durability edits and can be placed in another inventory or locker.

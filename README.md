@@ -1,14 +1,18 @@
-# Dead Island 2 Workshop for Mac
+# Dead Island 2 Workshop — Mac and Windows
 
-A Mac weapon editor for **decrypted Dead Island 2 PS4 saves exported through Save Wizard**.
+A weapon editor for **decrypted Dead Island 2 PS4 saves exported through Save Wizard**.
 
-[Download the latest Mac installer](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true) · [User guide](USER_GUIDE.md) · [Version history](CHANGELOG.md)
+[Windows download](https://github.com/TedInVR/DeadIsland2WorkshopForMac/releases/latest/download/Dead-Island-2-Workshop-Windows-Latest.zip) · [Windows guide](README-WINDOWS.md) · [Download the latest Mac installer](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true) · [User guide](USER_GUIDE.md) · [Version history](CHANGELOG.md)
 
-## Install
+## Install on Mac
 
 Quit Workshop, extract the downloaded ZIP, and double-click **Install.command**. It builds and installs **Dead Island 2 Workshop.app** in Applications, then opens it. Updates reuse the same app.
 
 Requires macOS 12+, Python 3.9+, and Apple Command Line Tools. No pip dependencies or Windows emulator. Public downloads and updates require no GitHub login.
+
+## Install on Windows
+
+Download the Windows ZIP above, choose **Extract All**, and run **Install-Windows.cmd**. It installs a self-contained app with Desktop and Start menu shortcuts. See the [Windows guide](README-WINDOWS.md) for requirements, portable use, updates, and building from source.
 
 ## Features
 
@@ -34,7 +38,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.6.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.7.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop does **not** decrypt or re-encrypt the PS4 USB save container. Save Wizard is still needed for export/import in the current workflow. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 
@@ -45,3 +49,5 @@ Personal saves are not included. The app implementation is independent. Game-dat
 Source files are at repository root. Run `python3 test_core.py /path/to/decrypted.sav` locally for the supplied-save regression suite. That suite includes assertions tied to the original development fixture, which is intentionally not published; use an appropriate local fixture when adapting it. `python3 -m unittest test_updater.py` runs isolated updater tests without a save or GitHub login.
 
 To publish a new update, see [DEVELOPMENT.md](DEVELOPMENT.md).
+
+External encryption services are being investigated; see [current findings and requirements](ENCRYPTION_RESEARCH.md). An online decryption connection is not included yet.

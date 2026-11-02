@@ -5,6 +5,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from save_core import Save,FormatError
 ROOT=Path(__file__).resolve().parent
 MAX=128*1024*1024
+DESKTOP_EVAL=False
 class App:
     def __init__(self): self.save=None;self.name='ue4savegame.ps4.sav';self.output=None
 app=App(); token=secrets.token_urlsafe(32)
@@ -13,7 +14,7 @@ class Handler(BaseHTTPRequestHandler):
     def reply(self,status,data,ctype='application/json'):
         if isinstance(data,(dict,list)):data=json.dumps(data).encode()
         if isinstance(data,str):data=data.encode()
-        self.send_response(status);self.send_header('Content-Type',ctype);self.send_header('Content-Length',str(len(data)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'");self.end_headers();self.wfile.write(data)
+        self.send_response(status);self.send_header('Content-Type',ctype);self.send_header('Content-Length',str(len(data)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'"+(" 'unsafe-eval'" if DESKTOP_EVAL else "")+"; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'");self.end_headers();self.wfile.write(data)
     def endpoint(self):
         if not self.path.startswith('/'+token+'/'):return None
         return self.path[len(token)+2:].split('?',1)[0]

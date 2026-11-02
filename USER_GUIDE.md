@@ -1,6 +1,6 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.6.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.7.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -30,6 +30,10 @@ Workshop does not modify the file you open. Edits stay in memory until you expor
 | (active) | The character marked active in the opened save |
 
 The first preview's Warrior/Berserker/Rogue labels were internal class metadata. Current versions show the actual slayer names and read NG+ status from the saved profile privileges. Empty legacy character-specific stash entries are not shown as shared lockers. Only character saves actually present in the file are listed.
+
+## Windows edition
+
+The Windows edition uses the same editing controls described here. Download the Windows ZIP from GitHub Releases, extract it, and run **Install-Windows.cmd**. Native file dialogs handle Open Save and exporting a separate copy. **Help → Check for Updates** opens release downloads; Windows does not yet have the Mac background installer. See [the Windows guide](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/README-WINDOWS.md).
 
 ## Identify weapons by picture and type
 

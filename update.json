@@ -1,6 +1,6 @@
 {
-  "version": "0.6.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.6.0.zip",
-  "sha256": "7d093c2de31f3d014be8d01222e789da98a4c2d68f3c02cf4d7e2a7f13be4aa6",
-  "notes": "Whole-weapon duplication, slot counters, scoped batch perk edits, and experimental durability/reserve-ammo editing."
+  "version": "0.7.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.7.0.zip",
+  "sha256": "8347f5d7a51dcffb59ec4c9d2d760df81b1b22aa396ca6a56d8c0dabe40fc2ed",
+  "notes": "Mac and Windows desktop shells share the editor; native Windows file dialogs and distribution build added."
 }

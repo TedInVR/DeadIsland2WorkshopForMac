@@ -8,3 +8,9 @@ __pycache__/
 upload/
 node_modules/
 *.app/
+
+build/
+dist/
+windows-dist/
+*.spec
+windows-smoke.json

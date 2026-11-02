@@ -16,7 +16,7 @@ def main():
             info.external_attr=((0o100755 if file=='Install.command' else 0o100644)<<16)
             z.writestr(info,(ROOT/file).read_bytes())
     (output/'Dead-Island-2-Workshop-Mac-Latest.zip').write_bytes(path.read_bytes())
-    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Whole-weapon duplication, slot counters, scoped batch perk edits, and experimental durability/reserve-ammo editing.')
+    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Mac and Windows desktop shells share the editor; native Windows file dialogs and distribution build added.')
     (ROOT/'update.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(dict(file=str(path),size=path.stat().st_size,**manifest)))
 if __name__=='__main__':main()

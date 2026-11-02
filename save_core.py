@@ -5,7 +5,7 @@ Independent implementation for the uncompressed, sectioned PS4 export format.
 import struct, re, hashlib, json, uuid, secrets
 from pathlib import Path
 
-CATALOG=json.loads(Path(__file__).with_name("catalog.json").read_text())
+CATALOG=json.loads(Path(__file__).with_name("catalog.json").read_text(encoding='utf-8'))
 WEAPON_NAMES={r["path"]:r["name"] for r in CATALOG["weapons"]}
 PERK_NAMES={r["path"]:r["name"] for r in CATALOG["upgrades"]}
 SLAYERS={("Warrior","Male"):"Ryan",("Warrior","Female"):"Carla",("Berserker","Male"):"Jacob",("Berserker","Female"):"Dani",("Rogue","Male"):"Bruno",("Rogue","Female"):"Amy"}
