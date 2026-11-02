@@ -1,6 +1,6 @@
 # Dead Island 2 Workshop — Mac and Windows
 
-A weapon editor for **decrypted Dead Island 2 PS4 saves exported through Save Wizard**.
+A **Dead Island 2 save editor** for characters, cash, materials, consumables and weapons, plus named backups and optional GarlicSaves tools for PS4 save containers from other games.
 
 [Windows download](https://github.com/TedInVR/DeadIsland2WorkshopForMac/releases/latest/download/Dead-Island-2-Workshop-Windows-Latest.zip) · [Windows guide](README-WINDOWS.md) · [Download the latest Mac installer](https://github.com/TedInVR/DeadIsland2WorkshopForMac/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true) · [User guide](USER_GUIDE.md) · [Version history](CHANGELOG.md)
 
@@ -15,6 +15,12 @@ Requires macOS 12+, Python 3.9+, and Apple Command Line Tools. No pip dependenci
 Download the Windows ZIP above, choose **Extract All**, and run **Install-Windows.cmd**. It installs a self-contained app with Desktop and Start menu shortcuts. See the [Windows guide](README-WINDOWS.md) for requirements, portable use, updates, and building from source.
 
 ## Features
+
+- Name a complete PS4 save backup beside each USB save; browse and restore named backups with checksum validation and automatic destination backups.
+- Discover encrypted pairs across all CUSA game folders. Resign one save or all encrypted saves on a source profile/drive to another local PSN profile; stage remote results before explicitly installing them, backing up every replaced destination.
+- Generic GarlicSaves decrypt/re-encrypt/resign workflows for other PS4 games, preserving complete packages and metadata. Actual service/game compatibility and console import require live testing; internal editing of other games is not included.
+- Dead Island 2 character levels 1–30 Regular / 1–40 NG+, with synchronized XP and level-display caches; cash from $0 to $2,000,000 per character.
+- Fill saved crafting materials and zombie parts to 99, med-kits to 5, and fuses to 3, including missing stack types. Fill one or all characters. These are quantity edits, not increases to the game’s capacity limits.
 
 - Automatically discover PS4 save pairs on connected drives; show editable local PSN profile labels without renaming folders. Import private profile names once per computer.
 
@@ -41,7 +47,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.10.1**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.11.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

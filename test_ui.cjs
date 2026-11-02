@@ -4,7 +4,7 @@ const assert=require('assert');
 (async()=>{
  const ready=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'di2-ui-')),'ready');
  const usbRoot=path.join(path.dirname(ready),'USB'),account='0000000000000001',game=path.join(usbRoot,'PS4','SAVEDATA',account,'CUSA01014');fs.mkdirSync(game,{recursive:true});
- fs.writeFileSync(path.join(game,'DeadIsland2SaveGame'),'encrypted example');fs.writeFileSync(path.join(game,'DeadIsland2SaveGame.bin'),'bin example');
+ fs.writeFileSync(path.join(game,'DeadIsland2SaveGame'),'encrypted example');fs.writeFileSync(path.join(game,'DeadIsland2SaveGame.bin'),Buffer.concat([Buffer.from('pfsSKKey'),Buffer.alloc(88)]));
  fs.copyFileSync(process.env.DI2_TEST_SAVE||'../upload/ue4savegame.ps4.sav',path.join(game,'export.sav'));
  const proc=cp.spawn('python',[path.join(__dirname,'server.py'),'--ready',ready],{env:{...process.env,DI2_WORKSHOP_BACKUP_DIR:path.join(path.dirname(ready),'backups'),DI2_WORKSHOP_SCAN_ROOTS:JSON.stringify([usbRoot])}});
 
@@ -101,6 +101,17 @@ const assert=require('assert');
   const refused=await fetch(base+'open-found',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:encrypted.key})});assert.equal(refused.status,400);
   const plain=w.eval('usbState.entries.find(e=>e.kind==="decrypted")');w.eval('selectedUSB='+JSON.stringify(plain.key));await w.openSelectedUSB();
   assert.equal(w.eval('fileName'),'export.sav');assert.equal(w.eval('data.source_path'),plain.path);assert(fs.readFileSync(w.eval('data.backup.path')).equals(source));
+  // Named backups round-trip through the real backend with destination protection.
+  assert([...d.querySelectorAll('#usb-list button')].some(b=>b.textContent==='Back Up This Save'));
+  w.nameBackup(encrypted.key);d.querySelector('#backup-name').value='Before cheats 2 Nov';await w.saveNamedBackup();
+  await w.openNamedBackups();assert(d.querySelector('#named-backups-list').textContent.includes('Before cheats 2 Nov'));
+  let saved=await (await fetch(base+'named-backups')).json();const named=saved.backups.find(b=>b.name==='Before cheats 2 Nov');assert(named);
+  fs.writeFileSync(path.join(game,'DeadIsland2SaveGame'),'changed-after-backup');await w.restoreNamedBackup(named);assert.equal(fs.readFileSync(path.join(game,'DeadIsland2SaveGame'),'utf8'),'encrypted example');
+  saved=await (await fetch(base+'named-backups')).json();assert(saved.backups.length>=2);d.querySelector('#named-backups-dialog').close();
+  // Character level, capped cash and full resource stacks use the real save parser.
+  w.openCharacter();assert(d.querySelector('#character-items input'));d.querySelector('#character-level').value=20;w.stageCharacterLevel();w.stageMoney(2000000);w.fillResources(false);assert(w.extraDirty()>2);
+  w.review();assert(d.querySelector('#reviewitems').textContent.includes('level 40 → 20'));assert(d.querySelector('#reviewitems').textContent.includes('Cash'));
+  await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);d.querySelector('#character-dialog').close();
   fs.unlinkSync(path.join(game,'DeadIsland2SaveGame'));fs.unlinkSync(path.join(game,'DeadIsland2SaveGame.bin'));fs.unlinkSync(path.join(game,'export.sav'));await w.refreshUSB(true);assert.equal(w.eval('usbState.entries.length'),0);
   // Exercise the Windows bridge through the same shared page.
   let winName=null;const originalData=w.eval('data');w.pywebview={api:{open_save:async()=>({name:'windows.sav',data:originalData}),export_save:async name=>{winName=name;return {message:'Windows native export completed.'}}}};

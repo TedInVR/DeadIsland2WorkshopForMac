@@ -1,5 +1,13 @@
 # Version history
 
+## 0.11.0
+
+- Add named, append-only PS4 save backups, persistent browsing, checksum validation and guarded restore.
+- Discover encrypted pairs for all CUSA games. Add single-save or source-profile batch resigning with source/destination backups and explicit installation of staged results.
+- Add generic complete-package decryption/re-encryption and externally edited ZIP import for other PS4 games; service compatibility and console import remain untested live.
+- Add DI2 character level/XP/cache editing within Regular 1–30 and NG+ 1–40; per-character cash capped at $2,000,000.
+- Fill crafting materials/zombie parts to 99, med-kits to 5, fuses to 3, adding missing stacks. Preserve unrelated records and retain normal capacity limits.
+
 ## 0.10.1
 
 - Remember each user's GarlicSaves worker key privately in macOS Keychain or Windows Credential Manager and load it automatically on later launches.

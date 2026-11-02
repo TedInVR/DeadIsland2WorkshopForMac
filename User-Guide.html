@@ -1,6 +1,6 @@
 <!doctype html><html><head><meta charset="utf-8"><title>Dead Island 2 Workshop User Guide</title><style>body{max-width:960px;margin:40px auto;padding:0 28px;background:#101618;color:#e7f0ed;font:16px/1.6 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}</style></head><body><pre># Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.10.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.11.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -42,10 +42,10 @@ Choose **USB Saves…** in the toolbar or **File → Browse USB Saves…**. The 
 Each row shows the profile label, account ID, drive, game ID, filename, size, modified date, and save type. Use **Show folder** to reveal it in Finder or File Explorer.
 
 - **Decrypted save:** select it and choose **Open selected save**. Workshop validates it, makes an automatic backup, and opens it directly without a file-navigation dialog.
-- **Encrypted PS4 pair:** the main `DeadIsland2SaveGame` file and matching `.bin` are listed together. **Select encrypted pair** remembers the chosen source and protects both paths from manual exports. This identifies the pair and opens **PS4 Decrypt / Encrypt**, where an optional GarlicSaves job can be started with confirmation.
+- **Encrypted PS4 pair:** a game save and its matching `.bin` are listed together. **Select encrypted pair** remembers the chosen source and protects both paths from manual exports. This identifies the pair and opens **PS4 Decrypt / Encrypt**, where an optional GarlicSaves job can be started with confirmation.
 - **Incomplete pair:** the `.bin` is missing, so selection is disabled. Copy the complete pair from the PS4.
 
-If a drive is removed, the next refresh removes its entries; opening a stale selection produces a clear refresh message. If macOS reports access denied, allow Workshop access to removable volumes in System Settings. Discovery reads metadata and short file headers; it does not edit, rename, decrypt, upload, or automatically back up encrypted USB files.
+If a drive is removed, the next refresh removes its entries; opening a stale selection produces a clear refresh message. If macOS reports access denied, allow Workshop access to removable volumes in System Settings. Discovery reads metadata and short file headers. It does not edit, rename, upload or back up files until you choose a backup or service action.
 
 ## Name your PSN profiles
 
@@ -161,9 +161,39 @@ Replacement uses the same inventory slot and keeps the existing IDs for shortcut
 
 Workshop refuses to export over a file opened as an input during the session. Its output is reparsed and compared with requested changes before saving. This checks file structure, not game compatibility. Start with one change and keep the original PS4 backup.
 
+## Named PS4 save backups and restoration
+
+In **USB Saves**, every save has **Back Up This Save**. Enter a descriptive name such as “Saved game before doing cheats on 2 Nov” and save it. Workshop creates a new dated folder with that label, a unique ID, the original filenames and `PS4/SAVEDATA/account-ID/CUSA…` tree. A manifest records account, game, timestamp, sizes and SHA-256 checksums. Labels never rename your PS4 source folders. Repeated names create separate backups.
+
+Click **Named Backups…** in that screen to browse saved backups after restarting the app. **Open Backup Folder** opens their local **NamedBackups** folder next to automatic Backups. Encrypted backups can be restored to their original account/game on a chosen connected USB drive; decrypted Dead Island 2 backups open in the editor. Restoring encrypted pairs requires confirmation and automatically backs up any existing destination pair before writing. Backups with missing files, links or changed checksums are refused. A backup originally captured as incomplete remains available for inspection but cannot be installed as a complete pair.
+
+Named backups never expire or overwrite one another. Manual exports into the named or automatic backup folders are blocked. Workshop restores the old pair if a normal two-file installation fails after the first file was replaced. As with any removable-drive write, a power failure or disconnect may require manual restoration from the retained backup; do not remove the drive during installation.
+
+## Dead Island 2 character levels, cash and resources
+
+Open **Character &amp; Resources…** after loading a supported decrypted Dead Island 2 save. Select the actual slayer and Regular/NG+ profile. Character level can be raised or lowered to **1–30 Regular** or **1–40 NG+**. Enter the level and click **Stage Level**. Export synchronizes the character’s XP to the start of that level and updates existing profile-summary and account level caches. It leaves missions, earned skills and weapon requirements unchanged; lowering character level does not lower weapon levels.
+
+Cash uses whole dollars, from **$0 to $2,000,000**. Click **Stage Cash** or **Set $2,000,000**. If the original save has several cash stacks, Workshop sets their combined amount to your requested total rather than granting that amount to every duplicate stack. An existing amount above this limit is preserved unless you stage a cash edit.
+
+Crafting materials and zombie parts can be filled to **99 each**, med-kits to **5**, and fuses to **3**. Edit individual saved quantities or click **Fill this character** / **Fill all characters…**. Missing known stack types are added with fresh identities. Recipes, curveballs, ammo and weapon records are preserved by these fill actions. Ammo has its separate editor. These controls fill inventory quantities; they do not increase hard-coded stack capacity or enable crafting-material storage in a weapon-only locker.
+
+All these edits are staged in memory alongside weapon edits. **Review &amp; Export** lists and validates them in a separate copy with an automatic backup. **Encrypt Edited Copy** includes them in the active GarlicSaves session. Opening another save or quitting asks about unexported edits. The parser and XP/cache changes have local round-trip tests; in-game effects still require a PS4 test.
+
+## Other PS4 games and profile-to-profile resigning
+
+USB discovery now lists matching encrypted pairs across **all CUSA game folders**, including filenames other than DeadIsland2SaveGame. Game labels use title IDs when Workshop has no local game name. This expands container management; the internal editor still understands only supported Dead Island 2 data.
+
+Select an encrypted save and open **PS4 Decrypt / Encrypt**. After decryption, **Re-encrypt Complete Package…** sends the complete unchanged package back for encryption; **Encrypt Edited ZIP…** accepts a complete externally edited ZIP, including `sce_sys/param.sfo` and all companion files. Account/title metadata must still match the original context. An unsupported Dead Island 2 representation is also retained as a generic package instead of being mistaken for editable data. File downloads and console processing depend on GarlicSaves support and availability; “all game folders” is not a guarantee that every game/firmware/protection scheme will process successfully.
+
+For account transfers, choose a **Destination PSN profile**, then **Resign selected save…** or **Resign all source-profile saves…**. The latter selects all complete encrypted pairs belonging to that source account on the same selected drive, across all listed games. Workshop sends one job per save, sequentially. The source pair and any existing destination pair receive named backups before processing. Original USB saves remain unchanged while results are staged locally.
+
+After processing, review the result count and click **Install Resigned Copies…**. Confirm USB replacement. Each destination is backed up again immediately before installation, including changes made while a remote job was running. A backup failure prevents that destination write. Batch processing may stop after partial results; completed pairs are retained. A later installation failure can leave earlier pairs installed, each with its own destination backup. Check the result message rather than assuming the entire batch completed.
+
+PSN targets come from your local profile names and accounts found on drives. Register/use accounts you control. Re-signing is performed by GarlicSaves, not by renaming an account folder locally. Its acceptance on the PS4 still requires testing. Keep Workshop open through a transfer; if you quit, raw result files remain in ServiceSessions, but this preview’s staged installation list is not restored automatically.
+
 ## PS4 encryption and Save Wizard
 
-Workshop 0.10.1 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
+Workshop 0.11.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -173,7 +203,7 @@ Workshop 0.10.1 includes a **GarlicSaves connection preview**. The cryptographic
 4. Click **Decrypt Selected Pair…** and confirm sending those two files to **garlicsaves.com**. Workshop saves an original-pair ZIP and automatic snapshots locally before submission. Keep Workshop open while the job is queued/running. The app does not automatically upload any saves just because a drive is connected.
 5. When decryption succeeds and its structure is validated, click **Open Decrypted Save**. Existing staged edits require a discard confirmation before replacement.
 
-The downloaded package must include `sce_sys/param.sfo`. Workshop checks its account and title against the selected source, preserves companion files, and requires the exact supported game-data format with a byte-for-byte no-edit validation. If the returned game data is compressed or otherwise unsupported, Workshop stops and retains **Decrypted-Result.zip** for inspection; it does not claim successful editing or silently convert the data.
+The downloaded package must include `sce_sys/param.sfo`. Workshop checks its account and title against the selected source, preserves companion files, and requires the exact supported game-data format with a byte-for-byte no-edit validation. If the returned game data is compressed or otherwise unsupported, Workshop retains **Decrypted-Result.zip** as a generic package for inspection or re-encryption; it does not claim successful internal editing or silently convert the data.
 
 ### Re-encrypt an edited copy
 

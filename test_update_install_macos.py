@@ -20,7 +20,7 @@ def main():
             assert result['status']=='installed',result
             assert u.installed_version()==m['version']
             assert (app/'Contents/MacOS/DI2Workshop').is_file()
-            for name in ('updater.py','credential_store.py','garlic_service.py','server.py','backup_storage.py','save_browser.py','catalog.json','index.html'):
+            for name in ('updater.py','credential_store.py','garlic_service.py','server.py','ps4_backups.py','character_editor.py','resource_catalog.json','backup_storage.py','save_browser.py','catalog.json','index.html'):
                 assert (app/'Contents/Resources'/name).is_file(),name
             assert not (support/'pending-update.json').exists()
             subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict',str(app)],check=True)

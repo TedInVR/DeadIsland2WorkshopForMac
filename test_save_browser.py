@@ -20,7 +20,8 @@ class BrowserTests(unittest.TestCase):
     def test_multiple_accounts_and_other_games(self):
         self.pair();other=self.drive/'PS4'/'SAVEDATA'/B/'CUSA01014';other.mkdir(parents=True);(other/'DeadIsland2SaveGame').write_bytes(b'pair missing key')
         wrong=self.drive/'PS4'/'SAVEDATA'/A/'CUSA99999';wrong.mkdir();(wrong/'DeadIsland2SaveGame').write_bytes(b'other game')
-        found=b.scan([self.drive])['entries'];self.assertEqual(len(found),2);self.assertEqual({e['kind'] for e in found},{'encrypted','incomplete'})
+        (wrong/'OtherSave').write_bytes(b'other game container');(wrong/'OtherSave.bin').write_bytes(b'key')
+        found=b.scan([self.drive])['entries'];self.assertEqual(len(found),4);self.assertEqual({e['kind'] for e in found},{'encrypted','incomplete'})
     def test_decrypted_header_detection_and_unplugged_drive(self):
         file=self.game/'ue4savegame.ps4.sav';file.write_bytes(bytes.fromhex('3dca1200')+bytes(12)+b'Zstd\0'+b'example header only')
         (self.game/'random.sav').write_bytes(b'unrelated')

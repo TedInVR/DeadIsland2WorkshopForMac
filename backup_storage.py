@@ -16,7 +16,7 @@ def folder():
 def protects(path):
     # Refuse manual exports anywhere inside the dedicated backup directory.
     root=folder().resolve();target=Path(path).resolve()
-    return target==root or root in target.parents
+    return any(target==p or p in target.parents for p in (root,root.parent/'NamedBackups'))
 
 def snapshot(data,reason,name='ue4savegame.ps4.sav'):
     if reason not in ('opened','exported'):raise ValueError('Unknown backup reason')

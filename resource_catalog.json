@@ -1,0 +1,200 @@
+[
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/BladeArm/DA_ItemArchetype_ExoticMaterials_BladeArm.DA_ItemArchetype_ExoticMaterials_BladeArm",
+    "name": "Blade Arm",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/BlastGland/DA_ItemArchetype_ExoticMaterials_BlastGland.DA_ItemArchetype_ExoticMaterials_BlastGland",
+    "name": "Blast Gland",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/BloatedSpleen/DA_ItemArchetype_ExoticMaterials_BloatedSpleen.DA_ItemArchetype_ExoticMaterials_BloatedSpleen",
+    "name": "Bloated Spleen",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/CombustibleFluid/DA_ItemArchetype_ExoticMaterials_CombustibleFluid.DA_ItemArchetype_ExoticMaterials_CombustibleFluid",
+    "name": "Combustible Fluid",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/CorrosiveFluid/DA_ItemArchetype_ExoticMaterials_ChthonicIchor.DA_ItemArchetype_ExoticMaterials_ChthonicIchor",
+    "name": "Chthonic Ichor",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/DamagedImplants/DA_ItemArchetype_ExoticMaterials_DamagedImplants.DA_ItemArchetype_ExoticMaterials_DamagedImplants",
+    "name": "Damaged Implants",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/InfectedBlood/DA_ItemArchetype_ExoticMaterials_InfectedBlood.DA_ItemArchetype_ExoticMaterials_InfectedBlood",
+    "name": "Infected Blood",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/InfectedFlesh/DA_ItemArchetype_ExoticMaterials_InfectedFlesh.DA_ItemArchetype_ExoticMaterials_InfectedFlesh",
+    "name": "Infected Flesh",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/InfectedSinew/DA_ItemArchetype_ExoticMaterials_InfectedSinew.DA_ItemArchetype_ExoticMaterials_InfectedSinew",
+    "name": "Infected Sinew",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/InfectedSpine/DA_ItemArchetype_ExoticMaterials_InfectedSpine.DA_ItemArchetype_ExoticMaterials_InfectedSpine",
+    "name": "Infected Spine",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/InsectLarva/DA_ItemArchetype_ExoticMaterials_InsectLarva.DA_ItemArchetype_ExoticMaterials_InsectLarva",
+    "name": "Insect Larva",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/MutatorBrain/DA_ItemArchetype_ExoticMaterials_MutatedHeart.DA_ItemArchetype_ExoticMaterials_MutatedHeart",
+    "name": "Mutated Heart",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/OversizedArmBone/DA_ItemArchetype_ExoticMaterials_OversizedArmBone.DA_ItemArchetype_ExoticMaterials_OversizedArmBone",
+    "name": "Oversized Arm Bone",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/RamSpinalFluid/DA_ItemArchetype_ExoticMaterials_ElectrifiedBrain.DA_ItemArchetype_ExoticMaterials_ElectrifiedBrain",
+    "name": "Electrified Brain",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/RegeneratingTissue/DA_ItemArchetype_ExoticMaterials_RegeneratingTissue.DA_ItemArchetype_ExoticMaterials_RegeneratingTissue",
+    "name": "Regenerating Tissue",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/ScreamerLungs/DA_ItemArchetype_ExoticMaterials_ScreamerLungs.DA_ItemArchetype_ExoticMaterials_ScreamerLungs",
+    "name": "Screamer Lungs",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/ExoticIngredients/ToxicGallbladder/DA_ItemArchetype_ExoticMaterials_ToxicGallbladder.DA_ItemArchetype_ExoticMaterials_ToxicGallbladder",
+    "name": "Toxic Gallbladder",
+    "category": "Zombie parts",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Alcohol/DA_ItemArchetype_Ingredients_Aerosol.DA_ItemArchetype_Ingredients_Aerosol",
+    "name": "Aerosol",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Bandages/DA_ItemArchetype_Ingredients_Fabric.DA_ItemArchetype_Ingredients_Fabric",
+    "name": "Fabric",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Blades/DA_ItemArchetype_Ingredients_Blades.DA_ItemArchetype_Ingredients_Blades",
+    "name": "Blades",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Chemicals/DA_ItemArchetype_Ingredients_Chemicals.DA_ItemArchetype_Ingredients_Chemicals",
+    "name": "Chemicals",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Electronics/DA_ItemArchetype_Ingredients_Electronics.DA_ItemArchetype_Ingredients_Electronics",
+    "name": "Electronics",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Gunpowder/DA_ItemArchetype_Ingredients_Gunpowder.DA_ItemArchetype_Ingredients_Gunpowder",
+    "name": "Gunpowder",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/MetalParts/DA_ItemArchetype_Ingredients_MetalParts.DA_ItemArchetype_Ingredients_MetalParts",
+    "name": "Metal Parts",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/MetalRod/DA_ItemArchetype_Ingredients_Alloy.DA_ItemArchetype_Ingredients_Alloy",
+    "name": "Alloy",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Resin/DA_ItemArchetype_Ingredients_Adhesive.DA_ItemArchetype_Ingredients_Adhesive",
+    "name": "Adhesive",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Scrap/DA_ItemArchetype_Ingredients_Scrap.DA_ItemArchetype_Ingredients_Scrap",
+    "name": "Scrap",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Screws/DA_ItemArchetype_Ingredients_Fasteners.DA_ItemArchetype_Ingredients_Fasteners",
+    "name": "Fasteners",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/SyntheticFibres/DA_ItemArchetype_Ingredients_SyntheticFibres.DA_ItemArchetype_Ingredients_SyntheticFibres",
+    "name": "Synthetic Fibres",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Pickups/Ingredients/Wire/DA_ItemArchetype_Ingredients_Wire.DA_ItemArchetype_Ingredients_Wire",
+    "name": "Wire",
+    "category": "Crafting materials",
+    "maximum": 99
+  },
+  {
+    "path": "/Game/DI2/Items/Consumables/DA_InventoryTypes_Consumable_HealthPack.DA_InventoryTypes_Consumable_HealthPack",
+    "name": "Med-kits",
+    "category": "Consumables",
+    "maximum": 5
+  },
+  {
+    "path": "/Game/DI2/Items/Consumables/DA_InventoryTypes_KeyItems_Fuse.DA_InventoryTypes_KeyItems_Fuse",
+    "name": "Fuses",
+    "category": "Consumables",
+    "maximum": 3
+  },
+  {
+    "path": "/Game/DI2/Items/Special/DA_InventoryTypes_Special_CashItem.DA_InventoryTypes_Special_CashItem",
+    "name": "Cash",
+    "category": "Money",
+    "maximum": 2000000
+  }
+]

@@ -1,4 +1,4 @@
-DEAD ISLAND 2 WORKSHOP FOR MAC 0.10.1
+DEAD ISLAND 2 WORKSHOP FOR MAC 0.11.0
 
 Quit Workshop, extract this package, and double-click Install.command.
 It updates /Applications/Dead Island 2 Workshop.app and opens the same app.
@@ -20,3 +20,5 @@ They run every 15 minutes with the app closed and leave it closed after updating
 No GitHub token or Save Wizard credentials are bundled in this package.
 
 Optional GarlicSaves preview: PS4 Decrypt / Encrypt remembers your worker key securely on this computer. Test Connection sends no saves. Decryption/encryption requires explicit upload confirmation. Live output compatibility and PS4 import still need testing.
+
+0.11.0: Character & Resources edits level, cash, materials, zombie parts, med-kits and fuses. USB Saves offers Back Up This Save and Named Backups. PS4 tools can resign one/all source-profile saves across CUSA game folders, with destination backups before replacement. Generic package processing depends on GarlicSaves game support and requires live testing.

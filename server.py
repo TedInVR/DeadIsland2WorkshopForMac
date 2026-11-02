@@ -7,6 +7,8 @@ from urllib.parse import unquote
 import backup_storage
 import save_browser
 import garlic_service
+import ps4_backups
+usb_busy=False
 service=garlic_service.Manager()
 ROOT=Path(__file__).resolve().parent
 MAX=128*1024*1024
@@ -37,22 +39,42 @@ class Handler(BaseHTTPRequestHandler):
         elif p=='saves':
             try:self.reply(200,save_browser.scan())
             except Exception as e:self.reply(400,{'error':str(e)})
+        elif p=='named-backups':self.reply(200,{'backups':ps4_backups.list_backups()})
+        elif p=='backup-folder':
+            ps4_backups.root().mkdir(parents=True,exist_ok=True);self.reply(200,{'path':str(ps4_backups.root())})
         elif p=='service-status':self.reply(200,service.view())
         elif p=='service-folder':self.reply(200,{'path':str(service.folder) if service.folder else None})
         elif p=='export' and app.output is not None:self.reply(200,app.output,'application/octet-stream')
         else:self.reply(404,{'error':'Not found'})
     def do_POST(self):
+        global usb_busy
         if self.headers.get('Host')!='127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid host'})
         origin=self.headers.get('Origin')
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
-        if p not in ('open','prepare','profile-name','import-profiles','open-found','select-found','service-key','service-test','service-decrypt','service-open','service-encrypt'):return self.reply(404,{'error':'Not found'})
+        if p not in ('open','prepare','profile-name','import-profiles','open-found','select-found','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
             raw=self.rfile.read(n)
             if len(raw)!=n:raise ValueError('Upload was interrupted')
-            if p.startswith('service-'):
+            if p in ('named-backup','restore-backup','open-backup'):
+                value=json.loads(raw)
+                if p=='named-backup':self.reply(200,ps4_backups.capture(save_browser.find_save(value.get('key')),value.get('name')))
+                else:
+                    meta,files=ps4_backups.retrieve(value.get('id'))
+                    if p=='open-backup':
+                        if meta['kind']!='decrypted':raise ValueError('Restore this encrypted backup to USB, then decrypt it through PS4 tools.')
+                        self.reply(200,{'name':meta['filename'],'data':app.open_save(files[meta['filename']],meta['filename'])})
+                    else:
+                        if value.get('consent')is not True:raise ValueError('Confirm restoring this backup and replacing the USB destination.')
+                        usb_busy=True
+                        try:self.reply(200,ps4_backups.install(save_browser.find_drive(value.get('drive_key')),meta['account_id'],meta['title_id'],meta['filename'],files,'Automatic backup before restoring '+meta['name']))
+                        finally:usb_busy=False
+            elif p=='service-import-zip':
+                if self.headers.get('X-Workshop-Consent')!='yes':raise ValueError('Confirm uploading this complete decrypted ZIP to GarlicSaves.')
+                self.reply(200,service.encrypt(package=raw))
+            elif p.startswith('service-'):
                 value=json.loads(raw)
                 if not isinstance(value,dict):raise ValueError('Invalid service request.')
                 if p=='service-key':
@@ -60,6 +82,22 @@ class Handler(BaseHTTPRequestHandler):
                     if not isinstance(value.get('key'),str):raise ValueError('Enter a worker key, or explicitly remove the saved key.')
                     self.reply(200,service.set_key(value.get('key')))
                 elif p=='service-test':self.reply(200,service.test())
+                elif p=='service-install':
+                    if value.get('consent')is not True:raise ValueError('Confirm replacing the destination saves on USB.')
+                    usb_busy=True
+                    try:self.reply(200,service.install_results())
+                    finally:usb_busy=False
+                elif p=='service-resign':
+                    if value.get('consent')is not True:raise ValueError('Confirm sending the selected saves to GarlicSaves for resigning.')
+                    entry=save_browser.find_save(value.get('key'));entries=[entry]
+                    if value.get('all')is True:entries=[e for e in save_browser.scan()['entries'] if e['account_id']==entry['account_id'] and e['drive_key']==entry['drive_key'] and e['kind']=='encrypted']
+                    target=value.get('account_id')
+                    known=set(save_browser.profile_names())|{e['account_id'] for e in save_browser.scan()['entries']}
+                    if target not in known:raise ValueError('Choose an existing or named destination profile.')
+                    self.reply(200,service.resign(entries,target))
+                elif p=='service-encrypt-original':
+                    if value.get('consent')is not True:raise ValueError('Confirm sending the complete decrypted package to GarlicSaves.')
+                    self.reply(200,service.encrypt())
                 elif p=='service-decrypt':
                     if value.get('consent') is not True:raise ValueError('Confirm sending this encrypted pair to GarlicSaves.')
                     entry=save_browser.find_save(value.get('key'))
@@ -68,7 +106,9 @@ class Handler(BaseHTTPRequestHandler):
                     self.reply(200,service.decrypt(entry))
                 elif p=='service-open':
                     if service.running or service.session is None:raise ValueError('Wait for a successful decryption first.')
-                    session=service.session;name=session['name'];info=app.open_save(session['files'][name],Path(name).name)
+                    session=service.session;name=session['name']
+                    if not name:raise ValueError('This game-data format is not editable here. Use the generic PS4 package tools.')
+                    info=app.open_save(session['files'][name],Path(name).name)
                     app.service_session=session
                     self.reply(200,{'data':info,'name':Path(name).name})
                 else:
@@ -103,14 +143,14 @@ class Handler(BaseHTTPRequestHandler):
                 if app.save is None:raise ValueError('Open a save first')
                 request=json.loads(raw)
                 if "changes" in request:
-                    changes=request["changes"];additions=request.get("additions",[]);deletions=request.get("deletions",[]);ammo_changes=request.get('ammo_changes',{})
-                else:changes=request;additions=[];deletions=[];ammo_changes={}
+                    changes=request["changes"];additions=request.get("additions",[]);deletions=request.get("deletions",[]);ammo_changes=request.get('ammo_changes',{});resource_changes=request.get('resource_changes',[]);character_levels=request.get('character_levels',{})
+                else:changes=request;additions=[];deletions=[];ammo_changes={};resource_changes=[];character_levels={}
                 catalog={x['path'] for x in app.save.info()['catalog']}
                 for key,c in changes.items():
                     if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path','durability'}:raise ValueError('Unknown edit field')
                     if 'perks' in c and (not isinstance(c['perks'],list) or any(x not in catalog for x in c['perks'])):raise ValueError('Choose upgrades from this save’s catalog')
                 app.output=None
-                output=app.save.rebuild(changes,additions,deletions,ammo_changes)
+                output=app.save.rebuild(changes,additions,deletions,ammo_changes,resource_changes,character_levels)
                 backup=backup_storage.snapshot(output,'exported',app.name)
                 app.output=output
                 self.reply(200,{'bytes':len(app.output),'edited':len(changes),'created':len(additions),'deleted':len(deletions),'backup':backup})

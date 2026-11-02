@@ -9,6 +9,7 @@ on:
       - '*.html'
       - 'Info.plist'
       - 'catalog.json'
+      - 'resource_catalog.json'
       - '.github/workflows/mac-updates.yml'
   workflow_dispatch:
 permissions:
@@ -23,6 +24,6 @@ jobs:
         with:
           python-version: '3.11'
       - name: Update and backup regression checks
-        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_credentials.py -v
+        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_credentials.py test_ps4_backups.py test_ps4_service.py -v
       - name: Real Swift build and isolated updater installation
         run: python3 test_update_install_macos.py

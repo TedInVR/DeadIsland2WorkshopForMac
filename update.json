@@ -1,6 +1,6 @@
 {
-  "version": "0.10.1",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.10.1.zip",
-  "sha256": "09727b683022c7af266a9b4f01c8b483035261cd562edcb24a49e1d9af83e88b",
-  "notes": "Remember worker keys securely across launches using macOS Keychain or Windows Credential Manager. Includes save, replace, and remove controls."
+  "version": "0.11.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.11.0.zip",
+  "sha256": "a48e4567b5a7a423a707f73106b7ce95e492b93236b62aa8b1ead7e42ee4039e",
+  "notes": "Named backups and guarded restore; general PS4 package tools and profile resigning; DI2 character levels, capped cash and resource fills. Live service/console testing pending."
 }

@@ -81,32 +81,39 @@ def scan(roots=None):
             for account in sorted(savedata.iterdir(),key=lambda p:p.name.lower())[:512]:
                 if not ACCOUNT.fullmatch(account.name) or account.is_symlink() or not account.is_dir():continue
                 aid=account.name.lower()
-                for title in TITLE_IDS:
-                    game=account/title
+                for game in sorted(account.iterdir(),key=lambda p:p.name):
+                    title=game.name
+                    if not re.fullmatch(r"CUSA[0-9]{5}",title):continue
                     if game.is_symlink() or not game.is_dir():continue
                     try:files={p.name.lower():p for p in list(game.iterdir())[:512] if not p.is_symlink() and p.is_file()}
                     except OSError as e:errors.append(str(game)+': '+str(e));continue
                     for low,path in files.items():
-                        if low.endswith('.bin') or low.startswith('.'):continue
-                        if low!='deadisland2savegame' and path.suffix.lower() not in ('.sav','.dat'):continue
+                        if low.startswith('.') or (low.endswith('.bin') and low+'.bin' not in files):continue
+                        if not re.fullmatch(r'[A-Za-z0-9_. -]{1,64}',path.name):continue
                         try:
                             with path.open('rb') as f:head=f.read(21)
                             fileinfo=path.stat()
                         except OSError as e:errors.append(str(path)+': '+str(e));continue
                         plain=head[:4]==bytes.fromhex('3dca1200') and head[16:21]==b'Zstd\0'
-                        if not plain and low!='deadisland2savegame':continue
                         binfile=files.get(low+'.bin')
+                        if not plain and not binfile and low!='deadisland2savegame':continue
                         kind='decrypted' if plain else ('encrypted' if binfile else 'incomplete')
                         key=_key(path)
                         if key in seen:continue
                         seen.add(key)
-                        entries.append(dict(key=key,path=str(path),folder=str(game),drive=root.name or str(root),account_id=aid,profile_name=names.get(aid,aid),title_id=title,filename=path.name,kind=kind,bin_path=str(binfile) if binfile else None,bytes=fileinfo.st_size,modified=fileinfo.st_mtime))
+                        entries.append(dict(drive_key=_key(root),drive_root=str(root),game_name='Dead Island 2' if low=='deadisland2savegame' else title,is_di2=low=='deadisland2savegame' or plain,key=key,path=str(path),folder=str(game),drive=root.name or str(root),account_id=aid,profile_name=names.get(aid,aid),title_id=title,filename=path.name,kind=kind,bin_path=str(binfile) if binfile else None,bytes=fileinfo.st_size,modified=fileinfo.st_mtime))
         except OSError as e:errors.append(str(root)+': '+str(e))
     entries.sort(key=lambda e:(e['profile_name'].lower(),e['drive'].lower(),e['title_id'],e['filename'].lower()))
-    return dict(entries=entries,profiles=names,errors=errors)
+    return dict(entries=entries,profiles=names,errors=errors,drives=[dict(key=_key(p),name=Path(p).name,root=str(p)) for p in roots if Path(p).is_dir() and not Path(p).is_symlink()])
 
 def find_save(key,roots=None):
     if not isinstance(key,str) or not re.fullmatch('[0-9a-f]{32}',key):raise BrowserError('Choose a save from the USB list.')
     entry=next((e for e in scan(roots)['entries'] if e['key']==key),None)
     if not entry:raise BrowserError('That drive or save is no longer available. Refresh the USB list.')
     return entry
+
+
+def find_drive(key):
+    for p in mounted_roots():
+        if Path(p).is_dir() and not Path(p).is_symlink() and _key(p)==key:return Path(p)
+    raise BrowserError('That USB drive is no longer available.')

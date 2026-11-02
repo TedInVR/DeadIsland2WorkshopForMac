@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parent
 def main():
     if sys.platform!='win32':raise SystemExit('Build the Windows executable on Windows, using the GitHub Actions workflow.')
     os.chdir(ROOT);v=version();output=ROOT/'windows-dist';output.mkdir(exist_ok=True)
-    resources=['index.html','catalog.json','Info.plist','User-Guide.html','USER_GUIDE.md','README-WINDOWS.md','THIRD_PARTY_NOTICES.md']
+    resources=['resource_catalog.json','index.html','catalog.json','Info.plist','User-Guide.html','USER_GUIDE.md','README-WINDOWS.md','THIRD_PARTY_NOTICES.md']
     command=[sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onedir','--windowed','--name','Dead Island 2 Workshop','--icon','Workshop.icns','--copy-metadata','pywebview','--copy-metadata','pythonnet','--exclude-module','tkinter']
     for name in resources:command+=['--add-data',name+':.']
     command+=['windows_app.py'];subprocess.run(command,check=True)

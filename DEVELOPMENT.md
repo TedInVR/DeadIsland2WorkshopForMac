@@ -47,3 +47,5 @@ Never commit actual saves, PSN credentials, Save Wizard credentials/license keys
 The scanner tests use synthetic account IDs and temporary drive trees. `DI2_WORKSHOP_SCAN_ROOTS` may contain a JSON list of explicit development roots; `DI2_WORKSHOP_BACKUP_DIR` isolates backups/settings during tests. Do not commit private profile mappings or actual save containers.
 
 Mac update CI runs `test_update_install_macos.py`, which uses temporary app/support/development paths and skips launch-agent registration. `DI2_WORKSHOP_INSTALL_APP`, `DI2_WORKSHOP_DEV_DIR`, and `DI2_WORKSHOP_SKIP_AGENT=1` are integration-test overrides; normal installation still targets Applications and configures the updater.
+
+Character/resource tests: `DI2_TEST_SAVE=/private/path/to/export.sav python -m unittest test_character_editor -v`. General PS4 unit tests: `python -m unittest test_ps4_backups test_ps4_service -v`. Network calls are mocked; no credentials or user save fixtures are included in GitHub. Level thresholds are a numerical table cross-checked against saved profile caches and XP; reference https://deadisland.fandom.com/wiki/Experience_Points#Dead_Island_2.

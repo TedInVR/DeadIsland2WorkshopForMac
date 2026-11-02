@@ -15,7 +15,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.10.1"
+    let version = "0.11.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -72,7 +72,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         let auto=help.addItem(withTitle:"Automatic Updates", action:#selector(toggleAutomaticUpdates), keyEquivalent:"");auto.target=self;auto.state=automaticUpdatesEnabled() ? .on : .off;autoUpdateItem=auto
         help.addItem(withTitle:"PS4 Decrypt / Encrypt…", action:#selector(encryptionInfo), keyEquivalent:"").target=self
     }
-    @objc func about(){alert("Dead Island 2 Workshop \(version)","Independent Mac preview for decrypted PS4 Save Wizard exports. No affiliation with the game developer, Save Wizard, or SteffenL. Save format checks passed against your supplied file; PS4 in-game validation is still required.")}
+    @objc func about(){alert("Dead Island 2 Workshop \(version)","Dead Island 2 character, resource and weapon editor with general PS4 save tools. No affiliation with the game developer, Save Wizard, or SteffenL. Save format checks passed against your supplied file; PS4 in-game validation is still required.")}
     @objc func helpText(){alert("Using Workshop", "1. Open a copy of your decrypted PS4 export.\n2. Select a locker or carried inventory and a weapon.\n3. Adjust level, rarity, or perks. Copy/Paste Perk Set transfers upgrades between weapons.\n4. Review & Export creates a separate edited file.\n5. Import that file in Save Wizard on your PC, apply it, then test on PS4.\n\nKeep your original backup. Create Weapon adds a new catalog weapon to the selected character or shared locker. Replace Weapon switches an existing weapon to a catalog model in the same slot. Delete Weapon marks it for removal; Undo Delete restores it before export. Duplicate Weapon copies complete saved weapon state with fresh IDs. Slots after export shows capacity by location. Apply / Remove beside a perk opens scoped batch editing. Reserve Ammo edits existing reserve stacks, not loaded magazines. Melee durability is experimental. Separate combat-class overrides are not included. Profiles show actual slayer names and Regular/New Game Plus. The weapon and perk catalog combines published game identifiers with your opened save.")}
     @objc func shortcuts(){alert("Keyboard Shortcuts", "Command–O: Open save\nCommand–N: Create weapon\nCommand–S: Review and export\nCommand–W: Close window and quit\nCommand–Q: Quit\nCommand–C / V / X / A: Text editing\n\nKeyboard shortcuts are fixed in this preview.")}
     func automaticUpdatesEnabled() -> Bool {
@@ -170,12 +170,13 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     }
     @objc func browseUSB(){web.evaluateJavaScript("window.openUSB()",completionHandler:nil)}
     @objc func openFile(){web.evaluateJavaScript("window.openSave()",completionHandler:nil)}
+    @objc func characterEditor(){web.evaluateJavaScript("window.openCharacter()",completionHandler:nil)}
     @objc func createWeapon(){web.evaluateJavaScript("window.createWeapon()",completionHandler:nil)}
     @objc func exportFile(){web.evaluateJavaScript("window.reviewSave()",completionHandler:nil)}
     @objc func closeWindow(){window.performClose(nil)}
     @objc func quitApp(){
         if exporting {alert("Export in progress", "Please wait until saving has finished before quitting.");return}
-        web.evaluateJavaScript("({dirty:typeof changes==='undefined'?0:Object.keys(changes).length+additions.length+deletions.length+ammoDirty(),busy:typeof busy!=='undefined'&&busy})") { value, _ in
+        web.evaluateJavaScript("({dirty:typeof changes==='undefined'?0:Object.keys(changes).length+additions.length+deletions.length+ammoDirty()+extraDirty(),busy:typeof busy!=='undefined'&&busy})") { value, _ in
             let state=value as? [String:Any] ?? [:]
             if state["busy"] as? Bool == true{self.alert("Operation in progress", "Please wait for the current operation to finish before quitting.");return}
             if let count=state["dirty"] as? Int, count>0 {
@@ -232,8 +233,8 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         guard let body=message.body as? [String:Any] else{return}
         if body["action"] as? String == "rememberSource",let path=body["path"] as? String {sourcePaths.insert(URL(fileURLWithPath:path).resolvingSymlinksInPath().standardizedFileURL.path);return}
         if body["action"] as? String == "revealSource",let path=body["path"] as? String {NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath:path)]);return}
-        if body["action"] as? String == "serviceFolder",let base=base{
-            URLSession.shared.dataTask(with:base.appendingPathComponent("service-folder")){data,response,error in
+        if ["serviceFolder","backupFolder"].contains(body["action"] as? String ?? ""),let base=base{
+            URLSession.shared.dataTask(with:base.appendingPathComponent(body["action"] as? String == "backupFolder" ? "backup-folder":"service-folder")){data,response,error in
                 guard error==nil,(response as? HTTPURLResponse)?.statusCode==200,let data=data,let obj=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],let path=obj["path"] as? String else{return}
                 DispatchQueue.main.async{NSWorkspace.shared.open(URL(fileURLWithPath:path,isDirectory:true))}
             }.resume();return
@@ -244,7 +245,8 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
             guard r == .OK,let target=panel.url else{self.finish("Export canceled. Edits are still staged.");return}
             let backupRoot=self.backupDirectory().resolvingSymlinksInPath().standardizedFileURL.path.lowercased()
             let exportPath=target.resolvingSymlinksInPath().standardizedFileURL.path.lowercased()
-            if exportPath == backupRoot || exportPath.hasPrefix(backupRoot+"/"){self.finish("Choose another folder; automatic backups cannot be overwritten.",true);return}
+            let namedRoot=self.backupDirectory().deletingLastPathComponent().appendingPathComponent("NamedBackups").resolvingSymlinksInPath().standardizedFileURL.path.lowercased()
+            if exportPath == backupRoot || exportPath.hasPrefix(backupRoot+"/") || exportPath == namedRoot || exportPath.hasPrefix(namedRoot+"/"){self.finish("Choose another folder; automatic backups cannot be overwritten.",true);return}
             if self.sourcePaths.contains(target.resolvingSymlinksInPath().standardizedFileURL.path) {self.finish("Choose a different filename; the original save cannot be overwritten.",true);return}
             self.exporting=true
             URLSession.shared.dataTask(with:base.appendingPathComponent("export")){d,response,e in

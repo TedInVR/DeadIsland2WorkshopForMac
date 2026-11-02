@@ -4,6 +4,7 @@ from pathlib import Path,PurePosixPath
 from urllib import request,error
 import backup_storage
 import credential_store
+import ps4_backups
 
 BASE='https://garlicsaves.com/api/v1'
 LIMIT=128*1024*1024
@@ -56,6 +57,13 @@ def decrypted_files(files):
     if len(candidates)!=1:raise ServiceError('Could not identify a single Dead Island 2 game-data file. The downloaded ZIP has been kept for inspection.')
     return result,candidates[0]
 
+def package_files(files):
+    names=[n for n,v in files.items() if n.endswith('sce_sys/param.sfo') and v.startswith(b'\0PSF')]
+    if len(names)!=1:raise ServiceError('Choose a ZIP containing exactly one complete decrypted save with sce_sys/param.sfo.')
+    prefix=names[0][:-len('sce_sys/param.sfo')]
+    if any(not n.startswith(prefix) for n in files):raise ServiceError('The ZIP contains files outside the selected save folder.')
+    return {n[len(prefix):]:v for n,v in files.items()}
+
 def validate_identity(files,account,title):
     raw=files['sce_sys/param.sfo']
     try:
@@ -74,16 +82,16 @@ def validate_identity(files,account,title):
     except (ValueError,KeyError,struct.error,UnicodeError):raise ServiceError('The decrypted param.sfo account/game metadata could not be validated. The result ZIP is retained for inspection.') from None
     if actual_title!=title or actual_account!=account:raise ServiceError('The decrypted metadata identifies a different PSN account or game. The result ZIP is retained; Workshop did not open or re-encrypt it.')
 
-def encrypted_files(files,account,title):
-    found=[n for n in files if PurePosixPath(n).name=='DeadIsland2SaveGame']
-    if len(found)!=1 or found[0]+'.bin' not in files:raise ServiceError('The encrypted result did not contain one matching DeadIsland2SaveGame pair. The ZIP has been kept for inspection.')
+def encrypted_files(files,account,title,savename='DeadIsland2SaveGame'):
+    found=[n for n in files if PurePosixPath(n).name==savename]
+    if len(found)!=1 or found[0]+'.bin' not in files:raise ServiceError('The encrypted result did not contain one matching PS4 save pair. The ZIP has been kept for inspection.')
     name=found[0];parts=PurePosixPath(name).parts
     if 'SAVEDATA' in parts:
         i=parts.index('SAVEDATA')
         if len(parts)<=i+2 or parts[i+1].lower()!=account or parts[i+2]!=title:raise ServiceError('The result folder identifies a different account or game. Workshop did not prepare it for USB copying.')
     validate_pair(files[name],files[name+'.bin'])
     base='PS4/SAVEDATA/'+account+'/'+title+'/'
-    return {base+'DeadIsland2SaveGame':files[name],base+'DeadIsland2SaveGame.bin':files[name+'.bin']}
+    return {base+savename:files[name],base+savename+'.bin':files[name+'.bin']}
 
 class Client:
     def __init__(self,key):
@@ -113,11 +121,11 @@ class Client:
         boundary='Workshop'+uuid.uuid4().hex;chunks=[]
         fields={'operation':operation}
         if operation=='decrypt':fields['include_sce_sys']='true'
-        elif operation=='encrypt':fields['account_id']=account
+        elif operation in ('encrypt','resign'):fields['account_id']=account
         else:raise ServiceError('Unsupported operation.')
         for name,value in fields.items():chunks.append(('--'+boundary+'\r\nContent-Disposition: form-data; name="'+name+'"\r\n\r\n'+str(value)+'\r\n').encode())
         for name,raw in files:
-            if not re.fullmatch(r'[A-Za-z0-9._-]+',name):raise ServiceError('Invalid upload filename.')
+            if not re.fullmatch(r'[A-Za-z0-9._ -]+',name):raise ServiceError('Invalid upload filename.')
             chunks.extend([('--'+boundary+'\r\nContent-Disposition: form-data; name="files"; filename="'+name+'"\r\nContent-Type: application/octet-stream\r\n\r\n').encode(),raw,b'\r\n'])
         chunks.append(('--'+boundary+'--\r\n').encode());data=b''.join(chunks)
         if len(data)>LIMIT+1048576:raise ServiceError('Upload exceeds the size limit.')
@@ -139,7 +147,7 @@ class Client:
 class Manager:
     def __init__(self,store=None):
         self.store=store if store is not None else credential_store.default_store();self.key_loaded=False;self.key_saved=False;self.key_error=None
-        self.client=None;self.state={'status':'idle','message':'Enter your worker key and test the connection.'};self.lock=threading.Lock();self.session=None;self.folder=None;self.context=None;self.running=False
+        self.client=None;self.state={'status':'idle','message':'Enter your worker key and test the connection.'};self.lock=threading.Lock();self.session=None;self.folder=None;self.context=None;self.running=False;self.results=[]
     def load_key(self):
         if self.key_loaded:return
         try:
@@ -150,7 +158,7 @@ class Manager:
             self.key_error='The saved worker key could not be read. Allow secure credential-store access if prompted, then reopen this screen.'
     def view(self):
         if not self.running:self.load_key()
-        with self.lock:return dict(self.state,key_saved=self.key_saved,key_error=self.key_error,has_key=self.client is not None,has_session=self.session is not None,has_folder=self.folder is not None,account_id=(self.context or {}).get('account_id'),title_id=(self.context or {}).get('title_id'))
+        with self.lock:return dict(self.state,key_saved=self.key_saved,key_error=self.key_error,has_key=self.client is not None,has_session=self.session is not None,has_folder=self.folder is not None,editable=bool(self.session and self.session.get('name')),result_count=len(self.results),account_id=(self.context or {}).get('account_id'),title_id=(self.context or {}).get('title_id'))
     def message(self,text):
         with self.lock:self.state['message']=text
     def set_key(self,key):
@@ -174,13 +182,14 @@ class Manager:
                 with self.lock:self.state={'status':'done','operation':operation,**result}
             except Exception as e:
                 # Never expose unexpected exception text: it could contain credentials.
-                message=str(e) if isinstance(e,(ServiceError,backup_storage.BackupError)) else 'The operation could not finish. Your original files are unchanged. Downloaded results, if any, are retained in the service folder.'
+                message=str(e) if isinstance(e,(ServiceError,backup_storage.BackupError,ps4_backups.BackupError)) else 'The operation could not finish. Your original files are unchanged. Downloaded results, if any, are retained in the service folder.'
                 with self.lock:self.state={'status':'error','operation':operation,'message':message.replace(client.key,'[redacted]')}
             finally:
                 with self.lock:self.running=False
         threading.Thread(target=worker,daemon=True).start();return self.view()
     def test(self):return self.start('test',lambda c:c.test())
     def decrypt(self,entry):
+        entry=dict(entry);entry.setdefault('filename',Path(entry['path']).name)
         # Read and back up originals before any network submission. Do not modify USB.
         def task(c):
             a=Path(entry['path']);b=Path(entry['bin_path'])
@@ -188,40 +197,77 @@ class Manager:
             raw=a.read_bytes();sealed=b.read_bytes();validate_pair(raw,sealed)
             root=backup_storage.folder().parent/'ServiceSessions'/(time.strftime('%Y%m%d-%H%M%S')+'-'+uuid.uuid4().hex)
             root.mkdir(parents=True,mode=0o700)
-            originals={'PS4/SAVEDATA/'+entry['account_id']+'/'+entry['title_id']+'/DeadIsland2SaveGame':raw,'PS4/SAVEDATA/'+entry['account_id']+'/'+entry['title_id']+'/DeadIsland2SaveGame.bin':sealed}
+            originals={'PS4/SAVEDATA/'+entry['account_id']+'/'+entry['title_id']+'/'+entry['filename']:raw,'PS4/SAVEDATA/'+entry['account_id']+'/'+entry['title_id']+'/'+entry['filename']+'.bin':sealed}
             write_new(root/'Original-Encrypted-Pair.zip',make_zip(originals));self.folder=root
             for data,name in ((raw,a.name),(sealed,b.name)):backup_storage.snapshot(data,'opened',name)
-            job=c.submit('decrypt',[('DeadIsland2SaveGame',raw),('DeadIsland2SaveGame.bin',sealed)])
+            job=c.submit('decrypt',[(entry['filename'],raw),(entry['filename']+'.bin',sealed)])
             write_new(root/'decrypt-job.json',json.dumps({'job_id':job,'account_id':entry['account_id'],'title_id':entry['title_id']}).encode())
             result=c.result(job,self.message);write_new(root/'Decrypted-Result.zip',result)
-            files,name=decrypted_files(unpack(result));validate_identity(files,entry['account_id'],entry['title_id'])
-            from save_core import Save,FormatError
-            try:
-                save=Save(files[name])
-                if save.rebuild({})!=files[name]:raise FormatError('Round-trip mismatch')
-            except (FormatError,ValueError,IndexError,UnicodeError):raise ServiceError('Decryption finished, but this game-data format is not supported yet. The complete result ZIP is saved in the service folder. It has not been converted or modified.') from None
-            # Opening is a separate explicit action so existing staged edits are retained.
+            files=package_files(unpack(result));validate_identity(files,entry['account_id'],entry['title_id']);name=None
+            candidates=[n for n in files if PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav' or files[n][:4]==bytes.fromhex('3dca1200')]
+            candidate=candidates[0] if len(candidates)==1 else None
+            if candidate:
+                from save_core import Save,FormatError
+                try:
+                    save=Save(files[candidate])
+                    if save.rebuild({})==files[candidate]:name=candidate
+                except (FormatError,ValueError,IndexError,UnicodeError):pass
             self.session={'files':files,'name':name,'root':root};self.context=dict(entry)
-            return {'message':'Decrypted and validated. Click Open Decrypted Save to begin editing.','job_id':job}
-        if not re.fullmatch('[0-9a-f]{16}',entry.get('account_id','')) or entry.get('title_id') not in ('CUSA01014','CUSA27043','CUSA35681'):raise ServiceError('Choose a known Dead Island 2 PS4 save from USB.')
+            return {'message':'Decrypted and validated. Click Open Decrypted Save to edit Dead Island 2.' if name else 'Decrypted package saved. Game data is not editable here; you can re-encrypt the unchanged package or import a complete externally edited ZIP.','job_id':job}
+        ps4_backups.identity(entry['account_id'],entry['title_id'],entry['filename'])
         return self.start('decrypt',task)
-    def encrypt(self,raw):
+    def encrypt(self,raw=None,package=None):
         session=self.session;context=self.context
         if session is None or not context:raise ServiceError('Decrypt and open a save through GarlicSaves first.')
         validate_identity(session['files'],context['account_id'],context['title_id'])
-        from save_core import Save
-        save=Save(raw)
-        if save.rebuild({})!=raw:raise ServiceError('Edited game data did not pass validation.')
+        files=dict(session['files'])
+        if package is not None:
+            files=package_files(unpack(package));validate_identity(files,context['account_id'],context['title_id'])
+        elif raw is not None:
+            if not session['name']:raise ServiceError('This decrypted game-data format cannot be edited here.')
+            from save_core import Save
+            save=Save(raw)
+            if save.rebuild({})!=raw:raise ServiceError('Edited game data did not pass validation.')
+            files[session['name']]=raw
         def task(c):
             folder=session['root']/('Encrypted-'+uuid.uuid4().hex);folder.mkdir();self.folder=folder
-            files=dict(session['files']);files[session['name']]=raw
             package=make_zip(files);write_new(folder/'Edited-Decrypted-Package.zip',package)
-            backup_storage.snapshot(raw,'exported',PurePosixPath(session['name']).name)
+            if raw is not None:backup_storage.snapshot(raw,'exported',PurePosixPath(session['name']).name)
             job=c.submit('encrypt',[('decrypted_save.zip',package)],context['account_id'])
             write_new(folder/'encrypt-job.json',json.dumps({'job_id':job,'account_id':context['account_id'],'title_id':context['title_id']}).encode())
             result=c.result(job,self.message);write_new(folder/'Encrypted-Result.zip',result)
-            pair=encrypted_files(unpack(result),context['account_id'],context['title_id'])
+            pair=encrypted_files(unpack(result),context['account_id'],context['title_id'],context.get('filename','DeadIsland2SaveGame'))
             for name,data in pair.items():write_new(folder/name,data)
             write_new(folder/'Ready-For-USB.zip',make_zip(pair))
             return {'message':'Encrypted pair downloaded into a separate PS4 folder. Open the result folder and copy its PS4 folder to a spare USB drive for a console test. Original saves were preserved.','job_id':job}
         return self.start('encrypt',task)
+
+    def resign(self,entries,account):
+        import save_browser
+        if not ps4_backups.ACCOUNT.fullmatch(account):raise ServiceError('Choose a destination PSN profile.')
+        if not entries or len(entries)>512:raise ServiceError('Choose between 1 and 512 saves.')
+        if any(e['account_id']==account or e['kind']!='encrypted' for e in entries):raise ServiceError('Choose encrypted saves belonging to a different source account.')
+        def task(c):
+            self.results=[];root=backup_storage.folder().parent/'ServiceSessions'/('Resign-'+uuid.uuid4().hex);root.mkdir(parents=True);self.folder=root
+            for index,e in enumerate(entries):
+                self.message('Resigning save '+str(index+1)+' of '+str(len(entries))+': '+e['title_id']+' / '+e['filename'])
+                drive=save_browser.find_drive(e['drive_key']);ps4_backups.capture(e,'Source before resigning to '+account)
+                ps4_backups.destination_backup(drive,account,e['title_id'],e['filename'],'Destination before resigning '+e['title_id']+' / '+e['filename'])
+                raw=ps4_backups.read_file(e['path']);sealed=ps4_backups.read_file(e['bin_path']);validate_pair(raw,sealed)
+                job=c.submit('resign',[(e['filename'],raw),(e['filename']+'.bin',sealed)],account)
+                folder=root/(str(index+1)+'-'+e['title_id']);folder.mkdir()
+                write_new(folder/'resign-job.json',json.dumps({'job_id':job,'destination_account':account,'title_id':e['title_id'],'filename':e['filename']}).encode())
+                result=c.result(job,self.message);write_new(folder/'Resigned-Result.zip',result)
+                pair=encrypted_files(unpack(result),account,e['title_id'],e['filename'])
+                for n,data in pair.items():write_new(folder/n,data)
+                self.results.append(dict(drive_key=e['drive_key'],account_id=account,title_id=e['title_id'],filename=e['filename'],files={Path(n).name:data for n,data in pair.items()}))
+            return {'message':str(len(self.results))+' resigned pairs are ready. Destination backups were saved. Click Install Resigned Copies to write them to the selected USB drive.'}
+        return self.start('resign',task)
+    def install_results(self):
+        import save_browser
+        if self.running or not self.results:raise ServiceError('Wait for a completed resign job first.')
+        count=0
+        for result in self.results:
+            drive=save_browser.find_drive(result['drive_key']);ps4_backups.install(drive,result['account_id'],result['title_id'],result['filename'],result['files']);count+=1
+        self.results=[]
+        return {'message':str(count)+' resigned saves installed. Existing destination saves were backed up immediately before replacement.'}

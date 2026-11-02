@@ -50,6 +50,12 @@ class DesktopAPI:
         try:
             entry=save_browser.find_save(key);subprocess.Popen(['explorer.exe','/select,'+entry['path']]);return {'message':'Save folder opened.'}
         except (OSError,save_browser.BrowserError) as e:return {'error':str(e)}
+    def open_named_backups(self):
+        try:
+            import ps4_backups
+            folder=ps4_backups.root();folder.mkdir(parents=True,exist_ok=True);os.startfile(folder)
+            return {'message':'Named backup folder opened.'}
+        except OSError as e:return {'error':str(e)}
     def open_service_folder(self):
         try:
             if server.service.folder is None:raise ValueError('No service result folder yet.')
@@ -62,9 +68,9 @@ class DesktopAPI:
             return {'message':'Backup folder opened.'}
         except OSError as e:return {'error':str(e)}
     def _closing(self):
-        if self._exporting or server.service.running:return False
+        if self._exporting or server.service.running or server.usb_busy:return False
         try:
-            dirty=self._window.evaluate_js('typeof ammoDirty==="function" && (Object.keys(changes).length+additions.length+deletions.length+ammoDirty())')
+            dirty=self._window.evaluate_js('typeof ammoDirty==="function" && (Object.keys(changes).length+additions.length+deletions.length+ammoDirty()+extraDirty())')
             if dirty:return self._window.create_confirmation_dialog('Quit Workshop?','Unexported edits are kept only in memory. Quit and discard them?')
         except Exception:
             pass # Permit closing if the local page never finished starting.

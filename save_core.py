@@ -1,4 +1,5 @@
 import math
+import character_editor
 """DI2 PS4 Save Wizard export reader; preserves unedited bytes verbatim.
 Independent implementation for the uncompressed, sectioned PS4 export format.
 """
@@ -247,6 +248,8 @@ class Save:
                     self.ammo.append(dict(key=len(self.ammo),name=names.get(token,label(path)),group=group,count=u32(b,count.data),field=count,section=si))
                 if pos!=inner.end:raise FormatError('Archetype item count mismatch')
 
+        character_editor.attach(self)
+
     def catalogs(self):
         weapons={r['path']:dict(r) for r in CATALOG['weapons']}
         for w in self.weapons:
@@ -267,7 +270,7 @@ class Save:
             cap=16 if ar['kind']=='DIInventory' else 64
             dest.append(dict(key=ar['key'],name=ar['group'],count=count,capacity=cap,free=max(0,cap-count)))
         containers=[dict(key=a['key'],name=a['group'],count=sum(w.info()['editable'] for w in a['weapons']),capacity=next((d['capacity'] for d in dest if d['key']==a['key']),None)) for a in self.arrays if a['weapons'] or any(d['key']==a['key'] for d in dest)]
-        return dict(ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
+        return dict(resource_groups=character_editor.info(self),ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
     def duplicate_record(self,request):
         key=request.get('clone_source')
         if type(key)!=int or not 0<=key<len(self.weapons):raise FormatError('Invalid duplicate source')
@@ -310,7 +313,8 @@ class Save:
         changes={name:pd[name].replace(weapon.by[name].payload()) for name in ('EntryID','UniqueId')}
         changes['ProceduralGenerationContext']=pg.replace(replace_props(raw,pg.data,pg.end,pgprops,{'Seed':newseed.replace(oldseed.payload())}))
         return replace_props(raw,0,end,ps,changes)
-    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None):
+    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None):
+        resource_changes=resource_changes or [];character_levels=character_levels or {}
         deletions=deletions or []
         if not isinstance(deletions,list) or any(type(k)!=int for k in deletions):raise FormatError('Invalid deletion list')
         deleted=set(deletions)
@@ -343,8 +347,7 @@ class Save:
         if not isinstance(ammo_changes,dict) or set(ammo_changes)-{str(a['key']) for a in self.ammo}:raise FormatError('Unknown ammunition stack')
         for key,value in ammo_changes.items():
             if type(value)!=int or not 0<=value<=9_999_999:raise FormatError('Ammo count must be a whole number from 0 to 9,999,999')
-            a=self.ammo[int(key)];p=a['field']
-            if value!=a['count']:section_edits.setdefault(a['section'],[]).append((p.start,p.end,p.replace(put(value))))
+        section_edits=character_editor.plan(self,resource_changes,character_levels,ammo_changes)
         for ar in self.arrays:
             new_items=created.get(ar['key'],[])
             payload=b''.join((self.replacement_record(w,changes[str(w.idx)]) if changes[str(w.idx)].get('path',w.path)!=w.path else w.rebuild(changes[str(w.idx)])) if str(w.idx) in changes else self.b[w.start:w.end] for w in ar['weapons'] if w.idx not in deleted)+b''.join(new_items)
@@ -415,4 +418,5 @@ class Save:
                     seen_unique.add(uid)
         for key,value in ammo_changes.items():
             if check.ammo[int(key)]['count']!=value:raise FormatError('Ammo validation failed')
+        character_editor.verify(self,check,resource_changes,character_levels)
         return result
