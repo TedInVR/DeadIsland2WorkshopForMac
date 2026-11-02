@@ -20,9 +20,14 @@ class LicenseTests(unittest.TestCase):
             with patch.object(bundle.metadata,'distributions',return_value=[Distribution()]),patch.dict(sys.modules,{'webview':types.SimpleNamespace(__file__=str(view/'__init__.py'))}):
                 packages=bundle.collect(out);bundle.finish(out,packages)
             self.assertEqual((out/'THIRD_PARTY_LICENSES/example-1.0/METADATA.txt').read_text(),Distribution().read_text('METADATA'))
-            self.assertEqual((out/'THIRD_PARTY_LICENSES/Microsoft-WebView2-LICENSE.md').read_text(),(bundle.ROOT/'third_party_licenses/Microsoft-WebView2-LICENSE.md').read_text())
+            self.assertEqual((out/'THIRD_PARTY_LICENSES/Microsoft-WebView2-LICENSE.md').read_text(),'Microsoft notice')
             inventory=json.loads((out/'DISTRIBUTION-INVENTORY.json').read_text())
             self.assertEqual(inventory['packages'][0]['name'],'example')
             self.assertTrue(inventory['files'])
+            (view/'lib/Microsoft.Web.WebView2.LICENSE.md').unlink()
+            fallback=root/'fallback';fallback.mkdir()
+            with patch.object(bundle.metadata,'distributions',return_value=[]),patch.dict(sys.modules,{'webview':types.SimpleNamespace(__file__=str(view/'__init__.py'))}):
+                bundle.collect(fallback)
+            self.assertEqual((fallback/'THIRD_PARTY_LICENSES/Microsoft-WebView2-LICENSE.md').read_bytes(),(bundle.ROOT/'third_party_licenses/Microsoft-WebView2-LICENSE.md').read_bytes())
 
 if __name__=='__main__':unittest.main()

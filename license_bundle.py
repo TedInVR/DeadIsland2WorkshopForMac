@@ -23,10 +23,13 @@ def collect(folder):
     # pywebview's Microsoft SDK terms are outside its dist-info directory.
     import webview
     microsoft=Path(webview.__file__).parent/'lib'/'Microsoft.Web.WebView2.LICENSE.md'
-    if not microsoft.is_file():raise RuntimeError('Microsoft WebView2 license file is missing from the build environment.')
+    # Some pywebview wheels omit this notice although their source includes it.
+    # Retain the checked-in upstream notice for that pinned dependency.
+    if not microsoft.is_file():microsoft=ROOT/'third_party_licenses'/'Microsoft-WebView2-LICENSE.md'
+    if not microsoft.is_file():raise RuntimeError('Microsoft WebView2 license notice is missing.')
     shutil.copyfile(microsoft,target/'Microsoft-WebView2-LICENSE.md')
     for source in (ROOT/'third_party_licenses').iterdir():
-        if source.is_file():shutil.copyfile(source,target/source.name)
+        if source.is_file() and not (target/source.name).exists():shutil.copyfile(source,target/source.name)
     (target/'OpenSSL-ATTRIBUTION.txt').write_text('OpenSSL Project; Copyright (c) 1998-2024 The OpenSSL Project. Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson.\nPython 3.11 Windows TLS libraries use OpenSSL 3.x, under Apache-2.0; see OpenSSL-3.0.13-LICENSE.txt and https://github.com/openssl/openssl.\n',encoding='utf-8')
     (target/'README.txt').write_text('Package licenses/notices are copied from the installed build distributions. METADATA and the inventory include build-only packages as well as runtime packages; that is not a claim that every package is linked. Microsoft WebView2 terms and applicable runtime notices are retained separately. See CREDITS.md and THIRD_PARTY_NOTICES.md. No licenses for unrelated materials are inferred from dependency licenses.\n',encoding='utf-8')
     return packages
