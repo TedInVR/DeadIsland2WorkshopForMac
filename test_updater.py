@@ -46,11 +46,35 @@ class UpdaterTests(unittest.TestCase):
         with self.assertRaises(u.UpdateError):u.extract_package(p,self.root/'expanded')
     def test_closed_install_unattended_and_cleanup(self):
         b=self.package();m=self.manifest(b)
-        with patch.object(u,'app_running',return_value=False),patch.object(u,'manifest',return_value=m),patch.object(u,'installed_version',return_value='0.3.0'),patch.object(u,'github_bytes',return_value=b),patch.object(u.subprocess,'run') as run:
-            run.return_value.returncode=0
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'manifest',return_value=m),patch.object(u,'installed_version',side_effect=['0.3.0','0.4.0']),patch.object(u,'github_bytes',return_value=b),patch.object(u.subprocess,'run') as run:
+            run.return_value.returncode=0;run.return_value.stdout='installed';run.return_value.stderr=''
             self.assertEqual(u.run()['status'],'installed')
             self.assertIn('--unattended',run.call_args.args[0])
         self.assertFalse((self.root/'pending-update.zip').exists())
+    def test_cached_zip_restores_missing_pending_manifest(self):
+        b=self.package();m=self.manifest(b);(self.root/'pending-update.zip').write_bytes(b)
+        with patch.object(u,'github_bytes') as network:u.download(m);network.assert_not_called()
+        self.assertEqual(json.loads((self.root/'pending-update.json').read_text()),m)
+    def test_after_quit_waits_then_installs_only_the_pending_update(self):
+        u.atomic_json(self.root/'pending-update.json',{'version':'0.4.0'});u.atomic_json(self.root/'install-intent.json',{'pid':1})
+        with patch.object(u,'app_running',side_effect=[True,True,False]),patch.object(u.time,'sleep') as sleep,patch.object(u,'run',return_value={'status':'installed'}) as run:
+            self.assertEqual(u.after_quit()['status'],'installed');self.assertEqual(sleep.call_count,2);run.assert_called_once_with(pending_only=True)
+        self.assertFalse((self.root/'install-intent.json').exists())
+    def test_pending_only_never_fetches_when_nothing_is_queued(self):
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'manifest') as network:
+            self.assertEqual(u.run(pending_only=True)['status'],'nothing_queued');network.assert_not_called()
+    def test_successful_exit_with_wrong_installed_version_is_reported(self):
+        b=self.package();m=self.manifest(b)
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'manifest',return_value=m),patch.object(u,'installed_version',return_value='0.3.0'),patch.object(u,'github_bytes',return_value=b),patch.object(u.subprocess,'run') as run:
+            run.return_value.returncode=0;run.return_value.stdout='';run.return_value.stderr=''
+            with self.assertRaisesRegex(u.UpdateError,'still contains version'):u.run()
+        self.assertTrue((self.root/'pending-update.json').exists())
+    def test_installer_stdout_and_stderr_are_retained(self):
+        b=self.package();m=self.manifest(b)
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'manifest',return_value=m),patch.object(u,'installed_version',return_value='0.3.0'),patch.object(u,'github_bytes',return_value=b),patch.object(u.subprocess,'run') as run:
+            run.return_value.returncode=1;run.return_value.stdout='stdout failure';run.return_value.stderr='stderr detail'
+            with self.assertRaisesRegex(u.UpdateError,'stdout failure'):u.run()
+        log=(self.root/'install.log').read_text();self.assertIn('stdout failure',log);self.assertIn('stderr detail',log)
     def test_newer_version_check(self):
         with patch.object(u,'manifest',return_value={'version':'0.4.0'}),patch.object(u,'installed_version',return_value='0.3.0'):self.assertEqual(u.check()['status'],'available')
 

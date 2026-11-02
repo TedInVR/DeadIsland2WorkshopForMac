@@ -1,0 +1,28 @@
+name: Test Mac update installation
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.py'
+      - '*.swift'
+      - '*.command'
+      - '*.html'
+      - 'Info.plist'
+      - 'catalog.json'
+      - '.github/workflows/mac-updates.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-install:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Update and backup regression checks
+        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py -v
+      - name: Real Swift build and isolated updater installation
+        run: python3 test_update_install_macos.py

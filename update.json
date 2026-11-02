@@ -1,6 +1,6 @@
 {
-  "version": "0.9.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.9.0.zip",
-  "sha256": "2ee8c0976a0e6c753022710164600b557406c4977d3cb6d59884ee66ac3ba7e2",
-  "notes": "Automatic USB save discovery, local profile display names, private profile-name imports, and direct opening of decrypted exports."
+  "version": "0.9.1",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.9.1.zip",
+  "sha256": "758f3daf8e691ebdf2473332b57c3cfcf73c233044082a6a11cdda29fe9ddf6a",
+  "notes": "Fix queued Mac updates: install immediately on quit, verify the installed version, and retain installation status and logs."
 }

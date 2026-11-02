@@ -1,0 +1,28 @@
+"""Real macOS build/install smoke test, isolated from /Applications and user data."""
+import json,os,plistlib,subprocess,sys,tempfile
+from pathlib import Path
+from unittest.mock import patch
+import updater as u
+
+
+def main():
+    if sys.platform!='darwin':raise SystemExit('Run this integration check on macOS.')
+    root=Path(__file__).resolve().parent
+    m=json.loads((root/'update.json').read_text());package=(root/m['path']).read_bytes()
+    with tempfile.TemporaryDirectory(prefix='di2-install-test-') as temp:
+        temp=Path(temp);support=temp/'Support';app=temp/'Applications'/'Dead Island 2 Workshop.app';dev=temp/'Development'
+        (app/'Contents').mkdir(parents=True)
+        (app/'Contents/Info.plist').write_bytes(plistlib.dumps({'CFBundleShortVersionString':'0.0.0'}))
+        env={'DI2_WORKSHOP_INSTALL_APP':str(app),'DI2_WORKSHOP_DEV_DIR':str(dev),'DI2_WORKSHOP_SKIP_AGENT':'1'}
+        with patch.object(u,'SUPPORT',support),patch.object(u,'APP',app),patch.object(u,'app_running',return_value=False),patch.object(u,'github_bytes',side_effect=lambda path:json.dumps(m).encode() if path=='update.json' else package),patch.dict(os.environ,env):
+            assert u.queue()['status']=='queued'
+            result=u.run(pending_only=True)
+            assert result['status']=='installed',result
+            assert u.installed_version()==m['version']
+            assert (app/'Contents/MacOS/DI2Workshop').is_file()
+            for name in ('updater.py','server.py','backup_storage.py','save_browser.py','catalog.json','index.html'):
+                assert (app/'Contents/Resources'/name).is_file(),name
+            assert not (support/'pending-update.json').exists()
+            subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict',str(app)],check=True)
+            print(json.dumps({'status':'passed','actual_installed_version':u.installed_version(),'native_build_and_install':True,'original_user_app_untouched':True}))
+if __name__=='__main__':main()

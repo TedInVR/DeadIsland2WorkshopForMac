@@ -45,3 +45,5 @@ Automatic updates run from a per-user LaunchAgent every 900 seconds. An app-open
 Never commit actual saves, PSN credentials, Save Wizard credentials/license keys, GitHub tokens, startup logs, or screenshots containing personal information. The packaging script uses an explicit list and `.gitignore` excludes save files. The updater does not send save data to GitHub.
 
 The scanner tests use synthetic account IDs and temporary drive trees. `DI2_WORKSHOP_SCAN_ROOTS` may contain a JSON list of explicit development roots; `DI2_WORKSHOP_BACKUP_DIR` isolates backups/settings during tests. Do not commit private profile mappings or actual save containers.
+
+Mac update CI runs `test_update_install_macos.py`, which uses temporary app/support/development paths and skips launch-agent registration. `DI2_WORKSHOP_INSTALL_APP`, `DI2_WORKSHOP_DEV_DIR`, and `DI2_WORKSHOP_SKIP_AGENT=1` are integration-test overrides; normal installation still targets Applications and configures the updater.

@@ -3,12 +3,12 @@ set -euo pipefail
 UNATTENDED=0
 [[ "${1:-}" == "--unattended" ]] && UNATTENDED=1
 SOURCE="$(cd "$(dirname "$0")" && pwd)"
-APP="/Applications/Dead Island 2 Workshop.app"
-DEV="/Applications/Dead Island 2 Workshop Development"
+APP="${DI2_WORKSHOP_INSTALL_APP:-/Applications/Dead Island 2 Workshop.app}"
+DEV="${DI2_WORKSHOP_DEV_DIR:-/Applications/Dead Island 2 Workshop Development}"
 BUILD="$(mktemp -d "${TMPDIR:-/tmp}/DI2Workshop-build.XXXXXX")"
 trap 'rm -rf "$BUILD"' EXIT
 fail() { echo; echo "$1"; echo; if [[ "$UNATTENDED" == "0" ]]; then read -r -p "Press Return to close…" _reply; fi; exit 1; }
-echo "Dead Island 2 Workshop 0.9.0 — Mac preview"
+echo "Dead Island 2 Workshop 0.9.1 — Mac preview"
 echo "Building your Mac app. No additional Python packages are needed."
 [[ "$(uname -s)" == "Darwin" ]] || fail "Run this installer on your Mac."
 if pgrep -f '/Dead Island 2 Workshop.app/Contents/MacOS/' >/dev/null 2>&1; then
@@ -46,10 +46,12 @@ fi
 echo "Installed: $APP"
 # The persistent helper uses the installed app version and an existing gh login
 # when private-repository authentication is required. No credentials are copied.
-mkdir -p "$HOME/Library/Application Support/Dead Island 2 Workshop"
-cp "$SOURCE/updater.py" "$HOME/Library/Application Support/Dead Island 2 Workshop/updater.py"
-if ! "$PYTHON" "$SOURCE/updater.py" --install-agent; then
-    echo "App installed; the background updater could not be configured. Use Help > Download Updates."
+if [[ "${DI2_WORKSHOP_SKIP_AGENT:-0}" != "1" ]]; then
+    mkdir -p "$HOME/Library/Application Support/Dead Island 2 Workshop"
+    cp "$SOURCE/updater.py" "$HOME/Library/Application Support/Dead Island 2 Workshop/updater.py"
+    if ! DI2_WORKSHOP_UPDATE_PYTHON="$PYTHON" "$PYTHON" "$SOURCE/updater.py" --install-agent; then
+        echo "App installed; the background updater could not be configured. See Help > Update Status."
+    fi
 fi
 if [[ "$UNATTENDED" == "0" ]]; then
     echo "Opening Workshop…"

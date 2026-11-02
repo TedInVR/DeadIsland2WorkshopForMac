@@ -1,5 +1,13 @@
 # Version history
 
+## 0.9.1
+
+- Fix queued Mac updates that previously depended on the 15-minute background timer. Quit & Install starts a detached helper immediately; Keep Editing installs when the user later quits.
+- Keep the app closed during the handoff/build and respect in-progress operations and unexported-edit prompts.
+- Restore queue metadata when reusing an already downloaded ZIP, verify the installed Applications version before reporting success, and retain installer stdout/stderr and status.
+- Add Help → Update Status, running-copy diagnostics, a one-time repair command for older installs, and stable Python paths for future agent registration. Agent registration no longer contends with its parent install worker lock.
+- Add macOS CI that actually compiles, signs, and installs an update into a temporary app location, then verifies the new installed version. User apps and data are not touched by that test.
+
 ## 0.9.0
 
 - Add automatic, read-only discovery of PS4 Dead Island 2 saves on mounted Mac volumes and Windows removable/fixed drive roots. Check only PS4/SAVEDATA/account-ID/known-title-ID folders, and refresh every 10 seconds while the app is visible.

@@ -1,6 +1,6 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.9.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.9.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -174,7 +174,8 @@ References: [Apollo desktop guide](https://bucanero.github.io/apollo-patcher/gui
 ## Updates
 
 - **Help → Download Updates** opens the latest ZIP download in your default browser. The public repository needs no GitHub login. Quit Workshop and run the downloaded installer.
-- **Help → Check for Updates** reads `update.json`. If a newer version is available, you can download and queue it for installation after the app closes. If authentication is unavailable, it offers the browser download instead.
+- **Help → Check for Updates** reads `update.json`. If a newer version is available, you can download it and choose **Quit & Install**. Installation starts immediately after the app finishes quitting. **Keep Editing** leaves the update queued for your next quit. Unsaved-edit and busy-operation guards still apply. If authentication is unavailable, it offers the browser download instead.
+- **Help → Update Status** shows the running app path/version, installed Applications version, queued version, and last installation result. **Open Update Folder** reveals `install.log` and `update-handoff.log` when troubleshooting. A successful installer exit is followed by checking the actual installed version.
 - **Help → Automatic Updates** is enabled by default and can be turned off. A per-user LaunchAgent checks every 15 minutes while the Mac is awake and you are signed in. Automatic checks/downloads/installation run only while Workshop is closed. Updates leave it closed.
 - If the repository is made private later, automation requires an already authenticated **GitHub CLI (`gh`)** on this Mac with access to this repository. Workshop uses `gh api`; it does not copy the login token. A browser GitHub login alone does not authenticate the background updater. Without CLI authentication, use Download Updates; automatic attempts will report authentication required in the update log.
 - Downloaded updates are SHA-256 checked, extracted into a temporary folder, built locally, and installed over the same Applications app. An application lock prevents installation while the updated app is open. Failed downloads or builds retain the previous app. Old version updates also check the running app before replacement.
@@ -203,3 +204,7 @@ Shortcuts are fixed in this preview. Mouse-wheel input does not change number fi
 - **Install build error:** copy the compiler output. The installer builds before replacing the app.
 
 Saves are handled locally by a service listening only on 127.0.0.1 at a random session address. The service stops when the app quits. Updates contact GitHub; save contents are not sent to GitHub. Personal save files are excluded from this repository.
+
+## Repair older Mac update queues
+
+Versions through 0.9.0 queued downloads for the 15-minute background agent and did not launch installation on quit. Reopening could postpone installation repeatedly. Quit the app and run **Repair-Updates.command** from a newly downloaded Mac package to install the latest version immediately. Keep the app closed until the repair prints the installed version, then open the copy in Applications. If it fails, retain the Terminal output. The repair does not modify saves, backups, or profile names.

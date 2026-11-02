@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """GitHub updater. No embedded credentials; optional existing gh login for private repos."""
-import argparse,fcntl,hashlib,json,os,plistlib,re,shutil,subprocess,sys,tempfile,urllib.request,urllib.error,zipfile
+import argparse,fcntl,hashlib,json,os,plistlib,re,shutil,subprocess,sys,tempfile,time,urllib.request,urllib.error,zipfile
 from pathlib import Path
 REPO='TedInVR/DeadIsland2WorkshopForMac'
 BRANCH='main'
@@ -59,12 +59,16 @@ def app_running():
 
 def check():
     m=manifest();current=installed_version();available=version_tuple(m['version'])>version_tuple(current)
-    return dict(status='available' if available else 'current',installed=current,version=m['version'],notes=m.get('notes',''),browser_url=BROWSER,automatic_updates=settings().get('automatic_updates',True))
+    pending=read_json('pending-update.json');cached=SUPPORT/'pending-update.zip'
+    queued=available and pending.get('version')==m['version'] and cached.is_file() and hashlib.sha256(cached.read_bytes()).hexdigest()==m.get('sha256')
+    return dict(status='available' if available else 'current',installed=current,version=m['version'],notes=m.get('notes',''),browser_url=BROWSER,automatic_updates=settings().get('automatic_updates',True),queued=queued,last_update=read_json('update-status.json'))
 
 def download(m):
     SUPPORT.mkdir(parents=True,exist_ok=True)
     target=SUPPORT/'pending-update.zip'
-    if target.exists() and hashlib.sha256(target.read_bytes()).hexdigest()==m['sha256']:return target
+    if target.exists() and hashlib.sha256(target.read_bytes()).hexdigest()==m['sha256']:
+        atomic_json(SUPPORT/'pending-update.json',m)
+        return target
     b=github_bytes(m['path'])
     if hashlib.sha256(b).hexdigest()!=m['sha256']:raise UpdateError('Update checksum did not match; nothing was installed')
     tmp=target.with_suffix('.tmp');tmp.write_bytes(b);tmp.replace(target)
@@ -87,18 +91,44 @@ def extract_package(archive,directory):
         if any(not (root/name).is_file() for name in required):raise UpdateError('Update is missing required files')
         return root
 
+def read_json(name):
+    try:
+        value=json.loads((SUPPORT/name).read_text())
+        return value if isinstance(value,dict) else {}
+    except (OSError,ValueError):return {}
+
+def record_status(status,message,version=None):
+    value=dict(status=status,message=message,time=time.time(),log=str(SUPPORT/'install.log'))
+    if version is not None:value['version']=version
+    atomic_json(SUPPORT/'update-status.json',value)
+    return value
+
 def queue():
     m=manifest()
     if version_tuple(m['version'])<=version_tuple(installed_version()):return {'status':'current','version':m['version']}
     download(m)
-    return {'status':'queued','version':m['version'],'message':'Downloaded and verified. It will install after Workshop is closed, without reopening it.'}
+    return record_status('queued','Downloaded and verified. Quit Workshop to start installation immediately. Workshop will stay closed afterward.',m['version'])
 
-def run():
+def after_quit():
+    try:
+        pending=read_json('pending-update.json')
+        if not pending:return {'status':'nothing_queued'}
+        record_status('waiting','Waiting for Workshop to finish quitting.',pending.get('version'))
+        deadline=time.monotonic()+120
+        while app_running():
+            if time.monotonic()>=deadline:raise UpdateError('Workshop stayed open for two minutes. Quit all copies, then retry the update.')
+            time.sleep(0.5)
+        return run(pending_only=True)
+    finally:(SUPPORT/'install-intent.json').unlink(missing_ok=True)
+
+def run(pending_only=False):
     if not settings().get('automatic_updates',True) and not (SUPPORT/'pending-update.json').exists():return {'status':'disabled'}
     # Never check, download, build, or install automatically while the app is open.
     if app_running():return {'status':'app_open'}
-    try:m=json.loads((SUPPORT/'pending-update.json').read_text())
-    except (OSError,ValueError):m=manifest()
+    m=read_json('pending-update.json')
+    if not m:
+        if pending_only:return {'status':'nothing_queued'}
+        m=manifest()
     if version_tuple(m['version'])<=version_tuple(installed_version()):
         for name in ('pending-update.zip','pending-update.json'):(SUPPORT/name).unlink(missing_ok=True)
         return {'status':'current'}
@@ -107,14 +137,19 @@ def run():
         try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError:return {'status':'app_open'}
         if app_running():return {'status':'app_open'}
+        record_status('installing','Building and installing the update. Workshop will remain closed.',m['version'])
         with tempfile.TemporaryDirectory(prefix='di2-update-',dir=SUPPORT) as temp:
             root=extract_package(package,Path(temp))
             with (root/'Info.plist').open('rb') as f:actual=plistlib.load(f)['CFBundleShortVersionString']
             if actual!=m['version']:raise UpdateError('Package version does not match update manifest')
-            result=subprocess.run(['/bin/bash',str(root/'Install.command'),'--unattended'],capture_output=True,text=True,timeout=240)
-            if result.returncode:raise UpdateError('Installation did not finish. The previous app is retained; run the downloaded installer manually. Details: '+result.stderr[-1200:])
+            result=subprocess.run(['/bin/bash',str(root/'Install.command'),'--unattended'],capture_output=True,text=True,timeout=600)
+            details=(result.stdout or '')+'\n'+(result.stderr or '')
+            with (SUPPORT/'install.log').open('a',encoding='utf-8') as log:log.write('\nUpdate '+m['version']+'\n'+details+'\n')
+            if result.returncode:raise UpdateError('Installation did not finish. The previous app is retained. Details: '+details[-2500:])
+            actual_installed=installed_version()
+            if actual_installed!=m['version']:raise UpdateError('Installer finished but Applications still contains version '+actual_installed+'. Expected '+m['version']+'. See Update Status.')
         for name in ('pending-update.zip','pending-update.json'):(SUPPORT/name).unlink(missing_ok=True)
-    return {'status':'installed','version':m['version']}
+    return record_status('installed','Installed version '+m['version']+' in Applications. Workshop remains closed.',m['version'])
 
 def install_agent(python):
     SUPPORT.mkdir(parents=True,exist_ok=True)
@@ -135,19 +170,33 @@ def install_agent(python):
 
 def main():
     p=argparse.ArgumentParser();g=p.add_mutually_exclusive_group(required=True)
-    for flag in ('check','queue','run','enable','disable','status','install-agent'):g.add_argument('--'+flag,action='store_true')
+    for flag in ('check','queue','run','after-quit','enable','disable','status','install-agent'):g.add_argument('--'+flag,action='store_true')
     args=p.parse_args();SUPPORT.mkdir(parents=True,exist_ok=True)
+    # Agent registration does not perform an update; permit the installer to
+    # refresh it while its parent update worker holds the serialization lock.
+    if args.install_agent:
+        try:print(json.dumps(install_agent(os.environ.get('DI2_WORKSHOP_UPDATE_PYTHON',sys.executable))))
+        except Exception as e:print(json.dumps({'status':'error','message':str(e)}));sys.exit(1)
+        return
     with (SUPPORT/'updater-worker.lock').open('a') as lock:
-        try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        except BlockingIOError:print(json.dumps({'status':'busy','message':'An update check is already running.'}));return
+        deadline=time.monotonic()+30
+        while True:
+            try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);break
+            except BlockingIOError:
+                if not args.after_quit or time.monotonic()>=deadline:
+                    if args.after_quit:(SUPPORT/'install-intent.json').unlink(missing_ok=True)
+                    print(json.dumps({'status':'busy','message':'An update check is already running.'}));return
+                time.sleep(0.25)
         try:
             if args.check:result=check()
             elif args.queue:result=queue()
+            elif args.after_quit:result=after_quit()
             elif args.run:result=run()
-            elif args.install_agent:result=install_agent(sys.executable)
-            elif args.status:result=settings()
+            elif args.status:result=dict(**settings(),installed=installed_version(),pending=read_json('pending-update.json').get('version'),last_update=read_json('update-status.json'))
             else:
                 cfg=settings();cfg['automatic_updates']=args.enable;atomic_json(SUPPORT/'settings.json',cfg);result=cfg
             print(json.dumps(result))
-        except Exception as e:print(json.dumps({'status':'error','message':str(e),'browser_url':BROWSER}));sys.exit(1)
+        except Exception as e:
+            result=record_status('error',str(e),read_json('pending-update.json').get('version'))
+            result['browser_url']=BROWSER;print(json.dumps(result));sys.exit(1)
 if __name__=='__main__':main()

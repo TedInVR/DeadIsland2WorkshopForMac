@@ -35,13 +35,13 @@ Download the Windows ZIP above, choose **Extract All**, and run **Install-Window
 
 ## Updates
 
-**Help → Download Updates** opens the latest installer in your signed-in GitHub browser. **Check for Updates** can download and queue newer builds. Automatic updates default on and run every 15 minutes only while the app is closed, leaving it closed afterward.
+**Help → Download Updates** opens the latest installer in your signed-in GitHub browser. **Check for Updates** downloads newer builds and offers **Quit & Install**. Installation starts immediately after quitting. **Keep Editing** leaves it queued until the next quit. **Update Status** shows the last result and log location. Automatic discovery defaults on and checks every 15 minutes only while the app is closed, leaving it closed afterward. Manually queued installation starts on quit without waiting for that timer.
 
 The public repository supports direct downloads without authentication. If you make the repository private later, automated downloads require an authenticated GitHub CLI (`gh`) on the Mac; browser downloads use your browser login. No credentials are embedded or uploaded. See the [update guide](USER_GUIDE.md#updates).
 
 ## Preview status
 
-Version **0.9.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.9.1**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop does **not** decrypt or re-encrypt the PS4 USB save container. Save Wizard is still needed for export/import in the current workflow. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 
@@ -54,3 +54,5 @@ Source files are at repository root. Run `python3 test_core.py /path/to/decrypte
 To publish a new update, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
 External encryption services are being investigated; see [current findings and requirements](ENCRYPTION_RESEARCH.md). An online decryption connection is not included yet.
+
+If an older version repeatedly queues an update but never installs it, quit Workshop and run `Repair-Updates.command` from the latest Mac package. It uses the existing helper to verify/download/install the latest version immediately and checks the resulting Applications version.

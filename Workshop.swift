@@ -10,19 +10,25 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var base: URL?
     var logHandle: FileHandle?
     var exporting = false
+    var startedNormally = false
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.9.0"
+    let version = "0.9.1"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
         try? FileManager.default.createDirectory(at: support, withIntermediateDirectories: true)
+        if updateHandoffActive(support){
+            alert("Update installation in progress", "The downloaded update is installing. Workshop will stay closed. Please open it again after installation finishes.")
+            NSApp.terminate(nil);return
+        }
         applicationLock = Darwin.open(support.appendingPathComponent("app-install.lock").path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
         if applicationLock < 0 || flock(applicationLock, LOCK_SH | LOCK_NB) != 0 {
             alert("An update is installing", "Workshop will remain closed until installation finishes. Please open it again in a moment.")
             NSApp.terminate(nil); return
         }
+        startedNormally=true
         makeMenus()
         let content = WKUserContentController()
         content.add(self, name: "workshop")
@@ -60,6 +66,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         help.addItem(withTitle:"Using Workshop", action:#selector(helpText), keyEquivalent:"").target=self
         help.addItem(withTitle:"Keyboard Shortcuts", action:#selector(shortcuts), keyEquivalent:"").target=self
         help.addItem(withTitle:"Check for Updates…", action:#selector(updates), keyEquivalent:"").target=self
+        help.addItem(withTitle:"Update Status…", action:#selector(updateStatus), keyEquivalent:"").target=self
         help.addItem(withTitle:"Download Updates…", action:#selector(downloadUpdates), keyEquivalent:"").target=self
         let auto=help.addItem(withTitle:"Automatic Updates", action:#selector(toggleAutomaticUpdates), keyEquivalent:"");auto.target=self;auto.state=automaticUpdatesEnabled() ? .on : .off;autoUpdateItem=auto
         help.addItem(withTitle:"Save Encryption", action:#selector(encryptionInfo), keyEquivalent:"").target=self
@@ -104,18 +111,61 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
             let final=result;DispatchQueue.main.async{completion(final)}
         }
     }
+    func offerQueuedInstall(_ obj:[String:Any]){
+        guard obj["status"] as? String == "queued" else{alert("Workshop Update",obj["message"] as? String ?? "The update could not be queued. See Help → Update Status.");return}
+        let a=NSAlert();a.messageText="Ready to install version "+(obj["version"] as? String ?? "")
+        a.informativeText="The download is verified. Quit Workshop to start installation immediately. Export any edits you want to keep first. Workshop will stay closed afterward."
+        a.addButton(withTitle:"Quit & Install");a.addButton(withTitle:"Keep Editing")
+        if a.runModal() == .alertFirstButtonReturn{quitApp()}
+    }
     @objc func updates(){
         runUpdater("--check"){obj in
             switch obj["status"] as? String {
-            case "current":self.alert("You’re up to date", "Dead Island 2 Workshop "+self.version+" is the latest published version.")
+            case "current":
+                let installed=obj["installed"] as? String ?? self.version
+                if installed != self.version{self.alert("A different app copy is running", "This copy is version "+self.version+" at "+Bundle.main.bundleURL.path+".\n\nVersion "+installed+" is installed in Applications. Quit this copy and open Dead Island 2 Workshop from Applications.")}
+                else{self.alert("You’re up to date", "Dead Island 2 Workshop "+installed+" is the latest published version.")}
             case "available":
-                let a=NSAlert();a.messageText="An update is available";a.informativeText="Version "+(obj["version"] as? String ?? "")+"\n\nDownload now and install after Workshop closes? Installation will leave the app closed.";a.addButton(withTitle:"Download & Queue");a.addButton(withTitle:"Later")
-                if a.runModal() == .alertFirstButtonReturn{self.runUpdater("--queue"){r in self.alert("Workshop Update",r["message"] as? String ?? "The update request has finished.")}}
+                if obj["queued"] as? Bool == true{self.offerQueuedInstall(["status":"queued","version":obj["version"] ?? ""]);return}
+                let a=NSAlert();a.messageText="An update is available";a.informativeText="Version "+(obj["version"] as? String ?? "")+"\n\nDownload now? You can install it by quitting Workshop, or keep editing and install when you quit later.";a.addButton(withTitle:"Download Update");a.addButton(withTitle:"Later")
+                if a.runModal() == .alertFirstButtonReturn{self.runUpdater("--queue"){r in self.offerQueuedInstall(r)}}
             case "busy":self.alert("Update check in progress", "Another check is already running. Please try again shortly.")
             default:
-                let a=NSAlert();a.messageText="Check for Updates";a.informativeText=(obj["message"] as? String ?? "Could not reach GitHub.")+"\n\nYou can download the latest installer using your signed-in GitHub browser.";a.addButton(withTitle:"Download in Browser");a.addButton(withTitle:"Close");if a.runModal() == .alertFirstButtonReturn{self.downloadUpdates()}
+                let a=NSAlert();a.messageText="Check for Updates";a.informativeText=(obj["message"] as? String ?? "Could not reach GitHub.")+"\n\nSee Help → Update Status for the last installation result.";a.addButton(withTitle:"Download in Browser");a.addButton(withTitle:"Close");if a.runModal() == .alertFirstButtonReturn{self.downloadUpdates()}
             }
         }
+    }
+    @objc func updateStatus(){
+        runUpdater("--status"){obj in
+            let last=obj["last_update"] as? [String:Any] ?? [:]
+            let text="Running: "+self.version+" at "+Bundle.main.bundleURL.path+"\nInstalled in Applications: "+(obj["installed"] as? String ?? "unknown")+"\nQueued: "+(obj["pending"] as? String ?? "none")+"\n\n"+(last["message"] as? String ?? obj["message"] as? String ?? "No installation result has been recorded.")
+            let a=NSAlert();a.messageText="Workshop Update Status";a.informativeText=text;a.addButton(withTitle:"Close");a.addButton(withTitle:"Open Update Folder")
+            if a.runModal() == .alertSecondButtonReturn{NSWorkspace.shared.open(FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop",isDirectory:true))}
+        }
+    }
+    func updateHandoffActive(_ support:URL)->Bool{
+        let file=support.appendingPathComponent("install-intent.json")
+        guard let bytes=try? Data(contentsOf:file),let value=(try? JSONSerialization.jsonObject(with:bytes)) as? [String:Any],let pid=value["pid"] as? Int,let time=value["time"] as? Double,pid>0,Date().timeIntervalSince1970-time<900 else{return false}
+        return Darwin.kill(Int32(pid),0)==0
+    }
+    func startPendingUpdate(){
+        guard startedNormally else{return}
+        let support=FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop",isDirectory:true)
+        let helper=support.appendingPathComponent("updater.py")
+        guard FileManager.default.fileExists(atPath:support.appendingPathComponent("pending-update.json").path),FileManager.default.fileExists(atPath:helper.path),let python=["/opt/homebrew/bin/python3","/usr/local/bin/python3","/usr/bin/python3"].first(where:{FileManager.default.isExecutableFile(atPath:$0)}) else{return}
+        let log=support.appendingPathComponent("update-handoff.log")
+        if !FileManager.default.fileExists(atPath:log.path){FileManager.default.createFile(atPath:log.path,contents:nil)}
+        let handle=try? FileHandle(forWritingTo:log);try? handle?.seekToEnd()
+        let process=Process();process.executableURL=URL(fileURLWithPath:python);process.arguments=[helper.path,"--after-quit"];process.standardOutput=handle ?? FileHandle.nullDevice;process.standardError=handle ?? FileHandle.nullDevice
+        do{
+            try process.run()
+            let value:[String:Any]=["pid":Int(process.processIdentifier),"time":Date().timeIntervalSince1970]
+            if let bytes=try? JSONSerialization.data(withJSONObject:value){try? bytes.write(to:support.appendingPathComponent("install-intent.json"),options:.atomic)}
+        }catch{
+            let value:[String:Any]=["status":"error","message":"Could not start the update installer: "+error.localizedDescription,"time":Date().timeIntervalSince1970]
+            if let bytes=try? JSONSerialization.data(withJSONObject:value){try? bytes.write(to:support.appendingPathComponent("update-status.json"),options:.atomic)}
+        }
+        try? handle?.close()
     }
     @objc func browseUSB(){web.evaluateJavaScript("window.openUSB()",completionHandler:nil)}
     @objc func openFile(){web.evaluateJavaScript("window.openSave()",completionHandler:nil)}
@@ -124,8 +174,10 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     @objc func closeWindow(){window.performClose(nil)}
     @objc func quitApp(){
         if exporting {alert("Export in progress", "Please wait until saving has finished before quitting.");return}
-        web.evaluateJavaScript("Object.keys(changes).length+additions.length+deletions.length+ammoDirty()") { value, _ in
-            if let count=value as? Int, count>0 {
+        web.evaluateJavaScript("({dirty:typeof changes==='undefined'?0:Object.keys(changes).length+additions.length+deletions.length+ammoDirty(),busy:typeof busy!=='undefined'&&busy})") { value, _ in
+            let state=value as? [String:Any] ?? [:]
+            if state["busy"] as? Bool == true{self.alert("Operation in progress", "Please wait for the current operation to finish before quitting.");return}
+            if let count=state["dirty"] as? Int, count>0 {
                 let a=NSAlert();a.messageText="Quit Workshop?";a.informativeText="Edits are kept in memory. If you have not exported them, they will be discarded.";a.addButton(withTitle:"Keep Editing");a.addButton(withTitle:"Quit")
                 if a.runModal() != .alertSecondButtonReturn{return}
             }
@@ -133,7 +185,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         }
     }
     func windowShouldClose(_ sender: NSWindow)->Bool{quitApp();return false}
-    func applicationWillTerminate(_ notification: Notification){worker?.terminate();if applicationLock >= 0 {flock(applicationLock, LOCK_UN);Darwin.close(applicationLock)};if let r=ready{try? FileManager.default.removeItem(at:r)};try? logHandle?.close()}
+    func applicationWillTerminate(_ notification: Notification){startPendingUpdate();worker?.terminate();if applicationLock >= 0 {flock(applicationLock, LOCK_UN);Darwin.close(applicationLock)};if let r=ready{try? FileManager.default.removeItem(at:r)};try? logHandle?.close()}
     func alert(_ title:String,_ message:String){let a=NSAlert();a.messageText=title;a.informativeText=message;a.addButton(withTitle:"OK");a.runModal()}
     func startServer(){
         guard let resources=Bundle.main.resourceURL else {alert("Unable to start","App resources are missing.");return}
