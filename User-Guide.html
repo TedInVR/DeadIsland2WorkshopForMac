@@ -1,6 +1,6 @@
 <!doctype html><meta charset="utf-8"><title>Workshop User Guide</title><style>body{max-width:850px;margin:40px auto;padding:0 24px;font:16px -apple-system,sans-serif;line-height:1.6;color:#17201d}h1,h2,h3{line-height:1.3}a{color:#276c44}code{background:#eef3ee;padding:2px 4px}</style><pre style="white-space:pre-wrap"># Dead Island 2 Workshop for Mac — User Guide
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.5.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.6.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -51,6 +51,32 @@ Use **Find a weapon** or the creation search to look for a type such as **shotgu
 The catalog combines named game data with special entries already in your save. Hover over a perk to see its internal identifier. A stored upgrade is not a guarantee of an active game effect. Duplicate upgrades cannot be added. Rarity changes do not offer a separate control for combat classes such as Bulldozer or Headhunter.
 
 Levels 0–1000 and up to 256 upgrades are accepted as experimental values. Values beyond normal game rules may be ignored, changed, or rejected by the game. Special built-in Bare Hands and Fury Fists records are read-only and do not consume normal weapon-capacity calculations.
+
+## Duplicate an entire weapon
+
+Select an existing weapon and choose **Duplicate Weapon…**. The dialog copies its model, generation seed, complete saved runtime state, level, rarity, perks, and durability. Any staged edits are included. The duplicate receives fresh IDs so it is a separate item. Choose a destination and press **Queue Duplicate**. The source stays in place. If its current location is full, choose another location or stage a deletion first.
+
+The copy is a snapshot: later edits to the source do not automatically change the queued copy. Batch perk actions can affect queued copies. Use Create Weapon to inspect or remove queued copies before export. Custom values are preserved in the file; structural checks do not establish that every copied state has an in-game effect.
+
+## Weapon slot counters
+
+The **Slots after export** panel above the weapon list shows used / total slots and free space. Choose a location to see its counter, or use All inventories &amp; lockers for a breakdown. Creation and duplication destination choices also show these counts. Queued creations/duplicates use slots and staged deletions release them immediately in the counters; replacement uses the same slot.
+
+Workshop uses limits of **16 carried weapons** and **64 shared locker weapons**, with regular and NG+ lockers counted separately. Special Bare Hands/Fury Fists records do not consume these counters. Unclaimed Property shows a weapon count with **limit unverified** and is not a creation destination. The app does not increase the game&#x27;s capacity.
+
+## Apply or remove one perk across many weapons
+
+Choose **Apply / Remove…** beside a perk in an existing weapon&#x27;s perk list. Select **All weapons**, **Melee weapons only**, or **Firearms only**, then choose **Entire save** or **Selected location only**. The dialog shows the target count and how many weapons Apply and Remove would change before you click either button.
+
+A batch adds or removes only that one perk. Other perks, levels, rarity, and durability are retained. It includes queued new weapons and duplicates, skips read-only attacks and staged deletions, and does not add duplicate perk entries. Weapon/perk search filters do not limit the batch. Changes remain staged for Review &amp; Export; revert an individual weapon to cancel its edits. A perk stored on an incompatible weapon may have no effect in-game.
+
+## Experimental durability and ammunition
+
+For a melee weapon, edit **Melee durability · experimental** under Weapon settings. Try **9999** to test a high finite value. Creation, replacement, and duplication also have this field. Blank on creation uses 1000; blank on duplication preserves the source&#x27;s saved state. Values from 0 to 1,000,000,000 are allowed; 0 represents broken durability. The game may cap, reset, or otherwise reinterpret high values. This is not a guarantee of infinite durability.
+
+Choose **Reserve Ammo…** in the top toolbar, select a character or location, and change an existing stack&#x27;s count or click **Set 9,999**. These are reserve counts, not a gun&#x27;s loaded magazine. Review &amp; Export lists each ammo change. **Revert ammo edits** cancels all staged reserve-ammo changes. Ammo-only edits also trigger the quit-with-unsaved-edits prompt.
+
+No verified per-gun magazine count was found in the development save. Workshop does not invent an ammo field or claim to change magazine capacity. Reserve counts accept whole numbers from 0 to 9,999,999, but the game may enforce a much lower limit or reset them. Start with one weapon/stack and check it in-game before changing everything.
 
 ## Create a weapon
 
@@ -104,10 +130,10 @@ References: [Apollo desktop guide](https://bucanero.github.io/apollo-patcher/gui
 
 ## Updates
 
-- **Help → Download Updates** opens the latest ZIP download in your default browser. For this private repository, use a browser signed into an authorized GitHub account. Quit Workshop and run the downloaded installer.
+- **Help → Download Updates** opens the latest ZIP download in your default browser. The public repository needs no GitHub login. Quit Workshop and run the downloaded installer.
 - **Help → Check for Updates** reads `update.json`. If a newer version is available, you can download and queue it for installation after the app closes. If authentication is unavailable, it offers the browser download instead.
 - **Help → Automatic Updates** is enabled by default and can be turned off. A per-user LaunchAgent checks every 15 minutes while the Mac is awake and you are signed in. Automatic checks/downloads/installation run only while Workshop is closed. Updates leave it closed.
-- Private repository automation requires an already authenticated **GitHub CLI (`gh`)** on this Mac with access to this repository. Workshop uses `gh api`; it does not copy the login token. A browser GitHub login alone does not authenticate the background updater. Without CLI authentication, use Download Updates; automatic attempts will report authentication required in the update log.
+- If the repository is made private later, automation requires an already authenticated **GitHub CLI (`gh`)** on this Mac with access to this repository. Workshop uses `gh api`; it does not copy the login token. A browser GitHub login alone does not authenticate the background updater. Without CLI authentication, use Download Updates; automatic attempts will report authentication required in the update log.
 - Downloaded updates are SHA-256 checked, extracted into a temporary folder, built locally, and installed over the same Applications app. An application lock prevents installation while the updated app is open. Failed downloads or builds retain the previous app. Old version updates also check the running app before replacement.
 
 The background agent and settings are under your user account. Settings and logs live in `~/Library/Application Support/Dead Island 2 Workshop/`. The agent is `~/Library/LaunchAgents/local.ted.di2workshop.updater.plist`.

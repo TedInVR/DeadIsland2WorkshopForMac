@@ -70,6 +70,45 @@ class SaveTests(unittest.TestCase):
             self.assertEqual(len(out.weapons),len(self.s.weapons));self.assertEqual(new.id,w.id);self.assertEqual(new.by['UniqueId'].payload(),w.by['UniqueId'].payload());self.assertEqual(new.path,item['path'])
             for old,n in zip(self.s.weapons,out.weapons):
                 if old.idx!=w.idx:self.assertEqual(old.b[old.start:old.end],n.b[n.start:n.end])
+    def test_duplicate_preserves_every_field_except_ids(self):
+        from save_core import props,Weapon
+        for melee in (True,False):
+            w=next(w for w in self.s.weapons if w.info()['editable'] and ('MeleeWeaponArchetype' in w.path)==melee)
+            raw=self.s.duplicate_record({'clone_source':w.idx});ps,end=props(raw,0);clone=Weapon(raw,0,end,ps,'test',0)
+            self.assertNotEqual(w.id,clone.id);self.assertNotEqual(w.by['UniqueId'].payload(),clone.by['UniqueId'].payload())
+            self.assertEqual([p.name for p in w.ps],[p.name for p in clone.ps])
+            for name,p in w.by.items():
+                if name not in ('EntryID','UniqueId'):self.assertEqual(p.raw(),clone.by[name].raw(),name)
+            dest=next(d for d in self.s.info()['destinations'] if d['free'])
+            out=Save(self.s.rebuild({},[{'clone_source':w.idx,'destination':dest['key']}]))
+            new=out.arrays[dest['key']]['weapons'][-1];self.assertEqual(new.path,w.path)
+            self.assertEqual(new.runtime.p.raw(),w.runtime.p.raw())
+    def test_duplicate_snapshot_and_staged_replacement(self):
+        from save_core import props,Weapon
+        w=next(w for w in self.s.weapons if w.info()['editable']);target=next(c for c in self.s.info()['weapon_catalog'] if ('MeleeWeaponArchetype' in c['path'])!=('MeleeWeaponArchetype' in w.path))
+        change=dict(path=target['path'],level=34,rarity='Superior',perks=w.runtime.paths[:3])
+        a=self.s.replacement_record(w,change);b=self.s.duplicate_record(dict(clone_source=w.idx,**change));pa,ea=props(a,0);pb,eb=props(b,0);wa=Weapon(a,0,ea,pa,'test',0);wb=Weapon(b,0,eb,pb,'test',0)
+        for name,p in wa.by.items():
+            if name not in ('EntryID','UniqueId'):self.assertEqual(p.raw(),wb.by[name].raw(),name)
+        with self.assertRaises(FormatError):self.s.duplicate_record({'clone_source':True})
+    def test_durability_and_ammo_only_touch_their_fields(self):
+        w=next(w for w in self.s.weapons if w.info()['editable'] and w.runtime.durability() is not None)
+        a=self.s.ammo[0];out=Save(self.s.rebuild({str(w.idx):{'durability':9999}},ammo_changes={str(a['key']):9999}))
+        self.assertEqual(out.weapons[w.idx].runtime.durability(),9999);self.assertEqual(out.ammo[a['key']]['count'],9999)
+        allowed=set(range(a['field'].data,a['field'].end))
+        # Runtime durability's float payload is the final 4 bytes of its entry.
+        for key,t,value,raw in w.runtime.entries:
+            if key=='Durability':
+                import re
+                start=self.s.b.index(raw,w.runtime.inner.data,w.runtime.inner.end)+len(raw)-4;allowed.update(range(start,start+4))
+        self.assertEqual(len(out.b),len(self.s.b));self.assertTrue({i for i,(x,y) in enumerate(zip(out.b,self.s.b)) if x!=y}<=allowed)
+        for bad in (float('inf'),float('nan'),-1,True):
+            with self.assertRaises(FormatError):self.s.rebuild({str(w.idx):{'durability':bad}})
+        gun=next(w for w in self.s.weapons if w.info()['editable'] and 'RangedWeaponArchetype' in w.path)
+        with self.assertRaises(FormatError):self.s.rebuild({str(gun.idx):{'durability':9999}})
+        for bad in (-1,1.5,True):
+            with self.assertRaises(FormatError):self.s.rebuild({},ammo_changes={'0':bad})
+
     def test_delete_carried_shortcut(self):
         from save_core import fs,prop,props,u32
         import re

@@ -43,13 +43,13 @@ class Handler(BaseHTTPRequestHandler):
                 if app.save is None:raise ValueError('Open a save first')
                 request=json.loads(raw)
                 if "changes" in request:
-                    changes=request["changes"];additions=request.get("additions",[]);deletions=request.get("deletions",[])
-                else:changes=request;additions=[];deletions=[]
+                    changes=request["changes"];additions=request.get("additions",[]);deletions=request.get("deletions",[]);ammo_changes=request.get('ammo_changes',{})
+                else:changes=request;additions=[];deletions=[];ammo_changes={}
                 catalog={x['path'] for x in app.save.info()['catalog']}
                 for key,c in changes.items():
-                    if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path'}:raise ValueError('Unknown edit field')
+                    if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path','durability'}:raise ValueError('Unknown edit field')
                     if 'perks' in c and (not isinstance(c['perks'],list) or any(x not in catalog for x in c['perks'])):raise ValueError('Choose upgrades from this save’s catalog')
-                app.output=app.save.rebuild(changes,additions,deletions)
+                app.output=app.save.rebuild(changes,additions,deletions,ammo_changes)
                 self.reply(200,{'bytes':len(app.output),'edited':len(changes),'created':len(additions),'deleted':len(deletions)})
         except Exception as e:
             self.reply(400,{'error':str(e) or type(e).__name__})

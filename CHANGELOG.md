@@ -1,5 +1,15 @@
 # Version history
 
+## 0.6.0
+
+- Duplicate complete weapons, preserving generation seed, runtime state, and unknown fields while assigning fresh item and persistent IDs. Copies snapshot staged level/rarity/perk/durability edits and can be placed in another inventory or locker.
+- Show used/total/free weapon slots by location, updating for queued additions and deletions. Unclaimed Property has an explicit unverified limit.
+- Add Apply / Remove actions beside each perk, with whole-save or selected-location scope and all/melee/firearm targets. Includes queued creations and duplicates; skips read-only attacks and deleted weapons. Shows affected counts before applying.
+- Edit saved melee durability experimentally, including 9,999; preserve unrelated runtime fields.
+- Edit existing reserve-ammo stacks experimentally, including 9,999. No verified magazine-count field was found; magazine editing is not claimed.
+- Make the installed version visible beneath the app title at all window sizes. Retain the weapon silhouettes introduced in 0.5.0.
+- Replacements retain the source seed so copies of a staged replacement match its generated stats.
+
 ## 0.5.0
 
 - Add original weapon-family silhouettes beside inventory entries and a larger selected-weapon preview.

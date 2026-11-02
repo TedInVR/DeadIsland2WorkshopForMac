@@ -13,7 +13,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.5.0"
+    let version = "0.6.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -63,7 +63,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         help.addItem(withTitle:"Save Encryption", action:#selector(encryptionInfo), keyEquivalent:"").target=self
     }
     @objc func about(){alert("Dead Island 2 Workshop \(version)","Independent Mac preview for decrypted PS4 Save Wizard exports. No affiliation with the game developer, Save Wizard, or SteffenL. Save format checks passed against your supplied file; PS4 in-game validation is still required.")}
-    @objc func helpText(){alert("Using Workshop", "1. Open a copy of your decrypted PS4 export.\n2. Select a locker or carried inventory and a weapon.\n3. Adjust level, rarity, or perks. Copy/Paste Perk Set transfers upgrades between weapons.\n4. Review & Export creates a separate edited file.\n5. Import that file in Save Wizard on your PC, apply it, then test on PS4.\n\nKeep your original backup. Create Weapon adds a new catalog weapon to the selected character or shared locker. Replace Weapon switches an existing weapon to a catalog model in the same slot. Delete Weapon marks it for removal; Undo Delete restores it before export. Separate combat-class overrides and cloning are not included. Profiles show actual slayer names and Regular/New Game Plus. The weapon and perk catalog combines published game identifiers with your opened save.")}
+    @objc func helpText(){alert("Using Workshop", "1. Open a copy of your decrypted PS4 export.\n2. Select a locker or carried inventory and a weapon.\n3. Adjust level, rarity, or perks. Copy/Paste Perk Set transfers upgrades between weapons.\n4. Review & Export creates a separate edited file.\n5. Import that file in Save Wizard on your PC, apply it, then test on PS4.\n\nKeep your original backup. Create Weapon adds a new catalog weapon to the selected character or shared locker. Replace Weapon switches an existing weapon to a catalog model in the same slot. Delete Weapon marks it for removal; Undo Delete restores it before export. Duplicate Weapon copies complete saved weapon state with fresh IDs. Slots after export shows capacity by location. Apply / Remove beside a perk opens scoped batch editing. Reserve Ammo edits existing reserve stacks, not loaded magazines. Melee durability is experimental. Separate combat-class overrides are not included. Profiles show actual slayer names and Regular/New Game Plus. The weapon and perk catalog combines published game identifiers with your opened save.")}
     @objc func shortcuts(){alert("Keyboard Shortcuts", "Command–O: Open save\nCommand–N: Create weapon\nCommand–S: Review and export\nCommand–W: Close window and quit\nCommand–Q: Quit\nCommand–C / V / X / A: Text editing\n\nKeyboard shortcuts are fixed in this preview.")}
     func automaticUpdatesEnabled() -> Bool {
         let path=FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop/settings.json")
@@ -112,7 +112,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     @objc func closeWindow(){window.performClose(nil)}
     @objc func quitApp(){
         if exporting {alert("Export in progress", "Please wait until saving has finished before quitting.");return}
-        web.evaluateJavaScript("Object.keys(changes).length+additions.length+deletions.length") { value, _ in
+        web.evaluateJavaScript("Object.keys(changes).length+additions.length+deletions.length+ammoDirty()") { value, _ in
             if let count=value as? Int, count>0 {
                 let a=NSAlert();a.messageText="Quit Workshop?";a.informativeText="Edits are kept in memory. If you have not exported them, they will be discarded.";a.addButton(withTitle:"Keep Editing");a.addButton(withTitle:"Quit")
                 if a.runModal() != .alertSecondButtonReturn{return}

@@ -1,6 +1,6 @@
 {
-  "version": "0.5.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.5.0.zip",
-  "sha256": "2368d3ec715b72045220e6aadeb6015d7934cc79d6b888231290634531917127",
-  "notes": "Weapon silhouettes, plain-language weapon types, and live creation/replacement previews."
+  "version": "0.6.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.6.0.zip",
+  "sha256": "7d093c2de31f3d014be8d01222e789da98a4c2d68f3c02cf4d7e2a7f13be4aa6",
+  "notes": "Whole-weapon duplication, slot counters, scoped batch perk edits, and experimental durability/reserve-ammo editing."
 }

@@ -59,7 +59,34 @@ const assert=require('assert');
   w.toggleDelete();w.eval('additions=[]');w.openReplace();assert(d.querySelector('#newdestlabel').hidden);assert.equal(w.creationFree(),1);
   d.querySelector('#newsearch').value='Peggy';w.renderWeaponChoices();assert(d.querySelector('#newtype').options.length);w.queueWeapon();assert.equal(w.eval('Object.keys(changes).length'),1);assert(d.querySelector('#name').textContent.includes('PEGGY'));assert(d.querySelector('#weaponpreview').textContent.includes('Hunting rifle'));
   w.review();await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
-  console.log('PASS: weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
+  // Clone the complete staged weapon into another container, then batch-edit by family.
+  w.eval('changes={};additions=[];deletions=[];ammoChanges={}');
+  const melee=w.eval('data.weapons.find(w=>w.editable&&w.path.includes("MeleeWeaponArchetype")&&w.durability!==null)');
+  const locker=w.eval('data.destinations.find(d=>d.name==="Shared storage locker — Regular")');
+  const beforeLocker=locker.count;w.select(melee.key);d.querySelector('#durability').value=9999;w.stage();
+  w.openDuplicate();assert.equal(d.querySelector('#newtitle').textContent,'Duplicate Weapon');assert(d.querySelector('#newtype').disabled);
+  d.querySelector('#newdest').value=locker.key;w.updateCreateSpace();w.queueWeapon();
+  assert.equal(w.eval('additions[0].clone_source'),melee.key);assert.equal(w.eval('additions[0].durability'),9999);
+  assert.deepEqual(w.eval('additions[0].perks'),w.eval('currentPerks'));
+  d.querySelector('#group').value=locker.name;w.renderList();assert(d.querySelector('#slots').textContent.includes((beforeLocker+1)+' / 64 slots used'));
+  const acid=w.eval('data.catalog.find(p=>p.name.toLowerCase()==="acid rain").path');
+  w.openBulkPerk(acid);d.querySelector('#bulkscope').value='firearms';w.previewBulk();
+  const unchangedMelee=w.eval('JSON.stringify(state(data.weapons.find(w=>w.key==='+melee.key+')))');
+  w.applyBulkPerk(false);w.openBulkPerk(acid);d.querySelector('#bulkscope').value='firearms';w.previewBulk();w.applyBulkPerk(true);
+  assert(w.eval('data.weapons.filter(w=>w.editable&&weaponFamily(w)==="firearms").every(w=>state(w).perks.includes(bulkPerk))'));
+  assert.equal(w.eval('JSON.stringify(state(data.weapons.find(w=>w.key==='+melee.key+')))'),unchangedMelee);
+  assert(w.eval('data.weapons.filter(w=>!w.editable).every(w=>!changes[w.key])'));
+  w.openBulkPerk(acid);d.querySelector('#bulkscope').value='melee';w.previewBulk();w.applyBulkPerk(false);
+  assert(!w.eval('additions[0].perks.includes(bulkPerk)'));
+  // Current-location scoping, deletion exclusion, and no duplicate upgrade entries.
+  const gun=w.eval('data.weapons.find(w=>w.editable&&weaponFamily(w)==="firearms")');
+  w.select(gun.key);w.toggleDelete();w.openBulkPerk(acid);d.querySelector('#bulkwhere').value='current';w.previewBulk();
+  assert(w.bulkTargets().existing.every(x=>x.group===locker.name&&x.key!==gun.key));
+  w.applyBulkPerk(true);assert(w.eval('Object.values(changes).every(c=>new Set(c.perks).size===c.perks.length)'));
+  w.openAmmo();const input=d.querySelector('#ammolist input');assert(input);input.value=9999;input.onchange();assert.equal(w.ammoDirty(),1);
+  w.review();assert(d.querySelector('#reviewitems').textContent.includes('DUPLICATE:'));assert(d.querySelector('#reviewitems').textContent.includes('RESERVE AMMO:'));
+  await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
+  console.log('PASS: complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}
 })().catch(e=>{console.error(e);process.exit(1)});

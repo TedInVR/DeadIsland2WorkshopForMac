@@ -1,3 +1,4 @@
+import math
 """DI2 PS4 Save Wizard export reader; preserves unedited bytes verbatim.
 Independent implementation for the uncompressed, sectioned PS4 export format.
 """
@@ -103,21 +104,33 @@ class Runtime:
         self.upgrades.sort()
         self.paths=[v for i,v in self.upgrades if self.count is None or i<self.count]
         if self.count is not None and self.count!=len(self.paths):raise FormatError('Upgrade count mismatch')
-    def rebuild(self,paths):
-        if paths==self.paths:return self.p.raw()
+    def durability(self):
+        for key,t,v,_ in self.entries:
+            if key=='Durability' and t==10 and len(v)==4:
+                value=struct.unpack('<f',v)[0]
+                return value if math.isfinite(value) else None
+        return None
+    def rebuild(self,paths,durability=None):
+        if paths==self.paths and durability is None:return self.p.raw()
         if len(paths)>256:raise FormatError('This editor allows up to 256 upgrade entries')
         seen=set()
         for s in paths:
             if not s.startswith('/Game/') or '\0' in s:raise FormatError('Invalid upgrade path')
             if s in seen:raise FormatError('Duplicate upgrades are not supported')
             seen.add(s)
-        new=[]
+        if durability is not None and (isinstance(durability,bool) or not isinstance(durability,(int,float)) or not math.isfinite(durability) or not 0<=durability<=1_000_000_000):raise FormatError('Durability must be a finite number from 0 to 1,000,000,000')
+        new=[];found=False
         for key,t,v,raw in self.entries:
-            if key=='NumUpgrades' or re.fullmatch('UpgradeEntry[0-9]+',key): continue
+            if paths!=self.paths and (key=='NumUpgrades' or re.fullmatch('UpgradeEntry[0-9]+',key)):continue
+            if key=='Durability' and durability is not None:
+                if t!=10 or len(v)!=4:raise FormatError('Unknown durability representation')
+                raw=fs(key)+put(10)+put(4)+struct.pack('<f',durability);found=True
             new.append(raw)
-        new.append(fs('NumUpgrades')+put(14)+put(4)+put(len(paths)))
-        for i,s in enumerate(paths):
-            v=fs(s);new.append(fs('UpgradeEntry'+str(i))+put(24)+put(len(v))+v)
+        if durability is not None and not found:new.append(fs('Durability')+put(10)+put(4)+struct.pack('<f',durability))
+        if paths!=self.paths:
+            new.append(fs('NumUpgrades')+put(14)+put(4)+put(len(paths)))
+            for i,s in enumerate(paths):
+                v=fs(s);new.append(fs('UpgradeEntry'+str(i))+put(24)+put(len(v))+v)
         payload=put(0)+put(len(new))+b''.join(new)
         return self.p.replace(self.inner.replace(payload))
 
@@ -135,7 +148,7 @@ class Weapon:
             if 'RequiredRarity' in pd:self.rarity=string(b,pd['RequiredRarity'].data)[0].split('::')[-1]
         if 'RuntimeState' in self.by:self.runtime=Runtime(self.by['RuntimeState'])
     def info(self):
-        return dict(key=self.idx,id=self.id,name=WEAPON_NAMES.get(self.path,label(self.path)),path=self.path,group=self.group,level=self.level,rarity=self.rarity,perks=self.runtime.paths if self.runtime else [],editable=bool(self.pg and self.runtime and '/Weapons/' in self.path and 'BareHands' not in self.path and 'FuryFists' not in self.path))
+        return dict(key=self.idx,id=self.id,name=WEAPON_NAMES.get(self.path,label(self.path)),path=self.path,group=self.group,level=self.level,rarity=self.rarity,perks=self.runtime.paths if self.runtime else [],durability=self.runtime.durability() if self.runtime and 'MeleeWeaponArchetype' in self.path else None,editable=bool(self.pg and self.runtime and '/Weapons/' in self.path and 'BareHands' not in self.path and 'FuryFists' not in self.path))
     def rebuild(self,change):
         changes={}
         if 'level' in change or 'rarity' in change:
@@ -151,9 +164,10 @@ class Weapon:
                 if 'RequiredRarity' not in pd:raise FormatError('Weapon has no rarity field')
                 if r!=self.rarity:pgchanges['RequiredRarity']=pd['RequiredRarity'].replace(fs('EItemRarity::'+r))
             if pgchanges:changes['ProceduralGenerationContext']=self.pg.replace(replace_props(self.b,self.pg.data,self.pg.end,self.pgprops,pgchanges))
-        if 'perks' in change:
+        if 'perks' in change or 'durability' in change:
+            if 'durability' in change and ('MeleeWeaponArchetype' not in self.path or change['durability'] is None):raise FormatError('Durability is only supported on melee weapons')
             if self.runtime is None:raise FormatError('Weapon has no upgrade block')
-            changes['RuntimeState']=self.runtime.rebuild(change['perks'])
+            changes['RuntimeState']=self.runtime.rebuild(change.get('perks',self.runtime.paths),change.get('durability'))
         return replace_props(self.b,self.start,self.end,self.ps,changes)
 
 class Save:
@@ -211,6 +225,28 @@ class Save:
                 if p!=inner.end:raise FormatError('Inventory item count/length mismatch')
                 self.arrays.append(dict(outer=outer,inner=inner,weapons=wp,section=secnum,group=group,kind=kind,key=len(self.arrays)))
         if not self.arrays:raise FormatError('No supported inventory arrays found')
+        self.ammo=[]
+        pattern=fs('ArchetypeItems')+fs('ArrayProperty')
+        for si,sec in enumerate(self.sections):
+            for m in re.finditer(re.escape(pattern),b[sec['start']:sec['end']]):
+                outer,_=prop(b,sec['start']+m.start())
+                if outer.extra!='StructProperty' or outer.end>sec['end']:raise FormatError('Unknown archetype inventory')
+                inner,_=prop(b,outer.data+4)
+                if inner is None or inner.extra!='InventoryItemArchetype' or inner.end!=outer.end:raise FormatError('Unknown archetype item representation')
+                previous=[a for a in self.arrays if a['section']==si and a['outer'].end<=outer.start]
+                group=max(previous,key=lambda a:a['outer'].start)['group'] if previous else sec['name']+' / Ammo'
+                pos=inner.data
+                for _ in range(u32(b,outer.data)):
+                    fields,pos=props(b,pos,inner.end);pd={f.name:f for f in fields}
+                    if 'Archetype' not in pd or 'Count' not in pd:continue
+                    path=string(b,pd['Archetype'].data)[0];count=pd['Count']
+                    if 'DA_AmmoArchetype_' not in path:continue
+                    if count.typ!='IntProperty' or count.end-count.data!=4:raise FormatError('Unknown ammo count representation')
+                    names={'ShotgunAmmo':'Shotgun shells','HeavyRoundsAmmo':'Heavy rounds','PistolAmmo':'Pistol rounds','CarbineAmmo':'Rifle rounds','NailgunNailsAmmo':'Nails','CrossbowBoltsAmmo':'Crossbow bolts','SawbladeDiskAmmo':'Sawblade disks'}
+                    token=path.rsplit('DA_AmmoArchetype_',1)[-1]
+                    self.ammo.append(dict(key=len(self.ammo),name=names.get(token,label(path)),group=group,count=u32(b,count.data),field=count,section=si))
+                if pos!=inner.end:raise FormatError('Archetype item count mismatch')
+
     def catalogs(self):
         weapons={r['path']:dict(r) for r in CATALOG['weapons']}
         for w in self.weapons:
@@ -230,8 +266,21 @@ class Save:
             count=sum(w.info()['editable'] for w in ar['weapons'])
             cap=16 if ar['kind']=='DIInventory' else 64
             dest.append(dict(key=ar['key'],name=ar['group'],count=count,capacity=cap,free=max(0,cap-count)))
-        return dict(sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
+        containers=[dict(key=a['key'],name=a['group'],count=sum(w.info()['editable'] for w in a['weapons']),capacity=next((d['capacity'] for d in dest if d['key']==a['key']),None)) for a in self.arrays if a['weapons'] or any(d['key']==a['key'] for d in dest)]
+        return dict(ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
+    def duplicate_record(self,request):
+        key=request.get('clone_source')
+        if type(key)!=int or not 0<=key<len(self.weapons):raise FormatError('Invalid duplicate source')
+        source=self.weapons[key]
+        if not source.info()['editable']:raise FormatError('This item cannot be duplicated')
+        change={k:request[k] for k in ('path','level','rarity','perks','durability') if k in request}
+        raw=self.replacement_record(source,change) if change.get('path',source.path)!=source.path else source.rebuild(change)
+        ps,end=props(raw,0);pd={p.name:p for p in ps}
+        # Preserve the complete state and generation seed, changing only identities.
+        return replace_props(raw,0,end,ps,{name:pd[name].replace(uuid.uuid4().bytes) for name in ('EntryID','UniqueId')})
+
     def create_record(self,request):
+        if 'clone_source' in request:return self.duplicate_record(request)
         path=request.get('path');wc,pc=self.catalogs();paths={r['path'] for r in wc}
         if path not in paths:raise FormatError('Choose a weapon from the catalog')
         level=request.get('level');rarity=request.get('rarity');perks=request.get('perks',[])
@@ -250,13 +299,18 @@ class Save:
         # Fresh random IDs prevent collisions with any existing inventory item.
         raw=b''.join([template.by['EntryID'].replace(uuid.uuid4().bytes),template.by['Archetype'].replace(fs(path)+put(0)),pg,template.by['UniqueId'].replace(uuid.uuid4().bytes),rt,fs('None')])
         ps,end=props(raw,0);weapon=Weapon(raw,0,end,ps,'New weapon',-1)
-        return weapon.rebuild(dict(level=level,rarity=rarity,perks=perks))
+        change=dict(level=level,rarity=rarity,perks=perks)
+        if 'durability' in request:change['durability']=request['durability']
+        return weapon.rebuild(change)
     def replacement_record(self,weapon,change):
-        raw=self.create_record(dict(path=change['path'],level=change.get('level',weapon.level),rarity=change.get('rarity',weapon.rarity),perks=change.get('perks',[])))
+        raw=self.create_record(dict(path=change['path'],level=change.get('level',weapon.level),rarity=change.get('rarity',weapon.rarity),perks=change.get('perks',[]),**({'durability':change['durability']} if 'durability' in change else {})))
         ps,end=props(raw,0);pd={p.name:p for p in ps}
         # Keep both identities so weapon-wheel assignments continue referring to this slot.
-        return replace_props(raw,0,end,ps,{name:pd[name].replace(weapon.by[name].payload()) for name in ('EntryID','UniqueId')})
-    def rebuild(self,changes,additions=None,deletions=None):
+        pg=pd['ProceduralGenerationContext'];pgprops,_=props(raw,pg.data,pg.end);newseed=next(p for p in pgprops if p.name=='Seed');oldseed=next(p for p in weapon.pgprops if p.name=='Seed')
+        changes={name:pd[name].replace(weapon.by[name].payload()) for name in ('EntryID','UniqueId')}
+        changes['ProceduralGenerationContext']=pg.replace(replace_props(raw,pg.data,pg.end,pgprops,{'Seed':newseed.replace(oldseed.payload())}))
+        return replace_props(raw,0,end,ps,changes)
+    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None):
         deletions=deletions or []
         if not isinstance(deletions,list) or any(type(k)!=int for k in deletions):raise FormatError('Invalid deletion list')
         deleted=set(deletions)
@@ -273,7 +327,7 @@ class Save:
             if ar['key'] in destinations:
                 d=destinations[ar['key']];removed=sum(w.idx in deleted for w in ar['weapons']);d['free']=max(0,d['capacity']-d['count']+removed)
         for request in additions:
-            if not isinstance(request,dict):raise FormatError("Invalid weapon request")
+            if not isinstance(request,dict) or set(request)-{'destination','path','level','rarity','perks','clone_source','durability'}:raise FormatError("Invalid weapon request")
             dest=request.get("destination")
             if dest not in destinations:raise FormatError("Invalid weapon destination")
             bucket=created.setdefault(dest,[])
@@ -285,6 +339,12 @@ class Save:
         for key in changes:
             if not self.weapons[int(key)].info()['editable']:raise FormatError('This item cannot be edited')
         section_edits={}
+        ammo_changes=ammo_changes or {}
+        if not isinstance(ammo_changes,dict) or set(ammo_changes)-{str(a['key']) for a in self.ammo}:raise FormatError('Unknown ammunition stack')
+        for key,value in ammo_changes.items():
+            if type(value)!=int or not 0<=value<=9_999_999:raise FormatError('Ammo count must be a whole number from 0 to 9,999,999')
+            a=self.ammo[int(key)];p=a['field']
+            if value!=a['count']:section_edits.setdefault(a['section'],[]).append((p.start,p.end,p.replace(put(value))))
         for ar in self.arrays:
             new_items=created.get(ar['key'],[])
             payload=b''.join((self.replacement_record(w,changes[str(w.idx)]) if changes[str(w.idx)].get('path',w.path)!=w.path else w.rebuild(changes[str(w.idx)])) if str(w.idx) in changes else self.b[w.start:w.end] for w in ar['weapons'] if w.idx not in deleted)+b''.join(new_items)
@@ -333,11 +393,13 @@ class Save:
                 if old_w.id!=new_w.id:raise FormatError('Existing weapon identity changed')
                 by_index[old_w.idx]=new_w
         seen_ids={w.id for w in self.weapons}
+        seen_unique={w.by['UniqueId'].payload() for w in self.weapons}
         for key,c in changes.items():
             old=self.weapons[int(key)];new=by_index[old.idx]
             for field in ('level','rarity'):
                 if field in c and getattr(new,field)!=c[field]:raise FormatError('Validation failed for '+field)
             if 'perks' in c and new.runtime.paths!=c['perks']:raise FormatError('Validation failed for upgrades')
+            if 'durability' in c and new.runtime.durability()!=struct.unpack('<f',struct.pack('<f',c['durability']))[0]:raise FormatError('Durability validation failed')
             if 'path' in c and new.path!=c['path']:raise FormatError('Validation failed for replacement')
         for ar in self.arrays:
             target=next(a for a in check.arrays if a['key']==ar['key'])
@@ -348,4 +410,9 @@ class Save:
                     if w.b[w.start:w.end]!=raw:raise FormatError('New weapon validation failed')
                     if w.id in seen_ids:raise FormatError('New weapon identity collision')
                     seen_ids.add(w.id)
+                    uid=w.by['UniqueId'].payload()
+                    if uid in seen_unique:raise FormatError('New persistent identity collision')
+                    seen_unique.add(uid)
+        for key,value in ammo_changes.items():
+            if check.ammo[int(key)]['count']!=value:raise FormatError('Ammo validation failed')
         return result
