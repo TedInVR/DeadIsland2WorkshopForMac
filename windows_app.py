@@ -3,6 +3,7 @@ import json,os,sys,threading,uuid,webbrowser
 from pathlib import Path
 import server
 from save_core import Save
+import backup_storage
 
 ROOT=Path(__file__).resolve().parent
 RELEASES='https://github.com/TedInVR/DeadIsland2WorkshopForMac/releases/latest'
@@ -21,11 +22,9 @@ class DesktopAPI:
             if not paths:return None
             path=Path(paths[0] if isinstance(paths,(list,tuple)) else paths)
             if path.stat().st_size>server.MAX:raise ValueError('Save exceeds 128 MB')
-            raw=path.read_bytes();save=Save(raw)
-            if save.rebuild({})!=raw:raise ValueError('No-edit validation failed')
-            server.app.save=save;server.app.output=None
+            raw=path.read_bytes();info=server.app.open_save(raw,path.name)
             self._sources.add(str(path.resolve()).casefold())
-            return {'name':path.name,'data':save.info()}
+            return {'name':path.name,'data':info}
         except Exception as e:return {'error':str(e)}
     def export_save(self,name):
         if self._exporting:return {'error':'An export is already in progress.'}
@@ -37,6 +36,7 @@ class DesktopAPI:
             chosen=self._window.create_file_dialog(self._webview.FileDialog.SAVE,save_filename=name,file_types=('Save files (*.sav)','All files (*.*)'))
             if not chosen:return {'message':'Export canceled. Edits are still staged.'}
             path=Path(chosen[0] if isinstance(chosen,(tuple,list)) else chosen)
+            if backup_storage.protects(path):raise ValueError('Choose another folder. Automatic backups cannot be overwritten.')
             if str(path.resolve()).casefold() in self._sources:raise ValueError('Choose another filename. The original save cannot be overwritten.')
             temporary=path.with_name(path.name+'.'+uuid.uuid4().hex+'.tmp')
             try:temporary.write_bytes(server.app.output);os.replace(temporary,path)
@@ -44,6 +44,11 @@ class DesktopAPI:
             return {'message':'Saved '+path.name+'. Import this edited copy through Save Wizard or a compatible PS4 container workflow.'}
         except Exception as e:return {'error':str(e)}
         finally:self._exporting=False
+    def open_backups(self):
+        try:
+            directory=backup_storage.folder();directory.mkdir(parents=True,exist_ok=True);os.startfile(directory)
+            return {'message':'Backup folder opened.'}
+        except OSError as e:return {'error':str(e)}
     def _closing(self):
         if self._exporting:return False
         try:
@@ -75,7 +80,7 @@ def main():
     def guide():webbrowser.open((ROOT/'User-Guide.html').as_uri())
     def updates():webbrowser.open(RELEASES)
     def about():api._window.create_confirmation_dialog('Dead Island 2 Workshop '+version(),'Windows preview. Edits decrypted PS4 saves. In-game effects of experimental edits still require testing.')
-    menus=[Menu('File',[MenuAction('Open Decrypted Save…',lambda:js('openSave()')),MenuAction('Create Weapon…',lambda:js('openCreate()')),MenuAction('Duplicate Selected Weapon…',lambda:js('openDuplicate()')),MenuAction('Reserve Ammo…',lambda:js('openAmmo()')),MenuAction('Review & Export Copy…',lambda:js('review()')),MenuSeparator(),MenuAction('Quit',lambda:api._window.destroy())]),Menu('Help',[MenuAction('User Guide',guide),MenuAction('Check for Updates…',updates),MenuAction('About Workshop',about)])]
+    menus=[Menu('File',[MenuAction('Open Decrypted Save…',lambda:js('openSave()')),MenuAction('Create Weapon…',lambda:js('openCreate()')),MenuAction('Duplicate Selected Weapon…',lambda:js('openDuplicate()')),MenuAction('Reserve Ammo…',lambda:js('openAmmo()')),MenuAction('Review & Export Copy…',lambda:js('review()')),MenuSeparator(),MenuAction('Quit',lambda:api._window.destroy())]),Menu('Help',[MenuAction('Open Backup Folder',api.open_backups),MenuAction('User Guide',guide),MenuAction('Check for Updates…',updates),MenuAction('About Workshop',about)])]
     window=webview.create_window('Dead Island 2 Workshop',url='http://127.0.0.1:'+str(http.server_port)+'/'+server.token+'/',js_api=api,width=1220,height=850,min_size=(900,650),background_color='#101618',menu=menus)
     api._bind(window);window.events.closing+=api._closing
     profile=Path(os.environ.get('LOCALAPPDATA',str(Path.home())))/'Dead Island 2 Workshop'/'WebView2'

@@ -1,6 +1,6 @@
 {
-  "version": "0.7.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.7.0.zip",
-  "sha256": "8347f5d7a51dcffb59ec4c9d2d760df81b1b22aa396ca6a56d8c0dabe40fc2ed",
-  "notes": "Mac and Windows desktop shells share the editor; native Windows file dialogs and distribution build added."
+  "version": "0.8.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.8.0.zip",
+  "sha256": "44e9729c009041f0430626d7d778e683abf12ad6d984893009d9f72e6edcc518",
+  "notes": "Automatic dated backups on save opening and validated export; protected backup folder on Mac and Windows."
 }

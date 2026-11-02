@@ -27,6 +27,7 @@ Download the Windows ZIP above, choose **Extract All**, and run **Install-Window
 - Experimental melee durability and existing reserve-ammo count editing; game-imposed caps still apply. No magazine-count editing.
 - Delete/undo deletion to free slots in the same export.
 - Replace an existing weapon with a catalog weapon without using another slot.
+- Automatic dated backups on every valid save open and validated export; each is a separate file, with no automatic overwrite or deletion. Help → Open Backup Folder opens the local collection.
 - Review changes and export a separate validated copy; original inputs stay unchanged.
 - Help menu links to the user guide, update checks, latest download, and automatic-update preference.
 
@@ -38,7 +39,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.7.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.8.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop does **not** decrypt or re-encrypt the PS4 USB save container. Save Wizard is still needed for export/import in the current workflow. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

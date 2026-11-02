@@ -8,7 +8,7 @@ DEV="/Applications/Dead Island 2 Workshop Development"
 BUILD="$(mktemp -d "${TMPDIR:-/tmp}/DI2Workshop-build.XXXXXX")"
 trap 'rm -rf "$BUILD"' EXIT
 fail() { echo; echo "$1"; echo; if [[ "$UNATTENDED" == "0" ]]; then read -r -p "Press Return to close…" _reply; fi; exit 1; }
-echo "Dead Island 2 Workshop 0.7.0 — Mac preview"
+echo "Dead Island 2 Workshop 0.8.0 — Mac preview"
 echo "Building your Mac app. No additional Python packages are needed."
 [[ "$(uname -s)" == "Darwin" ]] || fail "Run this installer on your Mac."
 if pgrep -f '/Dead Island 2 Workshop.app/Contents/MacOS/' >/dev/null 2>&1; then
@@ -21,17 +21,17 @@ for candidate in /opt/homebrew/bin/python3 /usr/local/bin/python3 /usr/bin/pytho
     if [[ -x "$candidate" ]] && "$candidate" -c 'import sys; assert sys.version_info >= (3,9)' 2>/dev/null; then PYTHON="$candidate"; break; fi
 done
 [[ -n "$PYTHON" ]] || fail "Python 3.9 or newer is required. Install Python 3, then rerun this installer."
-"$PYTHON" -c 'import py_compile,sys; [py_compile.compile(x,doraise=True,cfile="/tmp/di2-workshop-check.pyc") for x in sys.argv[1:]]' "$SOURCE/server.py" "$SOURCE/save_core.py" "$SOURCE/updater.py"
+"$PYTHON" -c 'import py_compile,sys; [py_compile.compile(x,doraise=True,cfile="/tmp/di2-workshop-check.pyc") for x in sys.argv[1:]]' "$SOURCE/server.py" "$SOURCE/backup_storage.py" "$SOURCE/save_core.py" "$SOURCE/updater.py"
 mkdir -p "$BUILD/Dead Island 2 Workshop.app/Contents/MacOS" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources"
 if ! "$SWIFTC" -sdk "$SDK" -O -framework AppKit -framework WebKit "$SOURCE/Workshop.swift" -o "$BUILD/Dead Island 2 Workshop.app/Contents/MacOS/DI2Workshop"; then
     fail "The Mac build did not finish. Send the compiler message above to ChatGPT. Your existing app and saves have not been changed."
 fi
 cp "$SOURCE/Info.plist" "$BUILD/Dead Island 2 Workshop.app/Contents/Info.plist"
-for name in server.py save_core.py index.html Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt; do cp "$SOURCE/$name" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/$name"; done
+for name in server.py backup_storage.py save_core.py index.html Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt; do cp "$SOURCE/$name" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/$name"; done
 /usr/bin/codesign --force --sign - "$BUILD/Dead Island 2 Workshop.app"
 mkdir -p "$DEV"
 if [[ "$SOURCE" != "$DEV" ]]; then
-    for name in Install.command Workshop.swift server.py save_core.py index.html Info.plist Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt; do cp "$SOURCE/$name" "$DEV/$name"; done
+    for name in Install.command Workshop.swift server.py backup_storage.py save_core.py index.html Info.plist Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt; do cp "$SOURCE/$name" "$DEV/$name"; done
 fi
 chmod +x "$DEV/Install.command"
 if pgrep -f "/Dead Island 2 Workshop.app/Contents/MacOS/DI2Workshop" >/dev/null 2>&1; then fail "Please quit Workshop before installing this update."; fi

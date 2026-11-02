@@ -19,3 +19,11 @@ The backend uses participating jailbroken consoles. The person using the hosted 
 No account has been created, API key obtained, or personal save uploaded during this research. No live encryption integration is included in the current release. A compatible service account/key, confirmation of automation support, and an end-to-end Dead Island 2 round trip are needed before the app can offer this as a working feature. A web frontend or Discord interface alone is not evidence of an unauthenticated automation endpoint.
 
 Primary sources: [HTOS](https://github.com/hzhreal/HTOS), [HTOS-web](https://github.com/earthonion/HTOS-web), [REST API](https://github.com/earthonion/HTOS-web/blob/main/API.md), [GarlicSaves About](https://garlicsaves.com/about).
+
+## What an access key means
+
+It is a private text credential issued by GarlicSaves for submitting jobs under a service account. The API documentation calls it a **worker key** and directs users to the service's **Contribute** page. The published Contribute route requires login and a key name, and creates a key shown once; a live service account/key is still needed to verify actual access.
+
+User setup: register/sign in at https://garlicsaves.com/, then open https://garlicsaves.com/contribute and create a key with a recognizable name such as Workshop. Keep it private; do not put it in GitHub, screenshots, or chat. A future Workshop connection should accept it locally and store it through the operating system's credential store.
+
+A real round-trip test also needs the original encrypted PS4 save file and its matching `.bin` file. The existing decrypted development fixture is not enough to test container decryption. Service processing would send those selected files to GarlicSaves; that is separate from the current local-only editor and backups.

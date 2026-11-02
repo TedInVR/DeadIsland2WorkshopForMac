@@ -13,7 +13,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.7.0"
+    let version = "0.8.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -54,6 +54,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         edit.addItem(withTitle:"Paste", action:#selector(NSText.paste(_:)), keyEquivalent:"v")
         edit.addItem(withTitle:"Select All", action:#selector(NSText.selectAll(_:)), keyEquivalent:"a")
         let helpItem=NSMenuItem();bar.addItem(helpItem);let help=NSMenu(title:"Help");helpItem.submenu=help
+        help.addItem(withTitle:"Open Backup Folder", action:#selector(openBackups), keyEquivalent:"").target=self
         help.addItem(withTitle:"User Guide", action:#selector(userGuide), keyEquivalent:"").target=self
         help.addItem(withTitle:"Using Workshop", action:#selector(helpText), keyEquivalent:"").target=self
         help.addItem(withTitle:"Keyboard Shortcuts", action:#selector(shortcuts), keyEquivalent:"").target=self
@@ -69,6 +70,15 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         let path=FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop/settings.json")
         if let bytes=try? Data(contentsOf:path),let obj=(try? JSONSerialization.jsonObject(with:bytes)) as? [String:Any],let enabled=obj["automatic_updates"] as? Bool{return enabled}
         return true
+    }
+    func backupDirectory()->URL {
+        if let path=ProcessInfo.processInfo.environment["DI2_WORKSHOP_BACKUP_DIR"],!path.isEmpty{return URL(fileURLWithPath:(path as NSString).expandingTildeInPath,isDirectory:true)}
+        return FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop/Backups",isDirectory:true)
+    }
+    @objc func openBackups(){
+        let directory=backupDirectory()
+        do{try FileManager.default.createDirectory(at:directory,withIntermediateDirectories:true);NSWorkspace.shared.open(directory)}
+        catch{alert("Backup folder",error.localizedDescription)}
     }
     @objc func userGuide(){
         if let path=Bundle.main.url(forResource:"User-Guide",withExtension:"html"){NSWorkspace.shared.open(path)}
@@ -164,6 +174,9 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         let panel=NSSavePanel();panel.nameFieldStringValue=body["name"] as? String ?? "ue4savegame.ps4_Edited.sav";panel.message="Save a separate edited copy. Keep your original save backup.";panel.canCreateDirectories=true
         panel.beginSheetModal(for:window){r in
             guard r == .OK,let target=panel.url else{self.finish("Export canceled. Edits are still staged.");return}
+            let backupRoot=self.backupDirectory().resolvingSymlinksInPath().standardizedFileURL.path.lowercased()
+            let exportPath=target.resolvingSymlinksInPath().standardizedFileURL.path.lowercased()
+            if exportPath == backupRoot || exportPath.hasPrefix(backupRoot+"/"){self.finish("Choose another folder; automatic backups cannot be overwritten.",true);return}
             if self.sourcePaths.contains(target.resolvingSymlinksInPath().standardizedFileURL.path) {self.finish("Choose a different filename; the original save cannot be overwritten.",true);return}
             self.exporting=true
             URLSession.shared.dataTask(with:base.appendingPathComponent("export")){d,response,e in

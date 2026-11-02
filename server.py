@@ -3,11 +3,19 @@ import argparse,json,secrets,threading,time,sys
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from save_core import Save,FormatError
+from urllib.parse import unquote
+import backup_storage
 ROOT=Path(__file__).resolve().parent
 MAX=128*1024*1024
 DESKTOP_EVAL=False
 class App:
     def __init__(self): self.save=None;self.name='ue4savegame.ps4.sav';self.output=None
+    def open_save(self,raw,name='ue4savegame.ps4.sav'):
+        save=Save(raw)
+        if save.rebuild({})!=raw:raise FormatError('No-edit validation failed')
+        info=save.info();info['backup']=backup_storage.snapshot(raw,'opened',name)
+        self.save=save;self.output=None;self.name=name
+        return info
 app=App(); token=secrets.token_urlsafe(32)
 class Handler(BaseHTTPRequestHandler):
     def log_message(self,*args):pass
@@ -35,11 +43,7 @@ class Handler(BaseHTTPRequestHandler):
             raw=self.rfile.read(n)
             if len(raw)!=n:raise ValueError('Upload was interrupted')
             if p=='open':
-                save=Save(raw)
-                # Complete a no-edit serialization check before accepting a file.
-                if save.rebuild({})!=raw:raise FormatError('No-edit validation failed')
-                app.save=save;app.output=None
-                self.reply(200,save.info())
+                self.reply(200,app.open_save(raw,unquote(self.headers.get('X-Workshop-Filename','ue4savegame.ps4.sav'))))
             else:
                 if app.save is None:raise ValueError('Open a save first')
                 request=json.loads(raw)
@@ -50,8 +54,11 @@ class Handler(BaseHTTPRequestHandler):
                 for key,c in changes.items():
                     if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path','durability'}:raise ValueError('Unknown edit field')
                     if 'perks' in c and (not isinstance(c['perks'],list) or any(x not in catalog for x in c['perks'])):raise ValueError('Choose upgrades from this save’s catalog')
-                app.output=app.save.rebuild(changes,additions,deletions,ammo_changes)
-                self.reply(200,{'bytes':len(app.output),'edited':len(changes),'created':len(additions),'deleted':len(deletions)})
+                app.output=None
+                output=app.save.rebuild(changes,additions,deletions,ammo_changes)
+                backup=backup_storage.snapshot(output,'exported',app.name)
+                app.output=output
+                self.reply(200,{'bytes':len(app.output),'edited':len(changes),'created':len(additions),'deleted':len(deletions),'backup':backup})
         except Exception as e:
             self.reply(400,{'error':str(e) or type(e).__name__})
 

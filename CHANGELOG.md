@@ -1,5 +1,12 @@
 # Version history
 
+## 0.8.0
+
+- Automatically create a full-file backup after successful validation on every save open and before making each validated export available. Both desktop shells use the shared open/backup logic.
+- Give snapshots UTC timestamps, opened/exported labels, and unique IDs. Exclusive file creation prevents overwrites, including on filename collisions. Verify the saved bytes by SHA-256; stop the operation if backup writing fails.
+- Add Help → Open Backup Folder on Mac and Windows. Backups are retained without automatic pruning; updates retain the folder. Manual exports cannot target the automatic-backup directory.
+- Add collision, concurrent-write, disk-failure, open-session preservation, protected-export, and full editor/export backup checks.
+
 ## 0.7.0
 
 - Add a Windows desktop shell with WebView2, native save dialogs, source-file overwrite protection, and unsaved-edit close confirmation. Shared save/editing logic and interface remain the same on Mac and Windows.

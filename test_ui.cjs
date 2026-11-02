@@ -3,13 +3,14 @@ const fs=require('fs'), cp=require('child_process'),os=require('os'),path=requir
 const assert=require('assert');
 (async()=>{
  const ready=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'di2-ui-')),'ready');
- const proc=cp.spawn('python',[path.join(__dirname,'server.py'),'--ready',ready]);
+ const proc=cp.spawn('python',[path.join(__dirname,'server.py'),'--ready',ready],{env:{...process.env,DI2_WORKSHOP_BACKUP_DIR:path.join(path.dirname(ready),'backups')}});
  try{
   for(let i=0;i<100&&!fs.existsSync(ready);i++)await new Promise(r=>setTimeout(r,40));
   const base=fs.readFileSync(ready,'utf8');const source=fs.readFileSync(process.env.DI2_TEST_SAVE||'../upload/ue4savegame.ps4.sav');
   const dom=new JSDOM(fs.readFileSync(path.join(__dirname,'index.html'),'utf8'),{url:base,runScripts:'dangerously',beforeParse(w){w.confirm=()=>true;w.HTMLDialogElement.prototype.showModal=function(){this.open=true};w.HTMLDialogElement.prototype.close=function(){this.open=false};w.fetch=(url,o={})=>fetch(base+url,{...o,body:url==='open'?source:o.body});w.webkit={messageHandlers:{workshop:{postMessage(x){w.exported=x}}}}}});
   const w=dom.window,d=w.document;
   Object.defineProperty(d.querySelector('#file'),'files',{value:[{name:'test.sav'}]});await d.querySelector('#file').onchange({target:d.querySelector('#file')});
+  const backup=w.eval('data.backup');assert.equal(backup.reason,'opened');assert(fs.readFileSync(backup.path).equals(source));
   assert.equal(w.eval('data.profiles.length'),10);assert([...d.querySelectorAll('#group option')].some(x=>x.textContent.includes('Ryan — New Game Plus (active)')));
   const raven=w.eval('data.weapon_catalog.find(w=>w.name.toUpperCase()==="RAVEN")');
   assert.equal(w.weaponVisual(raven).label,'Sporting rifle');
@@ -54,7 +55,7 @@ const assert=require('assert');
   d.querySelector('#newsearch').value='katana';w.renderWeaponChoices();assert(d.querySelector('#newtype').options.length>0);w.queueWeapon();assert.equal(w.eval('additions.length'),1);assert.equal(w.creationFree(),0);
   w.review();assert(d.querySelector('#reviewitems').textContent.includes('DELETE:'));assert(d.querySelector('#reviewitems').textContent.includes('NEW:'));
   await w.exportSave();assert(w.exported);assert(d.querySelector('#status').textContent.includes('Validating'));
-  let out=await fetch(base+'export');assert(out.ok);let bytes=await out.arrayBuffer();assert(bytes.byteLength>0);
+  let out=await fetch(base+'export');assert(out.ok);let bytes=await out.arrayBuffer();assert(bytes.byteLength>0);assert(fs.readdirSync(backup.folder).filter(n=>n.includes('_exported_')).some(n=>fs.readFileSync(path.join(backup.folder,n)).equals(Buffer.from(bytes))));
   // Undo deletion and queued creation, then replace a weapon in a full slot.
   w.toggleDelete();w.eval('additions=[]');w.openReplace();assert(d.querySelector('#newdestlabel').hidden);assert.equal(w.creationFree(),1);
   d.querySelector('#newsearch').value='Peggy';w.renderWeaponChoices();assert(d.querySelector('#newtype').options.length);w.queueWeapon();assert.equal(w.eval('Object.keys(changes).length'),1);assert(d.querySelector('#name').textContent.includes('PEGGY'));assert(d.querySelector('#weaponpreview').textContent.includes('Hunting rifle'));
@@ -91,7 +92,7 @@ const assert=require('assert');
   w.dispatchEvent(new w.Event('pywebviewready'));assert(d.querySelector('#platformbadge').textContent.includes('Windows'));
   await w.openSave();assert.equal(w.eval('fileName'),'windows.sav');assert.equal(w.ammoDirty(),0);
   w.review();await w.exportSave();assert.equal(winName,'windows_Edited.sav');assert.equal(d.querySelector('#status').textContent,'Windows native export completed.');
-  console.log('PASS: Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
+  console.log('PASS: automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}
 })().catch(e=>{console.error(e);process.exit(1)});
