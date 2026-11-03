@@ -23,7 +23,7 @@ def main():
             for name in ('save_codec.py','PythonPath.txt','requirements-runtime.txt','legal_state.py','USAGE_TERMS.md','CREDITS.md','Credits.html','THIRD_PARTY_NOTICES.md','LICENSING_REVIEW.md','third_party_licenses/CC-BY-SA-3.0.txt','updater.py','credential_store.py','garlic_service.py','server.py','ps4_backups.py','character_editor.py','resource_catalog.json','backup_storage.py','save_browser.py','catalog.json','index.html'):
                 assert (app/'Contents/Resources'/name).is_file(),name
             runtime=(app/'Contents/Resources/PythonPath.txt').read_text().strip()
-            subprocess.run([runtime,'-c','import zstandard,cityhash; import sys; sys.path.insert(0,sys.argv[1]); import save_codec; assert save_codec.encode(b"example",None)==b"example"',str(app/'Contents/Resources')],check=True)
+            subprocess.run([runtime,'-B','-c','import zstandard,cityhash; import sys; sys.path.insert(0,sys.argv[1]); import save_codec; assert save_codec.encode(b"example",None)==b"example"',str(app/'Contents/Resources')],check=True)
             assert not (support/'pending-update.json').exists()
             subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict',str(app)],check=True)
             print(json.dumps({'status':'passed','actual_installed_version':u.installed_version(),'native_build_and_install':True,'original_user_app_untouched':True}))
