@@ -1,3 +1,12 @@
+# Version 0.15.0 — 3 November 2026
+
+- Fill materials and zombie parts to 50 for the selected character while filling med-kits/fuses to their normal maximum, without changing cash or level.
+- Show character levels in inventory choices and below the selector, including staged level changes.
+- Right-click Copy Weapon / Paste Weapon snapshots full saved state and staged settings, preserving destination IDs and slot count; validate pasted records on export.
+- Add selected-character/location Set All to 9,999 and Revert All ammo actions, plus a separate global ammo reset.
+- Track per-weapon applied preset labels locally, show modified sets, and update an existing preset by selecting it in the save dialog.
+- Local file/serialization checks passed; in-game effects and live PS4 import still require console testing.
+
 # Version 0.14.0 — 3 November 2026
 
 - Save named mod/perk presets locally between launches, apply them to existing/new/replacement/duplicate weapons, replace a saved set with confirmation and delete presets without altering weapons already edited.

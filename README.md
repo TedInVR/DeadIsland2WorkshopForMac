@@ -1,5 +1,14 @@
 # Dead Island 2 Workshop — Mac and Windows
 
+## Resource, weapon and preset shortcuts
+
+- **Fill to 50%** in Character & Resources sets crafting materials and zombie parts to **50 each** for the selected character. Med-kits and fuses use their normal maxima (5 and 3); cash and character levels stay unchanged. Export or encrypt the edited copy to save these changes.
+- Inventory dropdown entries show the character's level. The text below the dropdown follows the selected inventory or highlighted weapon and reflects staged level edits.
+- Right-click a weapon and choose **Copy Weapon**. Right-click an unwanted weapon and choose **Paste Weapon** to replace it in the editor. The clipboard is a snapshot, including the source's staged settings, complete saved state and generation seed. Destination IDs and slot count are retained. **Revert this weapon** undoes the paste before export. The internal clipboard clears when another save opens. Shift+F10 also opens the context menu.
+- Reserve Ammunition: **Set All to 9,999** and **Revert All** affect only the selected character/location. **Revert All Ammo Edits All Characters** removes every pending ammunition edit. These controls edit saved reserve stacks, not gun magazines.
+- Highlighting a weapon selects the preset actually applied to it, or **Choose a preset** when none was applied. A note identifies sets modified since application. Local annotations can recognize the association on reopening when the saved weapon ID and perk set match; no annotation is written into the game save.
+- **Save as Preset → Update Existing Preset** lets you choose a preset by name without retyping it. Updating retains that preset's ID/name and does not change other weapons automatically.
+
 ## Named mod and perk presets
 
 Select the mods/perks you want, click **Save as Preset**, give the set a name and save it. In the weapon editor or Create/Replace/Duplicate dialog, choose a saved set from **Saved mod & perk presets**, then click **Apply Preset**. Applying a preset replaces that weapon's selected mod/perk set; other weapon settings remain unchanged. Presets are stored locally between launches, independently of opened saves and app updates. A duplicate name requires confirmation before replacement. **Delete Preset** removes the saved set without changing weapons already using it. If a preset includes upgrades unavailable in the current save's catalog, no changes are applied.
@@ -61,7 +70,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.14.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.15.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

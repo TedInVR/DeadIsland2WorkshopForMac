@@ -1,6 +1,6 @@
 {
-  "version": "0.14.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.14.0.zip",
-  "sha256": "d23ba6fc090ab94f605fa9fcbe8dca221803744c0956a939abf130fbe586360e",
-  "notes": "Named mod/perk presets with save/apply/delete; clear Done replacement button; full header labels, wrapping buttons and hover help."
+  "version": "0.15.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.15.0.zip",
+  "sha256": "382dab122a2c2875d6ced536d1be92a9fd51f3f058315f795ecee26a5f7d2221",
+  "notes": "Half resource fills, visible character levels, right-click weapon copy/paste, scoped ammo actions and per-weapon preset labels with update-existing selection."
 }

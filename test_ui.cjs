@@ -157,8 +157,33 @@ const assert=require('assert');
   assert.equal(d.querySelector('#service-decrypt').textContent,'Decrypt Selected Save…');
   await w.openService();await w.serviceResume();assert(!d.querySelector('#service-dialog').open);
   assert(w.eval('serviceOpened'));assert.equal(w.eval('fileName'),'downloaded.sav');assert(!d.querySelector('#service-encrypt').disabled);w.fetch=resumeFetch;
+
+  // Half-fill preserves pickup space and cash; character levels identify inventory groups.
+  w.openCharacter();const halfGroup=w.chosenCharacter().group,halfProfile=w.chosenCharacter().profile;
+  w.stageMoney(123456);d.querySelector('#fill-half').click();
+  for(const item of halfGroup.items){const changed=w.eval('resourceChanges['+JSON.stringify(halfGroup.key+'|'+item.path)+']');const count=changed?.count??item.count;assert.equal(count,item.category==='Money'?123456:item.category==='Consumables'?item.maximum:50)}
+  assert(w.eval('Object.values(resourceChanges)').every(x=>x.group===halfGroup.key));
+  const levelGroup=w.eval('data.containers.find(c=>c.profile_id==='+JSON.stringify(halfProfile.id)+').name');d.querySelector('#group').value=levelGroup;w.renderList();assert(d.querySelector('#group-level').textContent.includes('Character level '+halfProfile.level));
+  d.querySelector('#character-level').value=18;w.stageCharacterLevel();assert(d.querySelector('#group-level').textContent.includes('Character level 18'));assert([...d.querySelector('#group').options].some(o=>o.value===levelGroup&&o.textContent.includes('Character level 18')));d.querySelector('#character-dialog').close();
+  // Reserve-ammo fill/reset is scoped to the dropdown; the global reset is separate.
+  w.openAmmo();const ammoGroups=[...d.querySelector('#ammogroup').options].map(o=>o.value);assert(ammoGroups.length>1);
+  d.querySelector('#ammogroup').value=ammoGroups[0];w.setCharacterAmmo();const ammoA=w.eval('data.ammo.filter(a=>a.group==='+JSON.stringify(ammoGroups[0])+')');assert(ammoA.every(a=>w.eval('ammoChanges['+a.key+']')===9999||a.count===9999));
+  d.querySelector('#ammogroup').value=ammoGroups[1];w.setCharacterAmmo();const ammoB=w.eval('data.ammo.filter(a=>a.group==='+JSON.stringify(ammoGroups[1])+')');
+  d.querySelector('#ammogroup').value=ammoGroups[0];w.revertCharacterAmmo();assert(ammoA.every(a=>w.eval('ammoChanges['+a.key+']')===undefined));assert(ammoB.some(a=>w.eval('ammoChanges['+a.key+']')===9999));
+  w.revertEveryAmmoEdit();assert.equal(w.ammoDirty(),0);w.setCharacterAmmo();d.querySelector('#ammodialog').close();
+  // Clipboard snapshots do not follow later source edits and replace without consuming a slot.
+  const copySource=w.eval('data.weapons.find(w=>w.editable&&w.path.includes("MeleeWeaponArchetype"))'),pasteTarget=w.eval('data.weapons.find(w=>w.editable&&w.path.includes("RangedWeaponArchetype"))');
+  w.select(copySource.key);d.querySelector('#level').value=14;w.stage();w.showWeaponMenu(new w.MouseEvent('contextmenu',{clientX:60,clientY:80}),copySource.key);assert(!d.querySelector('#weapon-context').hidden);d.querySelector('#weapon-copy').click();assert(d.querySelector('#weapon-context').hidden);
+  d.querySelector('#level').value=16;w.stage();const pendingAdditions=w.eval('additions.length');w.showWeaponMenu(new w.MouseEvent('contextmenu'),pasteTarget.key);assert(!d.querySelector('#weapon-paste').disabled);d.querySelector('#weapon-paste').click();assert.equal(w.eval('state(data.weapons.find(w=>w.key==='+pasteTarget.key+')).level'),14);assert.equal(w.eval('additions.length'),pendingAdditions);
+  w.review();await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
+  // Explicit preset association follows each weapon; untouched weapons show Choose a preset.
+  d.querySelector('#preset').value=presetId;w.applyPreset(false);await w.rememberPresetBinding(pasteTarget.key,presetId,w.eval('currentPerks'));
+  w.select(copySource.key);w.select(pasteTarget.key);assert.equal(d.querySelector('#preset').value,presetId);
+  const noPreset=w.eval('data.weapons.find(w=>w.editable&&!presetBindings[w.id]&&w.key!==selected)');w.select(noPreset.key);assert.equal(d.querySelector('#preset').value,'');
+  w.select(pasteTarget.key);w.openPresetName(false);d.querySelector('#preset-save-mode').value='update';w.presetSaveMode();assert.equal(d.querySelector('#preset-existing').value,presetId);assert(d.querySelector('#preset-name').readOnly);const originalPresetName=w.eval('perkPresets.find(p=>p.id==='+JSON.stringify(presetId)+').name');
+  w.eval('currentPerks=currentPerks.slice(0,1)');await w.savePreset();assert.equal(w.eval('perkPresets[0].id'),presetId);assert.equal(w.eval('perkPresets[0].name'),originalPresetName);assert.equal(w.eval('perkPresets[0].perks.length'),1);
   await w.refreshPresets();d.querySelector('#preset').value=presetId;const beforePresetDelete=w.eval('JSON.stringify(currentPerks)');await w.deletePreset(false);assert.equal(w.eval('perkPresets.length'),0);assert.equal(w.eval('JSON.stringify(currentPerks)'),beforePresetDelete);
-  console.log('PASS: named presets save/reload/apply to another weapon/create/delete; Done replacement label and header tooltips; USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
+  console.log('PASS: half resource fill and character levels; scoped/global ammo actions; clipboard snapshot paste; per-weapon preset labels and update-existing mode; named presets save/reload/apply to another weapon/create/delete; Done replacement label and header tooltips; USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}
 })().catch(e=>{console.error(e);process.exit(1)});

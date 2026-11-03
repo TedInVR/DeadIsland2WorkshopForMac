@@ -8,7 +8,7 @@ DEV="${DI2_WORKSHOP_DEV_DIR:-/Applications/Dead Island 2 Workshop Development}"
 BUILD="$(mktemp -d "${TMPDIR:-/tmp}/DI2Workshop-build.XXXXXX")"
 trap 'rm -rf "$BUILD"' EXIT
 fail() { echo; echo "$1"; echo; if [[ "$UNATTENDED" == "0" ]]; then read -r -p "Press Return to close…" _reply; fi; exit 1; }
-echo "Dead Island 2 Workshop 0.14.0 — Mac preview"
+echo "Dead Island 2 Workshop 0.15.0 — Mac preview"
 echo "Building your Mac app. Compression support is installed automatically in Workshop’s private runtime."
 [[ "$(uname -s)" == "Darwin" ]] || fail "Run this installer on your Mac."
 if pgrep -f '/Dead Island 2 Workshop.app/Contents/MacOS/' >/dev/null 2>&1; then

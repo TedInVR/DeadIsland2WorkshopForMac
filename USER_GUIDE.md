@@ -1,5 +1,14 @@
 # Dead Island 2 Workshop for Mac — User Guide
 
+## Resource, weapon and preset shortcuts
+
+- **Fill to 50%** in Character & Resources sets crafting materials and zombie parts to **50 each** for the selected character. Med-kits and fuses use their normal maxima (5 and 3); cash and character levels stay unchanged. Export or encrypt the edited copy to save these changes.
+- Inventory dropdown entries show the character's level. The text below the dropdown follows the selected inventory or highlighted weapon and reflects staged level edits.
+- Right-click a weapon and choose **Copy Weapon**. Right-click an unwanted weapon and choose **Paste Weapon** to replace it in the editor. The clipboard is a snapshot, including the source's staged settings, complete saved state and generation seed. Destination IDs and slot count are retained. **Revert this weapon** undoes the paste before export. The internal clipboard clears when another save opens. Shift+F10 also opens the context menu.
+- Reserve Ammunition: **Set All to 9,999** and **Revert All** affect only the selected character/location. **Revert All Ammo Edits All Characters** removes every pending ammunition edit. These controls edit saved reserve stacks, not gun magazines.
+- Highlighting a weapon selects the preset actually applied to it, or **Choose a preset** when none was applied. A note identifies sets modified since application. Local annotations can recognize the association on reopening when the saved weapon ID and perk set match; no annotation is written into the game save.
+- **Save as Preset → Update Existing Preset** lets you choose a preset by name without retyping it. Updating retains that preset's ID/name and does not change other weapons automatically.
+
 ## Named mod and perk presets
 
 Select the mods/perks you want, click **Save as Preset**, give the set a name and save it. In the weapon editor or Create/Replace/Duplicate dialog, choose a saved set from **Saved mod & perk presets**, then click **Apply Preset**. Applying a preset replaces that weapon's selected mod/perk set; other weapon settings remain unchanged. Presets are stored locally between launches, independently of opened saves and app updates. A duplicate name requires confirmation before replacement. **Delete Preset** removes the saved set without changing weapons already using it. If a preset includes upgrades unavailable in the current save's catalog, no changes are applied.
@@ -14,7 +23,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.14.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.15.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -207,7 +216,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.14.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
+Workshop 0.15.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 

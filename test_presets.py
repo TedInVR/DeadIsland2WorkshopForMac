@@ -32,4 +32,18 @@ class PresetTests(unittest.TestCase):
             store.save({'name':name,'perks':[A]})
         self.assertEqual(len(store.list_presets()),3)
         with self.assertRaises(store.PresetError):store.delete({'id':'not-an-id'})
+    def test_update_by_identity_and_persist_applied_annotations(self):
+        identity=store.save({'name':'Existing name','perks':[A]})['saved_id']
+        store.save({'id':identity,'name':'Existing name','perks':[B],'replace':True})
+        self.assertEqual(store.list_presets()[0]['id'],identity)
+        self.assertEqual(store.list_presets()[0]['perks'],[B])
+        store.bind({'weapon_id':'a'*32,'preset_id':identity,'perks':[B]})
+        self.assertEqual(store.bindings()['a'*32],{'preset_id':identity,'perks':[B]})
+        before=store.bindings_file().read_bytes()
+        with patch.object(store.os,'replace',side_effect=PermissionError):
+            with self.assertRaises(store.PresetError):store.bind({'weapon_id':'b'*32,'preset_id':identity,'perks':[A]})
+        self.assertEqual(store.bindings_file().read_bytes(),before)
+        with self.assertRaises(store.PresetError):store.save({'id':'b'*32,'name':'New','perks':[A],'replace':True})
+        store.bind({'weapon_id':'a'*32,'preset_id':None});self.assertEqual(store.bindings(),{})
+
 if __name__=='__main__':unittest.main()

@@ -44,7 +44,10 @@ def save(value):
     if not isinstance(value,dict):raise PresetError('Invalid preset request.')
     name=value.get('name');perks=value.get('perks');presets=list_presets()
     if not isinstance(name,str):raise PresetError('Enter a preset name.')
-    existing=next((p for p in presets if p['name'].casefold()==name.strip().casefold()),None)
+    identity=value.get('id')
+    existing=next((p for p in presets if p['id']==identity),None) if identity else next((p for p in presets if p['name'].casefold()==name.strip().casefold()),None)
+    if identity and not existing:raise PresetError('The preset to update was not found.')
+    if any(p['name'].casefold()==name.strip().casefold() and (not existing or p['id']!=existing['id']) for p in presets):raise PresetError('That preset name already exists.')
     if existing and value.get('replace')is not True:raise PresetError('That preset name already exists. Choose another name or confirm replacing it.')
     record={'id':existing['id'] if existing else uuid.uuid4().hex,'name':name,'perks':perks}
     validate([record]);presets=[p for p in presets if p['id']!=record['id']]+[record]
@@ -55,3 +58,40 @@ def delete(value):
     presets=list_presets()
     if not any(p['id']==value['id'] for p in presets):raise PresetError('That preset was not found. Refresh the preset list.')
     return {'presets':write([p for p in presets if p['id']!=value['id']])}
+
+# Bindings are local display annotations, never written into game saves.
+def bindings_file():return file().with_name('PerkPresetBindings.json')
+def bindings():
+    target=bindings_file()
+    if not target.exists():return {}
+    try:
+        if target.stat().st_size>16*1024*1024:raise PresetError('Preset annotations are too large.')
+        value=json.loads(target.read_text(encoding='utf-8'))
+        if not isinstance(value,dict) or len(value)>10000:raise PresetError('Invalid preset annotations.')
+        for key,entry in value.items():
+            if not isinstance(key,str) or len(key)!=32 or any(c not in '0123456789abcdef' for c in key) or not isinstance(entry,dict):raise PresetError('Invalid weapon preset annotation.')
+            validate([{'id':entry.get('preset_id'),'name':'annotation','perks':entry.get('perks')}])
+        return value
+    except (OSError,json.JSONDecodeError) as e:raise PresetError('Preset annotations could not be read.') from e
+
+def bind(value):
+    if not isinstance(value,dict):raise PresetError('Invalid preset annotation.')
+    key=value.get('weapon_id');identity=value.get('preset_id');perks=value.get('perks')
+    if not isinstance(key,str) or len(key)!=32 or any(c not in '0123456789abcdef' for c in key):raise PresetError('Invalid weapon identity.')
+    if identity is not None:
+        if not any(p['id']==identity for p in list_presets()):raise PresetError('That preset no longer exists.')
+        validate([{'id':identity,'name':'annotation','perks':perks}])
+    data=bindings()
+    if identity is None:data.pop(key,None)
+    else:data[key]={'preset_id':identity,'perks':perks}
+    if len(data)>10000:raise PresetError('Preset annotations are full.')
+    target=bindings_file();temp=target.with_name(target.name+'.'+uuid.uuid4().hex+'.tmp')
+    try:
+        target.parent.mkdir(parents=True,exist_ok=True);raw=json.dumps(data,ensure_ascii=False)
+        if len(raw.encode('utf-8'))>16*1024*1024:raise PresetError('Preset annotations are full.')
+        fd=os.open(temp,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+        with os.fdopen(fd,'w',encoding='utf-8') as out:out.write(raw);out.flush();os.fsync(out.fileno())
+        os.replace(temp,target)
+    except OSError as e:raise PresetError('The applied-preset label could not be saved.') from e
+    finally:temp.unlink(missing_ok=True)
+    return {'saved':True}

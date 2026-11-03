@@ -273,7 +273,7 @@ class Save:
             count=sum(w.info()['editable'] for w in ar['weapons'])
             cap=16 if ar['kind']=='DIInventory' else 64
             dest.append(dict(key=ar['key'],name=ar['group'],count=count,capacity=cap,free=max(0,cap-count)))
-        containers=[dict(key=a['key'],name=a['group'],count=sum(w.info()['editable'] for w in a['weapons']),capacity=next((d['capacity'] for d in dest if d['key']==a['key']),None)) for a in self.arrays if a['weapons'] or any(d['key']==a['key'] for d in dest)]
+        containers=[dict(key=a['key'],name=a['group'],profile_id=self.sections[a['section']].get('profile',{}).get('id'),count=sum(w.info()['editable'] for w in a['weapons']),capacity=next((d['capacity'] for d in dest if d['key']==a['key']),None)) for a in self.arrays if a['weapons'] or any(d['key']==a['key'] for d in dest)]
         return dict(resource_groups=character_editor.info(self),ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
     def duplicate_record(self,request):
         key=request.get('clone_source')
@@ -317,6 +317,17 @@ class Save:
         changes={name:pd[name].replace(weapon.by[name].payload()) for name in ('EntryID','UniqueId')}
         changes['ProceduralGenerationContext']=pg.replace(replace_props(raw,pg.data,pg.end,pgprops,{'Seed':newseed.replace(oldseed.payload())}))
         return replace_props(raw,0,end,ps,changes)
+    def paste_record(self,target,change):
+        key=change.get('copy_source')
+        if type(key)!=int or not 0<=key<len(self.weapons):raise FormatError('Invalid copied weapon source')
+        source=self.weapons[key]
+        if not source.info()['editable'] or not target.info()['editable']:raise FormatError('This item cannot be copied or replaced')
+        overrides={k:change[k] for k in ('path','level','rarity','perks','durability') if k in change}
+        raw=self.replacement_record(source,overrides) if overrides.get('path',source.path)!=source.path else source.rebuild(overrides)
+        fields,end=props(raw,0);by={f.name:f for f in fields}
+        # Keep destination references intact; every other field comes from the snapshot.
+        return replace_props(raw,0,end,fields,{k:by[k].replace(target.by[k].payload()) for k in ('EntryID','UniqueId')})
+
     def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None):
         resource_changes=resource_changes or [];character_levels=character_levels or {}
         deletions=deletions or []
@@ -345,7 +356,9 @@ class Save:
         known={str(w.idx) for w in self.weapons}
         if set(changes)-known:raise FormatError('Unknown weapon')
         for key in changes:
+            if not isinstance(changes[key],dict):raise FormatError('Invalid weapon edit')
             if not self.weapons[int(key)].info()['editable']:raise FormatError('This item cannot be edited')
+        pasted={int(k):self.paste_record(self.weapons[int(k)],v) for k,v in changes.items() if 'copy_source' in v}
         section_edits={}
         ammo_changes=ammo_changes or {}
         if not isinstance(ammo_changes,dict) or set(ammo_changes)-{str(a['key']) for a in self.ammo}:raise FormatError('Unknown ammunition stack')
@@ -354,7 +367,7 @@ class Save:
         section_edits=character_editor.plan(self,resource_changes,character_levels,ammo_changes)
         for ar in self.arrays:
             new_items=created.get(ar['key'],[])
-            payload=b''.join((self.replacement_record(w,changes[str(w.idx)]) if changes[str(w.idx)].get('path',w.path)!=w.path else w.rebuild(changes[str(w.idx)])) if str(w.idx) in changes else self.b[w.start:w.end] for w in ar['weapons'] if w.idx not in deleted)+b''.join(new_items)
+            payload=b''.join(pasted[w.idx] if w.idx in pasted else ((self.replacement_record(w,changes[str(w.idx)]) if changes[str(w.idx)].get('path',w.path)!=w.path else w.rebuild(changes[str(w.idx)])) if str(w.idx) in changes else self.b[w.start:w.end]) for w in ar['weapons'] if w.idx not in deleted)+b''.join(new_items)
             inner=ar['inner'];outer=ar['outer']
             if payload==inner.payload():continue
             new=outer.replace(put(len(ar['weapons'])-sum(w.idx in deleted for w in ar['weapons'])+len(new_items))+inner.replace(payload))
@@ -403,6 +416,7 @@ class Save:
         seen_unique={w.by['UniqueId'].payload() for w in self.weapons}
         for key,c in changes.items():
             old=self.weapons[int(key)];new=by_index[old.idx]
+            if old.idx in pasted and new.b[new.start:new.end]!=pasted[old.idx]:raise FormatError('Copied weapon state validation failed')
             for field in ('level','rarity'):
                 if field in c and getattr(new,field)!=c[field]:raise FormatError('Validation failed for '+field)
             if 'perks' in c and new.runtime.paths!=c['perks']:raise FormatError('Validation failed for upgrades')

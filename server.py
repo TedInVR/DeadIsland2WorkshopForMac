@@ -45,7 +45,7 @@ class Handler(BaseHTTPRequestHandler):
             try:self.reply(200,save_browser.scan())
             except Exception as e:self.reply(400,{'error':str(e)})
         elif p=='presets':
-            try:self.reply(200,{'presets':preset_storage.list_presets()})
+            try:self.reply(200,{'presets':preset_storage.list_presets(),'bindings':preset_storage.bindings()})
             except ValueError as e:self.reply(400,{'error':str(e)})
         elif p=='named-backups':self.reply(200,{'backups':ps4_backups.list_backups()})
         elif p=='backup-folder':
@@ -61,13 +61,14 @@ class Handler(BaseHTTPRequestHandler):
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
         if p!='legal-accept' and not legal_state.is_accepted():return self.reply(403,{'error':'Read and acknowledge the first-use agreement first.'})
-        if p not in ('legal-accept','presets-save','presets-delete','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
+        if p not in ('legal-accept','presets-save','presets-delete','presets-bind','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
             raw=self.rfile.read(n)
             if len(raw)!=n:raise ValueError('Upload was interrupted')
             if p=='legal-accept':self.reply(200,legal_state.accept(json.loads(raw)))
+            elif p=='presets-bind':self.reply(200,preset_storage.bind(json.loads(raw)))
             elif p=='presets-save':self.reply(200,preset_storage.save(json.loads(raw)))
             elif p=='presets-delete':self.reply(200,preset_storage.delete(json.loads(raw)))
             elif p in ('named-backup','restore-backup','open-backup'):
@@ -160,7 +161,7 @@ class Handler(BaseHTTPRequestHandler):
                 else:changes=request;additions=[];deletions=[];ammo_changes={};resource_changes=[];character_levels={}
                 catalog={x['path'] for x in app.save.info()['catalog']}
                 for key,c in changes.items():
-                    if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path','durability'}:raise ValueError('Unknown edit field')
+                    if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path','durability','copy_source'}:raise ValueError('Unknown edit field')
                     if 'perks' in c and (not isinstance(c['perks'],list) or any(x not in catalog for x in c['perks'])):raise ValueError('Choose upgrades from this save’s catalog')
                 app.output=None
                 output=app.save.rebuild(changes,additions,deletions,ammo_changes,resource_changes,character_levels)
