@@ -102,6 +102,8 @@ def install(drive,account,title,name,files,label='Automatic backup before replac
             with temp.open('xb') as f:f.write(data);f.flush();os.fsync(f.fileno())
             if hashlib.sha256(temp.read_bytes()).digest()!=hashlib.sha256(data).digest():raise BackupError('USB write verification failed.')
         for n,temp in temps.items():os.replace(temp,target/n);replaced.append(n)
+        for n,data in files.items():
+            if hashlib.sha256(read_file(target/n)).digest()!=hashlib.sha256(data).digest():raise BackupError('The installed USB save failed verification.')
     except Exception as error:
         try:
             for n in replaced:

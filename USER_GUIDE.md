@@ -23,7 +23,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.15.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.16.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -216,7 +216,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.15.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
+Workshop 0.16.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -226,18 +226,26 @@ Workshop 0.15.0 includes a **GarlicSaves connection preview**. The cryptographic
 4. Click **Decrypt Selected Save…** and confirm sending those two files to **garlicsaves.com**. Workshop saves an original-pair ZIP and automatic snapshots locally before submission. Keep Workshop open while the job is queued/running. The app does not automatically upload any saves just because a drive is connected.
 5. When the decrypted Dead Island 2 data passes validation, Workshop opens it in the editor automatically. Existing staged edits require a discard confirmation before replacement. **Open Decrypted Save** also opens the current validated result.
 
-To continue after updating or restarting, choose **PS4 Decrypt / Encrypt → Reopen Last Decryption**. Workshop validates and opens the latest locally saved decryption without another upload. This does not restore unexported edits from a previous session. Compressed inputs stay compressed on export, with validated chunk sizes and a recalculated CityHash64 checksum; no-edit exports remain byte-for-byte identical. Companion files and metadata are preserved unchanged.
+To continue after updating or restarting, choose **PS4 Decrypt / Encrypt → Reopen Last Decryption**. Workshop validates and opens the latest locally saved decryption without another upload. It also recovers the most recent locally saved edited package from a previous encryption attempt; edits never submitted or exported are not recoverable. Later failed diagnostic decryptions with mismatched account metadata are skipped. Compressed inputs stay compressed on export, with validated chunk sizes and a recalculated CityHash64 checksum; no-edit exports remain byte-for-byte identical. Companion files and metadata are preserved unchanged.
 
 The downloaded package must include `sce_sys/param.sfo`. Workshop checks its account and title against the selected source, preserves companion files, and requires the exact supported game-data format with a byte-for-byte no-edit validation. If the returned game data is compressed or otherwise unsupported, Workshop retains **Decrypted-Result.zip** as a generic package for inspection or re-encryption; it does not claim successful internal editing or silently convert the data.
 
-### Re-encrypt an edited copy
+### Finalize and Re-encrypt
 
-1. Edit the decrypted result normally. Open **PS4 Decrypt / Encrypt…** again.
-2. Click **Encrypt Edited Copy…**. Confirm the edit count, destination account, and upload to GarlicSaves. This validates the currently staged edits and submits the full package, retaining metadata and companion files. A standalone Save Wizard file opened separately is not bound to this session and cannot accidentally be encrypted into the wrong container.
-3. When complete, click **Open Result Folder**. The folder contains the raw result ZIP, the edited decrypted package, and a separate **PS4/SAVEDATA/account-ID/CUSA…** tree with the matching encrypted pair, plus **Ready-For-USB.zip**. Original USB files are never overwritten by this operation.
-4. Copy that new PS4 folder to a spare USB drive and test importing it on the PS4 before replacing your working save. In-game validation is required; syntax checks do not prove the console will accept a remote service result.
+The highlighted final header action is **Finalize and Re-encrypt**. **Review & Export** remains an optional way to review changes and export a separate decrypted file.
 
-The active link between an opened decrypted result and its original container lasts for the current app session. Keep Workshop open through decryption, editing, and re-encryption. If you quit, the archives remain on disk, but this preview requires decryption again to establish a new editable service session.
+1. Edit the decrypted save normally, then click **Finalize and Re-encrypt**.
+2. Check the source PSN profile and destination USB drive. Workshop prefers the original drive when it is still available and shows the complete destination path.
+3. Keep Workshop open and the USB drive connected. Workshop validates edits, backs up the current destination, uploads the full edited package to GarlicSaves and re-encrypts it.
+4. Before preparing any USB-ready result, Workshop submits the returned encrypted pair for decryption and checks its actual account and game, exact edited game data, and original keystone. If the service reversed the account bytes, Workshop retries once with the corrected wire value and verifies the new result again. Unexpected ownership, changed game data or an unavailable verification job stops the operation without replacing USB files. These extra service jobs can increase processing time.
+5. After verification, Workshop backs up the destination again, replaces both encrypted files in the correct **PS4/SAVEDATA/account-ID/CUSA…** folder, and reads them back to verify the write. A disconnected or changed drive stops installation; interrupted replacement rolls back the prior pair.
+6. Wait for **Saved to USB and verified**, safely eject, then copy the save from USB to console storage using the same PSN profile. Console acceptance and in-game behavior still require testing; service verification is not a console test.
+
+Successful finalization opens the installed edited data as the new editor baseline and clears staged edits. Original backups remain available. **PS4 Decrypt / Encrypt → Reopen Last Decryption** can resume the latest finalized package after restarting.
+
+### Re-encrypt a separate copy
+
+The **Encrypt Edited Copy**, **Re-encrypt Complete Package**, and **Encrypt Edited ZIP** tools also verify returned ownership and game data before creating a separate PS4 folder and **Ready-For-USB.zip**. They do not replace USB files automatically. **Open Result Folder** contains the submitted package and service verification diagnostics. Avoid copying an unverified attempt ZIP to USB.
 
 ### Retained files and failures
 

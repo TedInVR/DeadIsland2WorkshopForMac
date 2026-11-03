@@ -32,9 +32,9 @@ class ServiceTests(unittest.TestCase):
         self.pair(A,'CUSA99999','SaveA',b'encrypted-original');entry=browser.scan()['entries'][0]
         files={'save/sce_sys/param.sfo':sfo(A,'CUSA99999'),'save/data.bin':b'other-game-data','save/companion.dat':b'keep'}
         encrypted=g.make_zip({'SaveA':b'encrypted-new','SaveA.bin':SEALED})
-        with patch.object(g.Client,'submit',return_value='job') as submit,patch.object(g.Client,'result',side_effect=[g.make_zip(files),encrypted]):
+        with patch.object(g.Client,'submit',return_value='job') as submit,patch.object(g.Client,'result',side_effect=[g.make_zip(files),encrypted,g.make_zip(files)]):
             self.manager.decrypt(entry);self.wait();self.assertFalse(self.manager.view()['editable']);self.assertTrue(self.manager.view()['has_session'])
-            self.manager.encrypt();self.wait();upload=submit.call_args.args[1][0][1]
+            self.manager.encrypt();self.wait();upload=submit.call_args_list[1].args[1][0][1]
             self.assertEqual(g.unpack(upload),{n.removeprefix('save/'):v for n,v in files.items()})
         self.assertTrue((self.manager.folder/'PS4/SAVEDATA'/A/'CUSA99999/SaveA').exists())
 if __name__=='__main__':unittest.main()

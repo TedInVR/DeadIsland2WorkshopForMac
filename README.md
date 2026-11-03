@@ -70,7 +70,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.15.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.16.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 
@@ -85,3 +85,5 @@ To publish a new update, see [DEVELOPMENT.md](DEVELOPMENT.md).
 See [GarlicSaves setup, privacy, and test limits](ENCRYPTION_RESEARCH.md). Worker keys are remembered privately in macOS Keychain or Windows Credential Manager; they are never bundled or stored in settings.
 
 If an older version repeatedly queues an update but never installs it, quit Workshop and run `Repair-Updates.command` from the latest Mac package. It uses the existing helper to verify/download/install the latest version immediately and checks the resulting Applications version.
+
+Version 0.16.0 adds the final highlighted **Finalize and Re-encrypt** action, backed-up USB replacement and a mandatory service round trip to check the actual returned account, title, game data and keystone. An observed service account byte-order reversal triggers one corrected request, which must pass verification before a USB-ready result is released. Console import remains a user validation step.

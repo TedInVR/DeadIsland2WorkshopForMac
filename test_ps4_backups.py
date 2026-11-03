@@ -42,4 +42,14 @@ class BackupTests(unittest.TestCase):
         self.assertEqual(self.entry()['title_id'],TITLE);self.assertFalse(self.entry()['is_di2'])
         (self.game/'slot.bin').write_bytes(b'container');(self.game/'slot.bin.bin').write_bytes(SEALED)
         self.assertEqual(len(browser.scan()['entries']),2)
+    def test_installed_file_verification_failure_rolls_back(self):
+        real=b.read_file
+        def read(path):
+            value=real(path)
+            return b'bad readback' if Path(path)==self.game/NAME and value==b'new' else value
+        with patch.object(b,'read_file',side_effect=read):
+            with self.assertRaises(b.BackupError):b.install(self.drive,A,TITLE,NAME,{NAME:b'new',NAME+'.bin':SEALED})
+        self.assertEqual((self.game/NAME).read_bytes(),b'original')
+        self.assertEqual((self.game/(NAME+'.bin')).read_bytes(),SEALED)
+
 if __name__=='__main__':unittest.main()

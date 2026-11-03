@@ -1,3 +1,11 @@
+# Version 0.16.0 — 3 November 2026
+
+- Make Finalize and Re-encrypt the highlighted final header action; retain Review & Export as an optional action.
+- Back up the selected USB destination before processing and immediately before replacement; write and verify both encrypted files in their correct PS4 folder, with rollback on failure.
+- Decrypt returned encrypted pairs to verify the actual PSN account/title, exact edited game data and keystone. Retry one observed account byte-order reversal with a corrected wire value and verify again; never release a USB-ready result after a failed check.
+- Recover previously submitted edited packages when reopening a service session, and skip later failed diagnostic decryptions with mismatched accounts.
+- Add synthetic ownership/USB failure tests and private local save checks. Native packaging and live console acceptance are separate validation steps.
+
 # Version 0.15.0 — 3 November 2026
 
 - Fill materials and zombie parts to 50 for the selected character while filling med-kits/fuses to their normal maximum, without changing cash or level.

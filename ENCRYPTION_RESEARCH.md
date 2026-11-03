@@ -17,3 +17,9 @@ Local tests exercise protocol requests, status polling, credential storage, arch
 The internal game-data editor supports sectioned uncompressed Dead Island 2 saves. Unsupported representations remain intact as generic packages. Metadata and companion files are retained. The online service controls availability, processing queues and remote retention. The console-worker config file is not needed for the desktop connection.
 
 See the [User Guide](USER_GUIDE.md) for setup, account transfers, backup restoration and retained-file handling.
+
+## Verified re-encryption — 0.16.0
+
+A private live round trip showed that the returned SFO account bytes were reversed while the edited gameplay file and other companion files survived exactly. The desktop API adapter now inspects the encrypted result through a fresh decrypt job. It requires the intended account/title, identical gameplay files and keystone before releasing a USB-ready pair. Only the exact reversed-account condition permits one retry using a byte-reversed account wire value; the submitted package metadata and USB account folder keep their original identity. The retry must independently pass verification. Other mismatches or failed verification stop installation. No private sample identifiers are included in source or tests.
+
+The highlighted Finalize and Re-encrypt action backs up and replaces the chosen USB pair only after these checks. This is verification of returned metadata and payload, not a proof of console acceptance or in-game safety.

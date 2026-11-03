@@ -130,13 +130,14 @@ class RealSaveTests(unittest.TestCase):
             entry=dict(path=str(a),bin_path=str(b),account_id='0000000000000001',title_id='CUSA01014')
             m=g.Manager(store=MemoryStore());m.set_key(KEY)
             encrypted=g.make_zip({'DeadIsland2SaveGame':b'encrypted-edited','DeadIsland2SaveGame.bin':sealed})
-            with patch.object(g.Client,'submit',return_value='job'),patch.object(g.Client,'result',side_effect=[g.make_zip(files),encrypted,encrypted]) as result:
+            with patch.object(g.Client,'submit',return_value='job'),patch.object(g.Client,'result',side_effect=[g.make_zip(files)]) as result:
                 m.decrypt(entry);self.wait(m);self.assertEqual(m.session['files']['companion.dat'],b'untouched')
                 save=Save(raw);w=next(w for w in save.weapons if w.info()['editable']);edited=save.rebuild({str(w.idx):{'level':7}})
-                original_submit=g.Client.submit
+                checked={n.removeprefix('save/'):v for n,v in files.items()};checked['ue4savegame.ps4.sav']=edited
+                result.side_effect=[encrypted,g.make_zip(checked),encrypted,g.make_zip(checked)]
                 with patch.object(g.Client,'submit',return_value='encrypt-job') as submit:
                     m.encrypt(edited);self.wait(m)
-                    package=submit.call_args.args[1][0][1];parts=g.unpack(package)
+                    package=submit.call_args_list[0].args[1][0][1];parts=g.unpack(package)
                     self.assertEqual(parts['ue4savegame.ps4.sav'],edited);self.assertEqual(parts['sce_sys/param.sfo'],sfo());self.assertEqual(parts['companion.dat'],b'untouched')
                 first=m.folder;self.assertTrue((first/'PS4/SAVEDATA/0000000000000001/CUSA01014/DeadIsland2SaveGame').is_file())
                 m.encrypt(edited);self.wait(m);self.assertNotEqual(first,m.folder);self.assertTrue(first.is_dir())

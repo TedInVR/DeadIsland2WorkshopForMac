@@ -56,12 +56,13 @@ class CompressedSaveTests(unittest.TestCase):
             m=g.Manager(store=MemoryStore());state=m.resume();self.assertTrue(state['editable']);self.assertEqual(m.session['files'],files)
             m.client=g.Client('test_worker_key_00000000000000000000');m.key_loaded=True
             returned=g.make_zip({'DeadIsland2SaveGame':b'encrypted','DeadIsland2SaveGame.bin':b'pfsSKKey'+bytes(88)})
-            with patch.object(g.Client,'submit',return_value='job') as submit,patch.object(g.Client,'result',return_value=returned):
+            checked=dict(files);checked[name]=edited
+            with patch.object(g.Client,'submit',return_value='job') as submit,patch.object(g.Client,'result',side_effect=[returned,g.make_zip(checked)]):
                 m.encrypt(edited)
                 import time
                 deadline=time.monotonic()+30
                 while m.running and time.monotonic()<deadline:time.sleep(.01)
-                self.assertEqual(m.view()['status'],'done');uploaded=g.unpack(submit.call_args.args[1][0][1])
+                self.assertEqual(m.view()['status'],'done');uploaded=g.unpack(submit.call_args_list[0].args[1][0][1])
                 self.assertEqual(uploaded[name],edited)
                 for n,v in files.items():
                     if n!=name:self.assertEqual(uploaded[n],v)

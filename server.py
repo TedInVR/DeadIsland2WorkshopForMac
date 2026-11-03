@@ -50,6 +50,11 @@ class Handler(BaseHTTPRequestHandler):
         elif p=='named-backups':self.reply(200,{'backups':ps4_backups.list_backups()})
         elif p=='backup-folder':
             ps4_backups.root().mkdir(parents=True,exist_ok=True);self.reply(200,{'path':str(ps4_backups.root())})
+        elif p=='finalize-info':
+            try:
+                if app.service_session is None or app.service_session is not service.session:raise ValueError('Open the decrypted USB result in this editor before finalizing.')
+                self.reply(200,service.finalize_info())
+            except ValueError as e:self.reply(400,{'error':str(e)})
         elif p=='service-status':self.reply(200,service.view())
         elif p=='service-folder':self.reply(200,{'path':str(service.folder) if service.folder else None})
         elif p=='export' and app.output is not None:self.reply(200,app.output,'application/octet-stream')
@@ -61,7 +66,7 @@ class Handler(BaseHTTPRequestHandler):
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
         if p!='legal-accept' and not legal_state.is_accepted():return self.reply(403,{'error':'Read and acknowledge the first-use agreement first.'})
-        if p not in ('legal-accept','presets-save','presets-delete','presets-bind','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
+        if p not in ('legal-accept','presets-save','presets-delete','presets-bind','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-finalize','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
@@ -129,7 +134,8 @@ class Handler(BaseHTTPRequestHandler):
                     if value.get('consent') is not True:raise ValueError('Confirm sending this edited package to GarlicSaves.')
                     if app.service_session is None or app.service_session is not service.session:raise ValueError('Open the decrypted GarlicSaves result in this editor before encrypting it.')
                     if app.output is None:raise ValueError('Review and validate your edited save first.')
-                    self.reply(200,service.encrypt(app.output))
+                    if p=='service-finalize' and not value.get('drive_key'):raise ValueError('Choose a destination USB drive before finalizing.')
+                    self.reply(200,service.encrypt(app.output,finalize_drive_key=value.get('drive_key')) if p=='service-finalize' and value.get('drive_key') else service.encrypt(app.output))
             elif p in ('profile-name','import-profiles'):
                 if len(raw)>65536:raise ValueError('Profile-name imports must be smaller than 64 KB.')
                 value=json.loads(raw)

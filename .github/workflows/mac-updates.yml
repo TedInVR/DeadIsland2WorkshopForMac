@@ -16,7 +16,7 @@ permissions:
   contents: read
 jobs:
   native-install:
-    runs-on: macos-latest
+    runs-on: macos-15
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +26,6 @@ jobs:
       - name: Install compression test dependencies
         run: python3 -m pip install -r requirements-runtime.txt
       - name: Update and backup regression checks
-        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_credentials.py test_legal.py test_presets.py test_weapon_paste.py test_compression.py test_ps4_backups.py test_ps4_service.py -v
+        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_ownership.py test_finalize.py test_credentials.py test_legal.py test_presets.py test_weapon_paste.py test_compression.py test_ps4_backups.py test_ps4_service.py -v
       - name: Real Swift build and isolated updater installation
         run: python3 test_update_install_macos.py
