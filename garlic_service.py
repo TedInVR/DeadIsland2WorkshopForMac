@@ -57,6 +57,17 @@ def decrypted_files(files):
     if len(candidates)!=1:raise ServiceError('Could not identify a single Dead Island 2 game-data file. The downloaded ZIP has been kept for inspection.')
     return result,candidates[0]
 
+def editable_file(files):
+    candidates=[n for n in files if not n.lower().startswith('sce_sys/') and (PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav' or files[n][:4]==bytes.fromhex('3dca1200'))]
+    if len(candidates)!=1:return None,'Workshop could not identify one Dead Island 2 data file.'
+    name=candidates[0]
+    from save_core import Save,FormatError
+    try:
+        if Save(files[name]).rebuild({})!=files[name]:return None,'The no-edit validation did not match the downloaded data.'
+        return name,None
+    except (FormatError,ValueError,IndexError,UnicodeError) as e:return None,str(e)
+
+
 def package_files(files):
     names=[n for n,v in files.items() if n.endswith('sce_sys/param.sfo') and v.startswith(b'\0PSF')]
     if len(names)!=1:raise ServiceError('Choose a ZIP containing exactly one complete decrypted save with sce_sys/param.sfo.')
@@ -204,18 +215,30 @@ class Manager:
             write_new(root/'decrypt-job.json',json.dumps({'job_id':job,'account_id':entry['account_id'],'title_id':entry['title_id']}).encode())
             result=c.result(job,self.message);write_new(root/'Decrypted-Result.zip',result)
             files=package_files(unpack(result));validate_identity(files,entry['account_id'],entry['title_id']);name=None
-            candidates=[n for n in files if PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav' or files[n][:4]==bytes.fromhex('3dca1200')]
-            candidate=candidates[0] if len(candidates)==1 else None
-            if candidate:
-                from save_core import Save,FormatError
-                try:
-                    save=Save(files[candidate])
-                    if save.rebuild({})==files[candidate]:name=candidate
-                except (FormatError,ValueError,IndexError,UnicodeError):pass
+            name,issue=editable_file(files)
             self.session={'files':files,'name':name,'root':root};self.context=dict(entry)
-            return {'message':'Decrypted and validated. Click Open Decrypted Save to edit Dead Island 2.' if name else 'Decrypted package saved. Game data is not editable here; you can re-encrypt the unchanged package or import a complete externally edited ZIP.','job_id':job}
+            return {'message':'Decrypted and validated. Click Open Decrypted Save to edit Dead Island 2.' if name else 'Decryption finished, but this save could not be opened for editing. '+issue+' The downloaded package is safe in Open Result Folder.','job_id':job}
         ps4_backups.identity(entry['account_id'],entry['title_id'],entry['filename'])
         return self.start('decrypt',task)
+    def resume(self):
+        if self.running:raise ServiceError('Wait for the current operation to finish.')
+        root=backup_storage.folder().parent/'ServiceSessions'
+        sessions=sorted((p for p in root.glob('*') if p.is_dir() and not p.is_symlink() and (p/'decrypt-job.json').is_file() and (p/'Decrypted-Result.zip').is_file()),key=lambda p:p.name,reverse=True)
+        if not sessions:raise ServiceError('No previous decryption was found on this computer. Choose a USB save and decrypt it first.')
+        folder=sessions[0]
+        paths=[folder/n for n in ('decrypt-job.json','Decrypted-Result.zip','Original-Encrypted-Pair.zip')]
+        if any(p.is_symlink() or not p.is_file() or p.stat().st_size>LIMIT for p in paths):raise ServiceError('The saved decryption is incomplete or too large.')
+        meta=json.loads(paths[0].read_text());account=meta.get('account_id');title=meta.get('title_id')
+        files=package_files(unpack(paths[1].read_bytes()));validate_identity(files,account,title)
+        originals=unpack(paths[2].read_bytes());names=[n for n in originals if not n.endswith('.bin')]
+        if len(names)!=1:raise ServiceError('The original save backup is not a single complete save.')
+        filename=PurePosixPath(names[0]).name
+        encrypted_files(originals,account,title,filename)
+        name,issue=editable_file(files)
+        if not name:raise ServiceError('The previous decryption could not be opened: '+issue)
+        self.session={'files':files,'name':name,'root':folder};self.context={'account_id':account,'title_id':title,'filename':filename};self.folder=folder;self.results=[]
+        self.state={'status':'done','operation':'decrypt','message':'Previous decryption reopened and validated. No files were uploaded.'}
+        return self.view()
     def encrypt(self,raw=None,package=None):
         session=self.session;context=self.context
         if session is None or not context:raise ServiceError('Decrypt and open a save through GarlicSaves first.')

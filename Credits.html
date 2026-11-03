@@ -42,6 +42,14 @@ The wiki-derived description text and Workshop&#x27;s adaptations of that text a
 - Perk overview: <a href="https://deadisland.fandom.com/wiki/Perks">https://deadisland.fandom.com/wiki/Perks</a>
 - XP reference: <a href="https://deadisland.fandom.com/wiki/Experience_Points">https://deadisland.fandom.com/wiki/Experience_Points</a>
 
+## Compression and checksum support
+
+- **Gregory Szorc and python-zstandard contributors**, and **Meta/Facebook Zstandard contributors** — Zstandard compression/decompression, BSD-3-Clause. <a href="https://github.com/indygreg/python-zstandard">https://github.com/indygreg/python-zstandard</a> and <a href="https://github.com/facebook/zstd">https://github.com/facebook/zstd</a>
+- **Alonkament and python-cityhash contributors**, and **Google CityHash contributors** — CityHash64 checksum implementation and Python bindings, MIT. <a href="https://github.com/escherba/python-cityhash">https://github.com/escherba/python-cityhash</a> and <a href="https://github.com/google/cityhash">https://github.com/google/cityhash</a>
+- **Steffen André Langnes** — published file-format reference identifies the chunk framing and CityHash64 checksum. Workshop independently implements the framing; the AGPL-licensed binary-template implementation is not copied or bundled. <a href="https://github.com/SteffenL/file-format-docs/tree/master/games/dead-island-2">https://github.com/SteffenL/file-format-docs/tree/master/games/dead-island-2</a>
+
+Dependency notices accompany the distributions. On Mac the installer obtains the pinned libraries in an isolated runtime, retaining their package notices; Windows bundles the libraries and notices.
+
 ## Runtime, build and development tools
 
 - **Python Software Foundation and Python contributors** — Python runtime/standard library; PSF/Python license and included third-party notices. <a href="https://www.python.org/psf/license/">https://www.python.org/psf/license/</a>
@@ -130,6 +138,10 @@ Perk-effect prose was shortened/paraphrased from Dead Island Wiki contributors&#
 Mac builds use a separately installed Python runtime and Apple&#x27;s OS frameworks. Windows builds distribute Python, pywebview (BSD-3-Clause), pythonnet and related packages, the PyInstaller bootloader under its redistribution exception, and applicable Microsoft components. THIRD_PARTY_LICENSES in each Windows release retains available installed-package license/notice files and metadata, plus runtime-specific notices and Microsoft WebView2 terms. Its inventory distinguishes the build environment from the final file list. WebView2 Runtime is a separately installed Microsoft product. Third-party licenses and copyright notices remain in force.
 
 The project has not adopted a project-wide open-source license. Public source visibility is not a license grant, and the experimental-use acknowledgment does not create rights in third-party materials. No affiliation, sponsorship, permission or endorsement is implied by crediting Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the save-tooling community, GarlicSaves, Apple, Microsoft or any dependency author.
+
+## Compression support
+
+python-zstandard / Zstandard (BSD-3-Clause) and python-cityhash / Google CityHash (MIT) provide compression and checksum primitives. Included upstream notices: third_party_licenses/zstandard-LICENSE.txt and cityhash-LICENSE.txt. Workshop framing is independently implemented from documented format facts; SteffenL’s binary template is not distributed or adapted as code. Mac uses an installer-managed private runtime; Windows includes package notices in THIRD_PARTY_LICENSES.
 
 
 # Workshop — Experimental Use Agreement &amp; Risk Acknowledgment

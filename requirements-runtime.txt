@@ -1,0 +1,2 @@
+zstandard==0.25.0
+cityhash==0.4.10

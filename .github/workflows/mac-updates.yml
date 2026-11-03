@@ -23,7 +23,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install compression test dependencies
+        run: python3 -m pip install -r requirements-runtime.txt
       - name: Update and backup regression checks
-        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_credentials.py test_legal.py test_ps4_backups.py test_ps4_service.py -v
+        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_credentials.py test_legal.py test_compression.py test_ps4_backups.py test_ps4_service.py -v
       - name: Real Swift build and isolated updater installation
         run: python3 test_update_install_macos.py

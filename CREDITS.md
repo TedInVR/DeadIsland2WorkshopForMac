@@ -42,6 +42,14 @@ The wiki-derived description text and Workshop's adaptations of that text are of
 - Perk overview: https://deadisland.fandom.com/wiki/Perks
 - XP reference: https://deadisland.fandom.com/wiki/Experience_Points
 
+## Compression and checksum support
+
+- **Gregory Szorc and python-zstandard contributors**, and **Meta/Facebook Zstandard contributors** — Zstandard compression/decompression, BSD-3-Clause. https://github.com/indygreg/python-zstandard and https://github.com/facebook/zstd
+- **Alonkament and python-cityhash contributors**, and **Google CityHash contributors** — CityHash64 checksum implementation and Python bindings, MIT. https://github.com/escherba/python-cityhash and https://github.com/google/cityhash
+- **Steffen André Langnes** — published file-format reference identifies the chunk framing and CityHash64 checksum. Workshop independently implements the framing; the AGPL-licensed binary-template implementation is not copied or bundled. https://github.com/SteffenL/file-format-docs/tree/master/games/dead-island-2
+
+Dependency notices accompany the distributions. On Mac the installer obtains the pinned libraries in an isolated runtime, retaining their package notices; Windows bundles the libraries and notices.
+
 ## Runtime, build and development tools
 
 - **Python Software Foundation and Python contributors** — Python runtime/standard library; PSF/Python license and included third-party notices. https://www.python.org/psf/license/

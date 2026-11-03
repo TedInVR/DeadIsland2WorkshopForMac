@@ -1,4 +1,5 @@
 import math
+import save_codec
 import character_editor
 """DI2 PS4 Save Wizard export reader; preserves unedited bytes verbatim.
 Independent implementation for the uncompressed, sectioned PS4 export format.
@@ -173,8 +174,11 @@ class Weapon:
 
 class Save:
     def __init__(self,b):
-        self.b=b;self.sha=hashlib.sha256(b).hexdigest();self.sections=[];self.arrays=[];self.weapons=[];self.profiles=[]
-        if b[:4]!=bytes.fromhex('3dca1200') or b[16:21]!=b'Zstd\0':raise FormatError('Open a decrypted PS4 export from Save Wizard. This version supports the sectioned, uncompressed export only.')
+        self.original=b
+        try:b,self.compression=save_codec.decode(b)
+        except save_codec.CodecError as e:raise FormatError(str(e)) from e
+        self.b=b;self.sha=hashlib.sha256(self.original).hexdigest();self.sections=[];self.arrays=[];self.weapons=[];self.profiles=[]
+        if b[:4]!=bytes.fromhex('3dca1200') or b[16:21]!=b'Zstd\0':raise FormatError('Choose a supported decrypted Dead Island 2 save or use PS4 Decrypt / Encrypt first.')
         n=u32(b,21);p=25
         if not 1<=n<=100:raise FormatError('Unknown section count')
         for _ in range(n):
@@ -419,4 +423,4 @@ class Save:
         for key,value in ammo_changes.items():
             if check.ammo[int(key)]['count']!=value:raise FormatError('Ammo validation failed')
         character_editor.verify(self,check,resource_changes,character_levels)
-        return result
+        return save_codec.encode(result,self.compression)

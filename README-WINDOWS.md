@@ -51,4 +51,4 @@ The `Build Windows app` GitHub Actions workflow performs the build, smoke-tests 
 
 Click **PS4 Decrypt / Encrypt** to enter and securely save a worker key on this computer and test the connection. Decrypt a selected USB pair only after confirming upload to GarlicSaves. The app backs up the originals, preserves returned metadata, and can submit validated edits for encryption back to the source account. Results go into a separate PS4 folder. Live service output compatibility and PS4 import still need testing. See the shared User Guide for setup and limitations.
 
-0.12.0 adds named PS4 backups/restore, all-game CUSA discovery, profile-to-profile and batch resigning, and DI2 Character & Resources. See USER_GUIDE.md for limits and destination backup behavior.
+0.13.0 adds named PS4 backups/restore, all-game CUSA discovery, profile-to-profile and batch resigning, and DI2 Character & Resources. See USER_GUIDE.md for limits and destination backup behavior.

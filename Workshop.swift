@@ -15,7 +15,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.12.0"
+    let version = "0.13.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -202,8 +202,9 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     func alert(_ title:String,_ message:String){let a=NSAlert();a.messageText=title;a.informativeText=message;a.addButton(withTitle:"OK");a.runModal()}
     func startServer(){
         guard let resources=Bundle.main.resourceURL else {alert("Unable to start","App resources are missing.");return}
-        let candidates=["/opt/homebrew/bin/python3","/usr/local/bin/python3","/usr/bin/python3"]
-        guard let python=candidates.first(where:{FileManager.default.isExecutableFile(atPath:$0)}) else {alert("Python 3 is needed", "Install Python 3 for macOS, then reopen Workshop. No Python packages are required.");return}
+        let installedPython=(try? String(contentsOf:resources.appendingPathComponent("PythonPath.txt"),encoding:.utf8))?.trimmingCharacters(in:.whitespacesAndNewlines)
+        let candidates=[installedPython].compactMap{$0}+["/opt/homebrew/bin/python3","/usr/local/bin/python3","/usr/bin/python3"]
+        guard let python=candidates.first(where:{FileManager.default.isExecutableFile(atPath:$0)}) else {alert("Python 3 is needed", "Install Python 3 for macOS, then reopen Workshop. Reinstall the current Workshop update to repair its private runtime.");return}
         let dir=FileManager.default.temporaryDirectory.appendingPathComponent("DI2Workshop-"+UUID().uuidString,isDirectory:true)
         do {
             try FileManager.default.createDirectory(at:dir,withIntermediateDirectories:true)

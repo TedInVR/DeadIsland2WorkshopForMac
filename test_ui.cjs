@@ -135,6 +135,16 @@ const assert=require('assert');
   w.dispatchEvent(new w.Event('pywebviewready'));assert(d.querySelector('#platformbadge').textContent.includes('Windows'));
   await w.openSave();assert.equal(w.eval('fileName'),'windows.sav');assert.equal(w.ammoDirty(),0);
   w.review();await w.exportSave();assert.equal(winName,'windows_Edited.sav');assert.equal(d.querySelector('#status').textContent,'Windows native export completed.');
+  // Reopen a local decryption without a new upload, then enter the editor automatically.
+  const resumeFetch=w.fetch;
+  w.fetch=async (url,o={})=>{
+   if(url==='service-status'||url==='service-resume')return {ok:true,json:async()=>({operation:'decrypt',status:'done',editable:true,has_session:true,has_key:true,message:'Previous decryption reopened. No upload.'})};
+   if(url==='service-open')return {ok:true,json:async()=>({name:'downloaded.sav',data:originalData})};
+   return resumeFetch(url,o);
+  };
+  assert.equal(d.querySelector('#service-decrypt').textContent,'Decrypt Selected Save…');
+  await w.openService();await w.serviceResume();assert(!d.querySelector('#service-dialog').open);
+  assert(w.eval('serviceOpened'));assert.equal(w.eval('fileName'),'downloaded.sav');assert(!d.querySelector('#service-encrypt').disabled);w.fetch=resumeFetch;
   console.log('PASS: USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}

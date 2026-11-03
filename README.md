@@ -16,7 +16,7 @@ A **Dead Island 2 save editor** for characters, cash, materials, consumables and
 
 Quit Workshop, extract the downloaded ZIP, and double-click **Install.command**. It builds and installs **Dead Island 2 Workshop.app** in Applications, then opens it. Updates reuse the same app.
 
-Requires macOS 12+, Python 3.9+, and Apple Command Line Tools. No pip dependencies or Windows emulator. Public downloads and updates require no GitHub login.
+Requires macOS 12+, Python 3.9–3.13, and Apple Command Line Tools. The installer automatically prepares a private runtime with Zstandard and CityHash support. No Windows emulator. Public downloads and updates require no GitHub login.
 
 ## Install on Windows
 
@@ -55,7 +55,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.12.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.13.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

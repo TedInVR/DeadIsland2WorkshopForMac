@@ -1,6 +1,6 @@
 {
-  "version": "0.12.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.12.0.zip",
-  "sha256": "88c31445bd0e95521daf8c31ff345498f17d27b62e5ab0b4bb04e2ebb55c40ab",
-  "notes": "First-use agreement with local acknowledgment; expanded credits, source attribution and dependency notices. No legal clearance or ban protection is promised."
+  "version": "0.13.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.13.0.zip",
+  "sha256": "7a0ce4907547f1ce1778d948728effb74877cffac982204745b8522d834a224c",
+  "notes": "Fix editing GarlicSaves compressed DI2 saves; preserve compression and checksums; reopen the previous decryption without another upload; clearer save labels."
 }

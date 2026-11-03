@@ -8,7 +8,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported through Save Wizard**. Version 0.12.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.13.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -17,7 +17,7 @@ Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save exported thro
 3. Double-click **Install.command**.
 4. The installer builds and opens **Dead Island 2 Workshop** in Applications. It updates the same app and retains source in **Applications / Dead Island 2 Workshop Development**.
 
-macOS 12 or newer, Python 3.9 or newer, and Apple&#x27;s Command Line Tools are required. Homebrew Python is used when available. No pip packages, Windows emulator, or third-party editor executable are required. A locally built app is ad-hoc signed, not notarized by Apple.
+macOS 12 or newer, Python 3.9–3.13, and Apple&#x27;s Command Line Tools are required. Homebrew Python is used when available. The installer installs Zstandard and CityHash libraries into a private application runtime. No manual pip commands, Windows emulator, or third-party editor executable are required. A locally built app is ad-hoc signed, not notarized by Apple.
 
 ## Open your save
 
@@ -201,15 +201,17 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.12.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Live Dead Island 2 output compatibility and PS4 import still need testing; the existing Save Wizard workflow remains available.
+Workshop 0.13.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
 1. Click **PS4 Decrypt / Encrypt…** in the header (or Help menu).
 2. Paste your GarlicSaves **worker key** and click **Test Connection**. This sends a read-only API request; no save files are uploaded. The key is saved in **macOS Keychain** or **Windows Credential Manager**, and loads automatically after quitting and reopening. Click **Save Key** to save without testing; **Test Connection** also saves a newly entered key. The field stays masked and shows **Saved key ready** when a key exists. Paste another key to replace it, or click **Remove Saved Key** to delete it. On Mac, allow Keychain access if prompted; choosing **Always Allow** avoids repeated access prompts for that Python executable. Never include it in screenshots, GitHub, or shared files. The console-worker config file is not needed.
 3. Choose an encrypted save in **USB Saves**. The matching `DeadIsland2SaveGame.bin` must be present in the same game folder. The profile/account and title are displayed for checking.
-4. Click **Decrypt Selected Pair…** and confirm sending those two files to **garlicsaves.com**. Workshop saves an original-pair ZIP and automatic snapshots locally before submission. Keep Workshop open while the job is queued/running. The app does not automatically upload any saves just because a drive is connected.
-5. When decryption succeeds and its structure is validated, click **Open Decrypted Save**. Existing staged edits require a discard confirmation before replacement.
+4. Click **Decrypt Selected Save…** and confirm sending those two files to **garlicsaves.com**. Workshop saves an original-pair ZIP and automatic snapshots locally before submission. Keep Workshop open while the job is queued/running. The app does not automatically upload any saves just because a drive is connected.
+5. When the decrypted Dead Island 2 data passes validation, Workshop opens it in the editor automatically. Existing staged edits require a discard confirmation before replacement. **Open Decrypted Save** also opens the current validated result.
+
+To continue after updating or restarting, choose **PS4 Decrypt / Encrypt → Reopen Last Decryption**. Workshop validates and opens the latest locally saved decryption without another upload. This does not restore unexported edits from a previous session. Compressed inputs stay compressed on export, with validated chunk sizes and a recalculated CityHash64 checksum; no-edit exports remain byte-for-byte identical. Companion files and metadata are preserved unchanged.
 
 The downloaded package must include `sce_sys/param.sfo`. Workshop checks its account and title against the selected source, preserves companion files, and requires the exact supported game-data format with a byte-for-byte no-edit validation. If the returned game data is compressed or otherwise unsupported, Workshop retains **Decrypted-Result.zip** as a generic package for inspection or re-encryption; it does not claim successful internal editing or silently convert the data.
 

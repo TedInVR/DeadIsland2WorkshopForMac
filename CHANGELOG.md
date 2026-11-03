@@ -1,3 +1,11 @@
+# Version 0.13.0 — 3 November 2026
+
+- Read and edit compressed GarlicSaves Dead Island 2 results as well as uncompressed Save Wizard exports. Recompute and verify compression framing and CityHash64 checksums on edited exports; keep no-edit exports identical.
+- Automatically open validated DI2 decryption results. Reopen Last Decryption restores the latest local package without another service upload.
+- Rename Decrypt Selected Pair to Decrypt Selected Save and show parser diagnostics when a package is unsupported.
+- Install private Mac compression dependencies automatically; bundle them in Windows. Companion metadata and original packages remain preserved.
+- Local round-trip checks do not replace live service re-encryption and PS4 import testing.
+
 # Version 0.12.0 — 2 November 2026
 
 - First-use agreement with unchecked acknowledgment and explicit accept/quit choices; local acceptance survives ordinary updates without registration.

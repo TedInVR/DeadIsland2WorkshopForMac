@@ -110,7 +110,7 @@ class FailureRetentionTests(unittest.TestCase):
                 m.decrypt(dict(path=str(a),bin_path=str(b),account_id='0000000000000001',title_id='CUSA01014'))
                 deadline=time.monotonic()+5
                 while m.running and time.monotonic()<deadline:time.sleep(.01)
-            self.assertFalse(m.running);self.assertEqual(m.view()['status'],'done');self.assertIn('not editable',m.view()['message'])
+            self.assertFalse(m.running);self.assertEqual(m.view()['status'],'done');self.assertIn('could not be opened for editing',m.view()['message'])
             self.assertIsNotNone(m.session);self.assertFalse(m.view()['editable']);self.assertEqual((m.folder/'Decrypted-Result.zip').read_bytes(),returned)
             self.assertTrue((m.folder/'Original-Encrypted-Pair.zip').is_file());self.assertEqual(a.read_bytes(),b'original')
 

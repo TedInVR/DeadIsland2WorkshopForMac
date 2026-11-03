@@ -57,7 +57,7 @@ class Handler(BaseHTTPRequestHandler):
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
         if p!='legal-accept' and not legal_state.is_accepted():return self.reply(403,{'error':'Read and acknowledge the first-use agreement first.'})
-        if p not in ('legal-accept','open','prepare','profile-name','import-profiles','open-found','select-found','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
+        if p not in ('legal-accept','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
@@ -83,7 +83,8 @@ class Handler(BaseHTTPRequestHandler):
             elif p.startswith('service-'):
                 value=json.loads(raw)
                 if not isinstance(value,dict):raise ValueError('Invalid service request.')
-                if p=='service-key':
+                if p=='service-resume':self.reply(200,service.resume())
+                elif p=='service-key':
                     if len(raw)>2048:raise ValueError('Worker key is too long.')
                     if not isinstance(value.get('key'),str):raise ValueError('Enter a worker key, or explicitly remove the saved key.')
                     self.reply(200,service.set_key(value.get('key')))

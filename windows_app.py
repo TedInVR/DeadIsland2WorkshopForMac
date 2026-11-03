@@ -91,6 +91,11 @@ def self_test():
     for name in ("USAGE_TERMS.md","CREDITS.md","Credits.html","THIRD_PARTY_NOTICES.md","LICENSING_REVIEW.md"):
         assert ROOT.joinpath(name).is_file(),name
     assert legal_state.digest()
+    import save_codec
+    zstd,city=save_codec.libraries()
+    sample=b"Workshop compression smoke test"
+    assert zstd.ZstdDecompressor().decompress(zstd.ZstdCompressor().compress(sample))==sample
+    assert city.CityHash64(b"")==0x9ae16a3b2f90404f
     result=json.dumps({'status':'ok','version':version(),'catalog_weapons':len(__import__('save_core').CATALOG['weapons'])})
     if '--self-test' in sys.argv and len(sys.argv)>sys.argv.index('--self-test')+1:Path(sys.argv[sys.argv.index('--self-test')+1]).write_text(result)
     elif sys.stdout is not None:print(result)
