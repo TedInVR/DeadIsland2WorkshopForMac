@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/Game/DI2/BalancingData/Weapons/Ranged/Ammo/CrossbowBolts/DA_AmmoArchetype_CrossbowBoltsAmmo.DA_AmmoArchetype_CrossbowBoltsAmmo",
+    "name": "Crossbow bolts",
+    "maximum": 15
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Weapons/Ranged/Ammo/HeavyRounds/DA_AmmoArchetype_HeavyRoundsAmmo.DA_AmmoArchetype_HeavyRoundsAmmo",
+    "name": "Heavy rounds",
+    "maximum": 30
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Weapons/Ranged/Ammo/NailgunNails/DA_AmmoArchetype_NailgunNailsAmmo.DA_AmmoArchetype_NailgunNailsAmmo",
+    "name": "Nails",
+    "maximum": 60
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Weapons/Ranged/Ammo/PistolRounds/DA_AmmoArchetype_PistolAmmo.DA_AmmoArchetype_PistolAmmo",
+    "name": "Pistol rounds",
+    "maximum": 75
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Weapons/Ranged/Ammo/Rifle/DA_AmmoArchetype_CarbineAmmo.DA_AmmoArchetype_CarbineAmmo",
+    "name": "Rifle rounds",
+    "maximum": 90
+  },
+  {
+    "path": "/Game/DI2/Expansion02/BalancingData/Weapons/Ammo/DA_AmmoArchetype_SawbladeDiskAmmo.DA_AmmoArchetype_SawbladeDiskAmmo",
+    "name": "Sawblade disks",
+    "maximum": 24
+  },
+  {
+    "path": "/Game/DI2/BalancingData/Weapons/Ranged/Ammo/Shotgun/DA_AmmoArchetype_ShotgunAmmo.DA_AmmoArchetype_ShotgunAmmo",
+    "name": "Shotgun shells",
+    "maximum": 30
+  }
+]

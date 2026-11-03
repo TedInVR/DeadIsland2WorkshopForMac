@@ -163,14 +163,14 @@ class Handler(BaseHTTPRequestHandler):
                 if app.save is None:raise ValueError('Open a save first')
                 request=json.loads(raw)
                 if "changes" in request:
-                    changes=request["changes"];additions=request.get("additions",[]);deletions=request.get("deletions",[]);ammo_changes=request.get('ammo_changes',{});resource_changes=request.get('resource_changes',[]);character_levels=request.get('character_levels',{})
-                else:changes=request;additions=[];deletions=[];ammo_changes={};resource_changes=[];character_levels={}
+                    changes=request["changes"];additions=request.get("additions",[]);deletions=request.get("deletions",[]);ammo_changes=request.get('ammo_changes',{});resource_changes=request.get('resource_changes',[]);character_levels=request.get('character_levels',{});ammo_refills=request.get('ammo_refills',[])
+                else:changes=request;additions=[];deletions=[];ammo_changes={};resource_changes=[];character_levels={};ammo_refills=[]
                 catalog={x['path'] for x in app.save.info()['catalog']}
                 for key,c in changes.items():
                     if not isinstance(c,dict) or set(c)-{'level','rarity','perks','path','durability','copy_source'}:raise ValueError('Unknown edit field')
                     if 'perks' in c and (not isinstance(c['perks'],list) or any(x not in catalog for x in c['perks'])):raise ValueError('Choose upgrades from this save’s catalog')
                 app.output=None
-                output=app.save.rebuild(changes,additions,deletions,ammo_changes,resource_changes,character_levels)
+                output=app.save.rebuild(changes,additions,deletions,ammo_changes,resource_changes,character_levels,ammo_refills)
                 backup=backup_storage.snapshot(output,'exported',app.name)
                 app.output=output
                 self.reply(200,{'bytes':len(app.output),'edited':len(changes),'created':len(additions),'deleted':len(deletions),'backup':backup})

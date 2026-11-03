@@ -5,7 +5,7 @@
 - **Fill to 50%** in Character & Resources sets crafting materials and zombie parts to **50 each** for the selected character. Med-kits and fuses use their normal maxima (5 and 3); cash and character levels stay unchanged. Export or encrypt the edited copy to save these changes.
 - Inventory dropdown entries show the character's level. The text below the dropdown follows the selected inventory or highlighted weapon and reflects staged level edits.
 - Right-click a weapon and choose **Copy Weapon**. Right-click an unwanted weapon and choose **Paste Weapon** to replace it in the editor. The clipboard is a snapshot, including the source's staged settings, complete saved state and generation seed. Destination IDs and slot count are retained. **Revert this weapon** undoes the paste before export. The internal clipboard clears when another save opens. Shift+F10 also opens the context menu.
-- Reserve Ammunition: **Set All to 9,999** and **Revert All** affect only the selected character/location. **Revert All Ammo Edits All Characters** removes every pending ammunition edit. These controls edit saved reserve stacks, not gun magazines.
+- Reserve Ammunition: **Restore Normal Maximum** refills each supported ammo type for the selected character. **Restore Normal Maximum — All Characters** does the same for every character inventory. **Undo Pending Ammo Changes** separately cancels pending ammo edits for the selected character. Refills add missing types and consolidate duplicates; they edit reserve stacks, not gun magazines.
 - Highlighting a weapon selects the preset actually applied to it, or **Choose a preset** when none was applied. A note identifies sets modified since application. Local annotations can recognize the association on reopening when the saved weapon ID and perk set match; no annotation is written into the game save.
 - **Save as Preset → Update Existing Preset** lets you choose a preset by name without retyping it. Updating retains that preset's ID/name and does not change other weapons automatically.
 
@@ -23,7 +23,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.16.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.17.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -136,13 +136,25 @@ Choose **Apply / Remove…** beside a perk in an existing weapon's perk list. Se
 
 A batch adds or removes only that one perk. Other perks, levels, rarity, and durability are retained. It includes queued new weapons and duplicates, skips read-only attacks and staged deletions, and does not add duplicate perk entries. Weapon/perk search filters do not limit the batch. Changes remain staged for Review & Export; revert an individual weapon to cancel its edits. A perk stored on an incompatible weapon may have no effect in-game.
 
-## Experimental durability and ammunition
+## Reserve ammunition
 
-For a melee weapon, edit **Melee durability · experimental** under Weapon settings. Try **9999** to test a high finite value. Creation, replacement, and duplication also have this field. Blank on creation uses 1000; blank on duplication preserves the source's saved state. Values from 0 to 1,000,000,000 are allowed; 0 represents broken durability. The game may cap, reset, or otherwise reinterpret high values. This is not a guarantee of infinite durability.
+Choose **Reserve Ammo** and select a character. **Restore Normal Maximum** stages a refill of all supported ammo types for that character. **Restore Normal Maximum — All Characters** applies to every saved character inventory, including the active character. Shared lockers are excluded. These actions replace the earlier ambiguous Revert buttons; they refill normal game amounts rather than undoing pending edits.
 
-Choose **Reserve Ammo…** in the top toolbar, select a character or location, and change an existing stack's count or click **Set 9,999**. These are reserve counts, not a gun's loaded magazine. Review & Export lists each ammo change. **Revert ammo edits** cancels all staged reserve-ammo changes. Ammo-only edits also trigger the quit-with-unsaved-edits prompt.
+| Reserve ammunition | Normal amount |
+|---|---:|
+| Shotgun shells | 30 |
+| Heavy rounds | 30 |
+| Pistol rounds | 75 |
+| Rifle rounds | 90 |
+| Nailgun cartridges | 60 |
+| Crossbow bolts | 15 |
+| Sawblade disks | 24 |
 
-No verified per-gun magazine count was found in the development save. Workshop does not invent an ammo field or claim to change magazine capacity. Reserve counts accept whole numbers from 0 to 9,999,999, but the game may enforce a much lower limit or reset them. Start with one weapon/stack and check it in-game before changing everything.
+Amounts are cross-checked against the published item-data table at https://github.com/Fristet/Dead-Island-2-Save-Editor-GUI/blob/master/data/inventory/items.csv and the supplied pre-edit save. These counts describe normal reserve stacks; DLC ammunition requires the relevant content. A refill retains one record of each known type, removes additional records of that same type, and adds missing known types with fresh entry IDs. Other resources, weapons and unselected characters are preserved. It does not claim to fix every possible malformed inventory or override game limits.
+
+**Undo Pending Ammo Changes** cancels pending manual ammo edits and a pending refill for the selected character, returning to that opened save's values. This is different from refilling. While a normal refill is staged its preview shows all seven amounts; undo it to return to individual count editing. Save through export or **Finalize and Re-encrypt**.
+
+The 9,999 fill buttons and experimental durability controls were removed following live testing: excessive ammunition produced duplicated inventory entries and melee durability 9,999 did not prevent normal wear. Manual reserve count edits remain experimental. No verified magazine-capacity edit or lasting durability boost is offered. Existing saved weapon runtime state remains preserved during ordinary edits and duplication.
 
 ## Create a weapon
 
@@ -216,7 +228,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.16.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
+Workshop 0.17.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 

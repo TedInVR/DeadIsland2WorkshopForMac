@@ -10,6 +10,7 @@ on:
       - 'Info.plist'
       - 'catalog.json'
       - 'resource_catalog.json'
+      - 'ammo_catalog.json'
       - '.github/workflows/mac-updates.yml'
   workflow_dispatch:
 permissions:
@@ -26,6 +27,6 @@ jobs:
       - name: Install compression test dependencies
         run: python3 -m pip install -r requirements-runtime.txt
       - name: Update and backup regression checks
-        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_ownership.py test_finalize.py test_credentials.py test_legal.py test_presets.py test_weapon_paste.py test_compression.py test_ps4_backups.py test_ps4_service.py -v
+        run: python3 -m unittest test_updater.py test_backups.py test_save_browser.py test_garlic_service.py test_ownership.py test_finalize.py test_ammo_refill.py test_credentials.py test_legal.py test_presets.py test_weapon_paste.py test_compression.py test_ps4_backups.py test_ps4_service.py -v
       - name: Real Swift build and isolated updater installation
         run: python3 test_update_install_macos.py

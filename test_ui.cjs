@@ -87,13 +87,13 @@ const assert=require('assert');
   d.querySelector('#newsearch').value='Peggy';w.renderWeaponChoices();assert(d.querySelector('#newtype').options.length);w.queueWeapon();assert.equal(w.eval('Object.keys(changes).length'),1);assert(d.querySelector('#name').textContent.includes('PEGGY'));assert(d.querySelector('#weaponpreview').textContent.includes('Hunting rifle'));
   w.review();await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
   // Clone the complete staged weapon into another container, then batch-edit by family.
-  w.eval('changes={};additions=[];deletions=[];ammoChanges={}');
+  w.eval('changes={};additions=[];deletions=[];ammoChanges={};ammoRefills={}');
   const melee=w.eval('data.weapons.find(w=>w.editable&&w.path.includes("MeleeWeaponArchetype")&&w.durability!==null)');
   const locker=w.eval('data.destinations.find(d=>d.name==="Shared storage locker — Regular")');
-  const beforeLocker=locker.count;w.select(melee.key);d.querySelector('#durability').value=9999;w.stage();
+  const beforeLocker=locker.count;w.select(melee.key);assert.equal(d.querySelector('#durability'),null);assert.equal(d.querySelector('#newdurability'),null);w.stage();
   w.openDuplicate();assert.equal(d.querySelector('#newtitle').textContent,'Duplicate Weapon');assert(d.querySelector('#newtype').disabled);
   d.querySelector('#newdest').value=locker.key;w.updateCreateSpace();w.queueWeapon();
-  assert.equal(w.eval('additions[0].clone_source'),melee.key);assert.equal(w.eval('additions[0].durability'),9999);
+  assert.equal(w.eval('additions[0].clone_source'),melee.key);assert.equal(w.eval('additions[0].durability'),undefined);
   assert.deepEqual(w.eval('additions[0].perks'),w.eval('currentPerks'));
   d.querySelector('#group').value=locker.name;w.renderList();assert(d.querySelector('#slots').textContent.includes((beforeLocker+1)+' / 64 slots used'));
   const acid=w.eval('data.catalog.find(p=>p.name.toLowerCase()==="acid rain").path');
@@ -166,11 +166,12 @@ const assert=require('assert');
   const levelGroup=w.eval('data.containers.find(c=>c.profile_id==='+JSON.stringify(halfProfile.id)+').name');d.querySelector('#group').value=levelGroup;w.renderList();assert(d.querySelector('#group-level').textContent.includes('Character level '+halfProfile.level));
   d.querySelector('#character-level').value=18;w.stageCharacterLevel();assert(d.querySelector('#group-level').textContent.includes('Character level 18'));assert([...d.querySelector('#group').options].some(o=>o.value===levelGroup&&o.textContent.includes('Character level 18')));d.querySelector('#character-dialog').close();
   // Reserve-ammo fill/reset is scoped to the dropdown; the global reset is separate.
-  w.openAmmo();const ammoGroups=[...d.querySelector('#ammogroup').options].map(o=>o.value);assert(ammoGroups.length>1);
-  d.querySelector('#ammogroup').value=ammoGroups[0];w.setCharacterAmmo();const ammoA=w.eval('data.ammo.filter(a=>a.group==='+JSON.stringify(ammoGroups[0])+')');assert(ammoA.every(a=>w.eval('ammoChanges['+a.key+']')===9999||a.count===9999));
-  d.querySelector('#ammogroup').value=ammoGroups[1];w.setCharacterAmmo();const ammoB=w.eval('data.ammo.filter(a=>a.group==='+JSON.stringify(ammoGroups[1])+')');
-  d.querySelector('#ammogroup').value=ammoGroups[0];w.revertCharacterAmmo();assert(ammoA.every(a=>w.eval('ammoChanges['+a.key+']')===undefined));assert(ammoB.some(a=>w.eval('ammoChanges['+a.key+']')===9999));
-  w.revertEveryAmmoEdit();assert.equal(w.ammoDirty(),0);w.setCharacterAmmo();d.querySelector('#ammodialog').close();
+  w.openAmmo();const ammoGroups=w.eval('data.ammo_groups.map(g=>g.name)');assert(ammoGroups.length>1);
+  d.querySelector('#ammogroup').value=ammoGroups[0];w.revertCharacterAmmo();const groupA=w.eval('data.ammo_groups[0].key');assert(w.eval('ammoRefills['+groupA+']'));assert.equal(d.querySelectorAll('#ammolist input').length,7);assert([...d.querySelectorAll('#ammolist input')].every(i=>i.disabled));
+  d.querySelector('#ammogroup').value=ammoGroups[1];w.revertCharacterAmmo();const groupB=w.eval('data.ammo_groups[1].key');assert(w.eval('ammoRefills['+groupB+']'));
+  d.querySelector('#ammogroup').value=ammoGroups[0];w.undoCharacterAmmo();assert(!w.eval('ammoRefills['+groupA+']'));assert(w.eval('ammoRefills['+groupB+']'));
+  w.revertEveryAmmoEdit();assert.equal(w.eval('Object.keys(ammoRefills).length'),ammoGroups.length);assert.equal(d.querySelector('#ammo-fill-all'),null);
+  w.review();assert(d.querySelector('#reviewitems').textContent.includes('RESTORE NORMAL AMMO'));await w.exportSave();assert(!d.querySelector('#status').classList.contains('error'),d.querySelector('#status').textContent);
   // Clipboard snapshots do not follow later source edits and replace without consuming a slot.
   const copySource=w.eval('data.weapons.find(w=>w.editable&&w.path.includes("MeleeWeaponArchetype"))'),pasteTarget=w.eval('data.weapons.find(w=>w.editable&&w.path.includes("RangedWeaponArchetype"))');
   w.select(copySource.key);d.querySelector('#level').value=14;w.stage();w.showWeaponMenu(new w.MouseEvent('contextmenu',{clientX:60,clientY:80}),copySource.key);assert(!d.querySelector('#weapon-context').hidden);d.querySelector('#weapon-copy').click();assert(d.querySelector('#weapon-context').hidden);
@@ -195,7 +196,7 @@ const assert=require('assert');
   await w.openFinalize();assert(d.querySelector('#finalize-dialog').open);assert.equal(d.querySelector('#finalize-drive').value,'example-drive');assert(d.querySelector('#finalize-target').textContent.startsWith('/USB/PS4/SAVEDATA/'));
   const beforeFailedFinalize=w.eval('JSON.stringify(changes)');await w.finalizeSave();assert(d.querySelector('#finalize-status').textContent.includes('failed'));assert.equal(w.eval('JSON.stringify(changes)'),beforeFailedFinalize);assert(!d.querySelector('#finalize-confirm').hidden);
   finalizeInstalled=true;await w.finalizeSave();assert(d.querySelector('#finalize-status').textContent.includes('Saved to USB and verified'));assert.equal(w.eval('Object.keys(changes).length+ammoDirty()+extraDirty()+additions.length+deletions.length'),0);assert.equal(d.querySelector('#finalize-close').textContent,'Done');assert(d.querySelector('#finalize-confirm').hidden);assert(finalizeCalls.every(c=>c.drive_key==='example-drive'&&c.consent===true));w.fetch=finalizeFetch;d.querySelector('#finalize-dialog').close();
-  console.log('PASS: highlighted last-step finalize flow, failed-write handling and refreshed baseline; half resource fill and character levels; scoped/global ammo actions; clipboard snapshot paste; per-weapon preset labels and update-existing mode; named presets save/reload/apply to another weapon/create/delete; Done replacement label and header tooltips; USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability and reserve ammo; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
+  console.log('PASS: highlighted last-step finalize flow, failed-write handling and refreshed baseline; half resource fill and character levels; scoped/global ammo actions; clipboard snapshot paste; per-weapon preset labels and update-existing mode; named presets save/reload/apply to another weapon/create/delete; Done replacement label and header tooltips; USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; durability controls removed and normal reserve ammo refills; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}
 })().catch(e=>{console.error(e);process.exit(1)});

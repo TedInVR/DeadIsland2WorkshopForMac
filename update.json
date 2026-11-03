@@ -1,6 +1,6 @@
 {
-  "version": "0.16.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.16.0.zip",
-  "sha256": "62392074bd38a20c07668c464d25f94f01266bfc403200805a249bbfab7e17e4",
-  "notes": "Finalize and Re-encrypt backs up and installs the USB save. Returned account and edited game data are verified through a fresh decryption; an observed account byte-order reversal is corrected before release."
+  "version": "0.17.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.17.0.zip",
+  "sha256": "be5b408c8280927333f131c3d8bb2321ed603dcaed1a5b4eadb1532dd374f00b",
+  "notes": "Restore Normal Maximum refills ammo for one or all characters, with separate undo. Remove 9,999 fill buttons and experimental durability controls. Missing ammo types and duplicate records are handled during normal refills."
 }

@@ -274,7 +274,7 @@ class Save:
             cap=16 if ar['kind']=='DIInventory' else 64
             dest.append(dict(key=ar['key'],name=ar['group'],count=count,capacity=cap,free=max(0,cap-count)))
         containers=[dict(key=a['key'],name=a['group'],profile_id=self.sections[a['section']].get('profile',{}).get('id'),count=sum(w.info()['editable'] for w in a['weapons']),capacity=next((d['capacity'] for d in dest if d['key']==a['key']),None)) for a in self.arrays if a['weapons'] or any(d['key']==a['key'] for d in dest)]
-        return dict(resource_groups=character_editor.info(self),ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
+        return dict(ammo_catalog=character_editor.AMMO,ammo_groups=[dict(key=a["key"],name=a["group"]) for a in self.resource_arrays if a["kind"]=="DIInventory" and a["profile_id"]],resource_groups=character_editor.info(self),ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
     def duplicate_record(self,request):
         key=request.get('clone_source')
         if type(key)!=int or not 0<=key<len(self.weapons):raise FormatError('Invalid duplicate source')
@@ -328,7 +328,7 @@ class Save:
         # Keep destination references intact; every other field comes from the snapshot.
         return replace_props(raw,0,end,fields,{k:by[k].replace(target.by[k].payload()) for k in ('EntryID','UniqueId')})
 
-    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None):
+    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None,ammo_refills=None):
         resource_changes=resource_changes or [];character_levels=character_levels or {}
         deletions=deletions or []
         if not isinstance(deletions,list) or any(type(k)!=int for k in deletions):raise FormatError('Invalid deletion list')
@@ -364,7 +364,8 @@ class Save:
         if not isinstance(ammo_changes,dict) or set(ammo_changes)-{str(a['key']) for a in self.ammo}:raise FormatError('Unknown ammunition stack')
         for key,value in ammo_changes.items():
             if type(value)!=int or not 0<=value<=9_999_999:raise FormatError('Ammo count must be a whole number from 0 to 9,999,999')
-        section_edits=character_editor.plan(self,resource_changes,character_levels,ammo_changes)
+        ammo_refills=ammo_refills or []
+        section_edits=character_editor.plan(self,resource_changes,character_levels,ammo_changes,ammo_refills)
         for ar in self.arrays:
             new_items=created.get(ar['key'],[])
             payload=b''.join(pasted[w.idx] if w.idx in pasted else ((self.replacement_record(w,changes[str(w.idx)]) if changes[str(w.idx)].get('path',w.path)!=w.path else w.rebuild(changes[str(w.idx)])) if str(w.idx) in changes else self.b[w.start:w.end]) for w in ar['weapons'] if w.idx not in deleted)+b''.join(new_items)
@@ -435,6 +436,10 @@ class Save:
                     if uid in seen_unique:raise FormatError('New persistent identity collision')
                     seen_unique.add(uid)
         for key,value in ammo_changes.items():
-            if check.ammo[int(key)]['count']!=value:raise FormatError('Ammo validation failed')
-        character_editor.verify(self,check,resource_changes,character_levels)
+            source=self.ammo[int(key)]
+            owner,record=next((a,r) for a in self.resource_arrays for r in a['records'] if r['by']['Count'].data==source['field'].data)
+            target=next(a for a in check.resource_arrays if a['key']==owner['key'])
+            records=[r for r in target['records'] if r['path']==record['path'] and r['by']['EntryID'].payload()==record['by']['EntryID'].payload()]
+            if len(records)!=1 or records[0]['count']!=value:raise FormatError('Ammo validation failed')
+        character_editor.verify(self,check,resource_changes,character_levels,ammo_refills)
         return save_codec.encode(result,self.compression)

@@ -5,6 +5,7 @@ from pathlib import Path
 # Numerical reference: https://deadisland.fandom.com/wiki/Experience_Points#Dead_Island_2
 XP=(0,1500,4100,6800,9400,13300,17700,22500,27800,33500,39800,46700,54200,62300,71000,80300,90200,100900,112300,124500,137400,151200,165900,181500,198000,215700,234600,254700,276000,298500,322200,347100,373200,400500,429000,458700,489600,521700,555000,589500)
 CATALOG=json.loads(Path(__file__).with_name('resource_catalog.json').read_text())
+AMMO=json.loads(Path(__file__).with_name('ammo_catalog.json').read_text())
 def attach(s):
     from save_core import fs,prop,props,u32,string,FormatError
     s.resource_arrays=[];s.character_fields={}
@@ -39,9 +40,11 @@ def info(s):
         result.append(dict(key=a['key'],name=a['group'].replace('Carried weapons','Inventory'),profile_id=a['profile_id'],items=[dict(c,count=totals.get(c['path'],0)) for c in CATALOG]))
     return result
 
-def plan(s,resource_changes,levels,ammo_changes):
+def plan(s,resource_changes,levels,ammo_changes,ammo_refills=()):
     from save_core import fs,prop,props,u32,put,replace_props,FormatError
     edits={};requests={};catalog={x['path']:x for x in CATALOG};groups={a['key']:a for a in s.resource_arrays if a['kind']=='DIInventory' and a['profile_id']}
+    if not isinstance(ammo_refills,(list,tuple)) or any(type(k)!=int or k not in groups for k in ammo_refills) or len(set(ammo_refills))!=len(ammo_refills):raise FormatError('Choose known character inventories for normal ammo refills')
+    ammo_catalog={x['path']:x for x in AMMO}
     if not isinstance(resource_changes,list) or len(resource_changes)>4096:raise FormatError('Invalid resource edits')
     for value in resource_changes:
         if not isinstance(value,dict) or set(value)!={'group','path','count'} or type(value['group'])!=int or value['group']not in groups or value['path']not in catalog:raise FormatError('Choose a known resource and character inventory')
@@ -53,8 +56,14 @@ def plan(s,resource_changes,levels,ammo_changes):
     template=next((r for a in s.resource_arrays for r in a['records'] if set(r['by'])=={'EntryID','Archetype','Count','UniqueId'}),None)
     for a in s.resource_arrays:
         pending={path:n for (group,path),n in requests.items() if group==a['key']};parts=[];changed=False;seen=set()
+        refill=a['key'] in ammo_refills
+        if refill:
+            if any(r['by']['Count'].data in ammo_by_pos for r in a['records']):raise FormatError('Undo individual ammo edits before restoring this character to normal maximum')
+            pending.update({path:item['maximum'] for path,item in ammo_catalog.items()})
         for r in a['records']:
             replacements={};path=r['path'];countfield=r['by']['Count']
+            if refill and path in ammo_catalog and path in seen:
+                changed=True;continue
             if path in pending:
                 count=pending[path] if path not in seen else 0;seen.add(path)
                 if count!=r['count']:replacements['Count']=countfield.replace(put(count))
@@ -65,6 +74,7 @@ def plan(s,resource_changes,levels,ammo_changes):
             if path in seen or n==0:continue
             if template is None:raise FormatError('This save has no compatible resource serialization template')
             d=template['by'];new={name:d[name].replace(uuid.uuid4().bytes) for name in ('EntryID','UniqueId')}
+            if refill and path in ammo_catalog:new['UniqueId']=d['UniqueId'].replace(bytes(16))
             new['Archetype']=d['Archetype'].replace(fs(path)+put(0));new['Count']=d['Count'].replace(put(n))
             parts.append(replace_props(s.b,template['start'],template['end'],template['fields'],new));changed=True
         if changed:
@@ -98,7 +108,7 @@ def plan(s,resource_changes,levels,ammo_changes):
                     if guid==pid:edits.setdefault(si2,[]).append((offset+16,offset+20,put(level)))
     return edits
 
-def verify(before,after,resources,levels):
+def verify(before,after,resources,levels,ammo_refills=()):
     from save_core import FormatError
     groups={a['key']:a for a in info(after)}
     for request in resources:
@@ -107,3 +117,8 @@ def verify(before,after,resources,levels):
     for pid,level in levels.items():
         pf=next(p for p in after.profiles if p['id']==pid)
         if pf['level']!=level or pf['xp']!=XP[level-1]:raise FormatError('Character progression validation failed')
+    arrays={a['key']:a for a in after.resource_arrays}
+    for key in ammo_refills:
+        for item in AMMO:
+            records=[r for r in arrays[key]['records'] if r['path']==item['path']]
+            if len(records)!=1 or records[0]['count']!=item['maximum']:raise FormatError('Normal ammunition refill validation failed')

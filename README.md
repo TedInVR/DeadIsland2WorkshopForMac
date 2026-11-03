@@ -5,7 +5,7 @@
 - **Fill to 50%** in Character & Resources sets crafting materials and zombie parts to **50 each** for the selected character. Med-kits and fuses use their normal maxima (5 and 3); cash and character levels stay unchanged. Export or encrypt the edited copy to save these changes.
 - Inventory dropdown entries show the character's level. The text below the dropdown follows the selected inventory or highlighted weapon and reflects staged level edits.
 - Right-click a weapon and choose **Copy Weapon**. Right-click an unwanted weapon and choose **Paste Weapon** to replace it in the editor. The clipboard is a snapshot, including the source's staged settings, complete saved state and generation seed. Destination IDs and slot count are retained. **Revert this weapon** undoes the paste before export. The internal clipboard clears when another save opens. Shift+F10 also opens the context menu.
-- Reserve Ammunition: **Set All to 9,999** and **Revert All** affect only the selected character/location. **Revert All Ammo Edits All Characters** removes every pending ammunition edit. These controls edit saved reserve stacks, not gun magazines.
+- Reserve Ammunition: **Restore Normal Maximum** refills each supported ammo type for the selected character. **Restore Normal Maximum — All Characters** does the same for every character inventory. **Undo Pending Ammo Changes** separately cancels pending ammo edits for the selected character. Refills add missing types and consolidate duplicates; they edit reserve stacks, not gun magazines.
 - Highlighting a weapon selects the preset actually applied to it, or **Choose a preset** when none was applied. A note identifies sets modified since application. Local annotations can recognize the association on reopening when the saved weapon ID and perk set match; no annotation is written into the game save.
 - **Save as Preset → Update Existing Preset** lets you choose a preset by name without retyping it. Updating retains that preset's ID/name and does not change other weapons automatically.
 
@@ -55,7 +55,7 @@ Download the Windows ZIP above, choose **Extract All**, and run **Install-Window
 - Create weapons from a searchable base-game/DLC catalog.
 - Duplicate complete weapons with fresh IDs; see used/total/free slots by location.
 - Apply/remove a perk across all weapons, melee weapons, or firearms, across the whole save or selected location.
-- Experimental melee durability and existing reserve-ammo count editing; game-imposed caps still apply. No magazine-count editing.
+- Restore normal reserve-ammo amounts per character or across all characters; separate undo for pending edits. No magazine-count editing or experimental durability controls.
 - Delete/undo deletion to free slots in the same export.
 - Replace an existing weapon with a catalog weapon without using another slot.
 - Automatic dated backups on every valid save open and validated export; each is a separate file, with no automatic overwrite or deletion. Help → Open Backup Folder opens the local collection.
@@ -70,7 +70,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.16.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.17.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

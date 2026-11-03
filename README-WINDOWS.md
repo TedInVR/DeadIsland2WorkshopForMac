@@ -8,7 +8,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Windows 10/11 x64. Uses the same save reader, editor, catalog, duplication, batch-perk tools, durability/reserve-ammo controls, and silhouette UI as the Mac app. Works with **decrypted PS4 game-data saves**; this is not a PC-game-save converter.
+Windows 10/11 x64. Uses the same save reader, editor, catalog, duplication, batch-perk tools, normal reserve-ammo refill controls, and silhouette UI as the Mac app. Works with **decrypted PS4 game-data saves**; this is not a PC-game-save converter.
 
 ## Download and install
 
@@ -54,3 +54,5 @@ Click **PS4 Decrypt / Encrypt** to enter and securely save a worker key on this 
 0.15.0 adds named PS4 backups/restore, all-game CUSA discovery, profile-to-profile and batch resigning, and DI2 Character & Resources. See USER_GUIDE.md for limits and destination backup behavior.
 
 0.16.0 adds Finalize and Re-encrypt with USB backup/replacement and round-trip ownership/data verification, including correction of an observed service account byte-order reversal.
+
+0.17.0 corrects the ammo Revert actions to Restore Normal Maximum for one/all characters, keeps a separate undo action, and removes the failed 9,999 fill and experimental durability controls.

@@ -1,4 +1,4 @@
-DEAD ISLAND 2 WORKSHOP FOR MAC 0.16.0
+DEAD ISLAND 2 WORKSHOP FOR MAC 0.17.0
 
 Quit Workshop, extract this package, and double-click Install.command.
 It updates /Applications/Dead Island 2 Workshop.app and opens the same app.
@@ -32,3 +32,5 @@ Save as Preset stores the current mod/perk set locally between launches. Choose 
 0.15.0: Fill to 50% for the selected character (materials/parts 50; med-kits 5; fuses 3). Character levels in inventory choices. Right-click Copy Weapon / Paste Weapon uses a full snapshot and retains destination IDs. Ammo fill/revert controls distinguish selected-character from all-character scope. Per-weapon preset labels and Update Existing Preset selection. Export or encrypt to save game edits.
 
 0.16.0: Finalize and Re-encrypt is the highlighted final action. It validates edits, checks the actual encrypted result through a fresh decryption, corrects an observed account byte-order reversal, verifies game data and keystone, then backs up and replaces the encrypted USB pair. A wrong account or failed verification stops USB installation. Additional GarlicSaves jobs take extra time; console acceptance still requires testing.
+
+0.17.0: Restore Normal Maximum refills the selected character, or all characters, to normal ammo amounts. Missing types are added and duplicate records consolidated. Undo Pending Ammo Changes is separate. Remove 9,999 fill buttons and experimental durability controls after live testing did not produce the intended behavior.

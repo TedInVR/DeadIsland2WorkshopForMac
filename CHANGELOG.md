@@ -1,3 +1,10 @@
+# Version 0.17.0 — 3 November 2026
+
+- Replace ambiguous ammo Revert actions with Restore Normal Maximum for the selected character or all characters, and a separate Undo Pending Ammo Changes action.
+- Fill seven supported ammunition types to published normal amounts, add missing records, consolidate duplicates and verify one correctly sized record per type. Exclude shared lockers and preserve unrelated items and weapon state.
+- Remove 9,999 ammo fill buttons and experimental durability input fields after live testing did not produce the intended behavior. Do not treat the mirrored counts seen in-game as capacity limits.
+- The user confirmed console acceptance after the ownership correction. The new refill behavior still needs live gameplay validation; post-game ammo diagnosis awaits a decrypted package.
+
 # Version 0.16.0 — 3 November 2026
 
 - Make Finalize and Re-encrypt the highlighted final header action; retain Review & Export as an optional action.

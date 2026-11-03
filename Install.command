@@ -34,13 +34,13 @@ if ! "$SWIFTC" -sdk "$SDK" -O -framework AppKit -framework WebKit "$SOURCE/Works
     fail "The Mac build did not finish. Send the compiler message above to ChatGPT. Your existing app and saves have not been changed."
 fi
 cp "$SOURCE/Info.plist" "$BUILD/Dead Island 2 Workshop.app/Contents/Info.plist"
-for name in server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py character_editor.py resource_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/$name"; done
+for name in server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py character_editor.py resource_catalog.json ammo_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/$name"; done
 printf '%s\n' "$RUNTIME/bin/python3" > "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/PythonPath.txt"
 cp -R "$SOURCE/third_party_licenses" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/third_party_licenses"
 /usr/bin/codesign --force --sign - "$BUILD/Dead Island 2 Workshop.app"
 mkdir -p "$DEV"
 if [[ "$SOURCE" != "$DEV" ]]; then
-    for name in Install.command Workshop.swift server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py character_editor.py resource_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Info.plist Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$DEV/$name"; done
+    for name in Install.command Workshop.swift server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py character_editor.py resource_catalog.json ammo_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Info.plist Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$DEV/$name"; done
 fi
 if [[ "$SOURCE" != "$DEV" ]]; then cp -R "$SOURCE/third_party_licenses" "$DEV/"; fi
 chmod +x "$DEV/Install.command"
