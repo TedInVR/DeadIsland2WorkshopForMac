@@ -1,3 +1,10 @@
+# Version 0.18.0 — 3 November 2026
+
+- Recognize the newer observed post-game save revision and variable game-build field instead of matching one fixed build number.
+- Use the same supported header check in the editor, USB browser and decrypted-package detection.
+- Preserve the complete original header and no-edit bytes; retain revision, compression checksum and structural validation.
+- Validate normal-ammo restoration against the private post-game sample while preserving all weapon record bytes. The sample still stores oversized distinct ammo types despite the game's mirrored icons; in-game normalization remains to be tested.
+
 # Version 0.17.0 — 3 November 2026
 
 - Replace ambiguous ammo Revert actions with Restore Normal Maximum for the selected character or all characters, and a separate Undo Pending Ammo Changes action.

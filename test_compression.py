@@ -28,6 +28,14 @@ class FramingTests(unittest.TestCase):
     def test_uncompressed_data_passes_through(self):
         raw=HEADER+struct.pack('<I',1)+b'example'
         self.assertEqual(codec.decode(raw),(raw,None));self.assertEqual(codec.encode(raw,None),raw)
+    def test_build_number_is_variable_and_new_save_revision_is_preserved(self):
+        raw=struct.pack('<I',1234567)+bytes.fromhex('0a000b00')+packed(b'test body'*100)[8:]
+        self.assertTrue(codec.is_save_header(raw))
+        plain,state=codec.decode(raw);self.assertEqual(codec.encode(plain,state),raw)
+        edited=plain[:-1]+b'X';out=codec.encode(edited,state)
+        self.assertEqual(out[:21],raw[:21]);self.assertEqual(codec.decode(out)[0],edited)
+        self.assertFalse(codec.is_save_header(raw[:4]+bytes(4)+raw[8:]))
+        self.assertFalse(codec.is_save_header(raw[:8]+bytes(4)+raw[12:]))
 
 @unittest.skipUnless(os.environ.get('DI2_TEST_COMPRESSED_ZIP'),'Private package is never included in repository')
 class CompressedSaveTests(unittest.TestCase):

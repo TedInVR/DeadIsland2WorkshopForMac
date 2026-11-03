@@ -23,7 +23,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.17.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.18.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -228,7 +228,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.17.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.18.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -302,3 +302,7 @@ Saves are handled locally by a service listening only on 127.0.0.1 at a random s
 ## Repair older Mac update queues
 
 Versions through 0.9.0 queued downloads for the 15-minute background agent and did not launch installation on quit. Reopening could postpone installation repeatedly. Quit the app and run **Repair-Updates.command** from a newly downloaded Mac package to install the latest version immediately. Keep the app closed until the repair prints the installed version, then open the copy in Applications. If it fails, retain the Terminal output. The repair does not modify saves, backups, or profile names.
+
+## Post-game format compatibility
+
+Version 0.18.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.

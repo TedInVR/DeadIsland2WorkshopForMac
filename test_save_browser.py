@@ -23,7 +23,7 @@ class BrowserTests(unittest.TestCase):
         (wrong/'OtherSave').write_bytes(b'other game container');(wrong/'OtherSave.bin').write_bytes(b'key')
         found=b.scan([self.drive])['entries'];self.assertEqual(len(found),4);self.assertEqual({e['kind'] for e in found},{'encrypted','incomplete'})
     def test_decrypted_header_detection_and_unplugged_drive(self):
-        file=self.game/'ue4savegame.ps4.sav';file.write_bytes(bytes.fromhex('3dca1200')+bytes(12)+b'Zstd\0'+b'example header only')
+        file=self.game/'ue4savegame.ps4.sav';file.write_bytes(bytes.fromhex('e80300000a000a0001d90e51050000005a73746400')+b'example header only')
         (self.game/'random.sav').write_bytes(b'unrelated')
         e=b.scan([self.drive])['entries'][0];self.assertEqual(e['kind'],'decrypted')
         shutil.rmtree(self.drive)
@@ -39,7 +39,7 @@ class BrowserTests(unittest.TestCase):
             self.assertEqual(b.profile_names(),{A:'Keep'})
     def test_links_and_invalid_ids_are_ignored(self):
         self.pair();bad=self.drive/'PS4'/'SAVEDATA'/'not-an-account';bad.mkdir();(bad/'CUSA01014').mkdir()
-        outside=self.root/'elsewhere.sav';outside.write_bytes(bytes.fromhex('3dca1200')+bytes(12)+b'Zstd\0')
+        outside=self.root/'elsewhere.sav';outside.write_bytes(bytes.fromhex('e80300000a000a0001d90e51050000005a73746400'))
         try:(self.game/'linked.sav').symlink_to(outside)
         except OSError:pass
         self.assertEqual(len(b.scan([self.drive])['entries']),1)

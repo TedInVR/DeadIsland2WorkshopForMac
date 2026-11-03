@@ -16,7 +16,7 @@ def main():
             info.external_attr=((0o100755 if file.endswith('.command') else 0o100644)<<16)
             z.writestr(info,(ROOT/file).read_bytes())
     (output/'Dead-Island-2-Workshop-Mac-Latest.zip').write_bytes(path.read_bytes())
-    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Restore Normal Maximum refills ammo for one or all characters, with separate undo. Remove 9,999 fill buttons and experimental durability controls. Missing ammo types and duplicate records are handled during normal refills.')
+    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Open the newer post-game save revision and retain its original version header. Includes normal ammo restoration for one/all characters; failed 9,999 fill and durability controls remain removed.')
     (ROOT/'update.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(dict(file=str(path),size=path.stat().st_size,**manifest)))
 if __name__=='__main__':main()

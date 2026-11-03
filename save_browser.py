@@ -1,6 +1,7 @@
 """Read-only PS4 USB save discovery and local profile display names."""
 import hashlib,json,os,re,stat,sys,uuid
 from pathlib import Path
+import save_codec
 import backup_storage
 
 TITLE_IDS=('CUSA01014','CUSA27043','CUSA35681')
@@ -94,7 +95,7 @@ def scan(roots=None):
                             with path.open('rb') as f:head=f.read(21)
                             fileinfo=path.stat()
                         except OSError as e:errors.append(str(path)+': '+str(e));continue
-                        plain=head[:4]==bytes.fromhex('3dca1200') and head[16:21]==b'Zstd\0'
+                        plain=save_codec.is_save_header(head)
                         binfile=files.get(low+'.bin')
                         if not plain and not binfile and low!='deadisland2savegame':continue
                         kind='decrypted' if plain else ('encrypted' if binfile else 'incomplete')

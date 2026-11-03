@@ -1,6 +1,6 @@
 {
-  "version": "0.17.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.17.0.zip",
-  "sha256": "be5b408c8280927333f131c3d8bb2321ed603dcaed1a5b4eadb1532dd374f00b",
-  "notes": "Restore Normal Maximum refills ammo for one or all characters, with separate undo. Remove 9,999 fill buttons and experimental durability controls. Missing ammo types and duplicate records are handled during normal refills."
+  "version": "0.18.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.18.0.zip",
+  "sha256": "3791f80153df3cc130d60685df1e0cee50fd246b47a54ecdac9430fdf66fbb7b",
+  "notes": "Open the newer post-game save revision and retain its original version header. Includes normal ammo restoration for one/all characters; failed 9,999 fill and durability controls remain removed."
 }

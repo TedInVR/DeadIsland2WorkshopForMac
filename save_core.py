@@ -178,7 +178,7 @@ class Save:
         try:b,self.compression=save_codec.decode(b)
         except save_codec.CodecError as e:raise FormatError(str(e)) from e
         self.b=b;self.sha=hashlib.sha256(self.original).hexdigest();self.sections=[];self.arrays=[];self.weapons=[];self.profiles=[]
-        if b[:4]!=bytes.fromhex('3dca1200') or b[16:21]!=b'Zstd\0':raise FormatError('Choose a supported decrypted Dead Island 2 save or use PS4 Decrypt / Encrypt first.')
+        if not save_codec.is_save_header(b):raise FormatError('Choose a supported decrypted Dead Island 2 save. Its version header is not supported; any downloaded package is retained in Open Result Folder.')
         n=u32(b,21);p=25
         if not 1<=n<=100:raise FormatError('Unknown section count')
         for _ in range(n):

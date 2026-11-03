@@ -7,6 +7,11 @@ END=b'\x42\xfc\x13\x5a'
 MAGIC=b'\x28\xb5\x2f\xfd'
 class CodecError(ValueError):pass
 
+def is_save_header(raw):
+    # First uint32 is the game build, not a fixed magic number. Support the
+    # two observed save revisions and retain the complete header verbatim.
+    return len(raw)>=21 and raw[:4]!=bytes(4) and raw[4:8] in (bytes.fromhex('0a000a00'),bytes.fromhex('0a000b00')) and raw[8:21]==bytes.fromhex('01d90e51050000005a73746400')
+
 def libraries():
     try:import zstandard,cityhash
     except ImportError:raise CodecError('Compression support is missing. Reinstall the current Workshop update to repair its private runtime.') from None

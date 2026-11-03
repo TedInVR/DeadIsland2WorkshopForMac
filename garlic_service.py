@@ -2,6 +2,7 @@
 import hashlib,io,json,os,re,stat,struct,threading,time,uuid,zipfile
 from pathlib import Path,PurePosixPath
 from urllib import request,error
+import save_codec
 import backup_storage
 import credential_store
 import ps4_backups
@@ -53,12 +54,12 @@ def decrypted_files(files):
     prefix=sfos[0][:-len('sce_sys/param.sfo')]
     if any(not n.startswith(prefix) for n in files):raise ServiceError('The decrypted ZIP contains files outside its save folder.')
     result={n[len(prefix):]:v for n,v in files.items()}
-    candidates=[n for n,v in result.items() if not n.lower().startswith('sce_sys/') and (v[:4]==bytes.fromhex('3dca1200') or PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav')]
+    candidates=[n for n,v in result.items() if not n.lower().startswith('sce_sys/') and (save_codec.is_save_header(v) or PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav')]
     if len(candidates)!=1:raise ServiceError('Could not identify a single Dead Island 2 game-data file. The downloaded ZIP has been kept for inspection.')
     return result,candidates[0]
 
 def editable_file(files):
-    candidates=[n for n in files if not n.lower().startswith('sce_sys/') and (PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav' or files[n][:4]==bytes.fromhex('3dca1200'))]
+    candidates=[n for n in files if not n.lower().startswith('sce_sys/') and (PurePosixPath(n).name.lower()=='ue4savegame.ps4.sav' or save_codec.is_save_header(files[n]))]
     if len(candidates)!=1:return None,'Workshop could not identify one Dead Island 2 data file.'
     name=candidates[0]
     from save_core import Save,FormatError
