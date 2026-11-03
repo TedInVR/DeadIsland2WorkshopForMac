@@ -1,4 +1,4 @@
-DEAD ISLAND 2 WORKSHOP FOR MAC 0.19.0
+DEAD ISLAND 2 WORKSHOP FOR MAC 0.19.1
 
 Quit Workshop, extract this package, and double-click Install.command.
 It updates /Applications/Dead Island 2 Workshop.app and opens the same app.
@@ -37,6 +37,6 @@ Save as Preset stores the current mod/perk set locally between launches. Choose 
 
 0.18.0: Open post-game saves with the newer observed save revision. Treat the first header field as a variable game build instead of a fixed magic number. Keep supported revision checks, compression checksum and full structural validation; preserve the original header exactly during export.
 
-0.19.0: On Mac, automatically check and download updates before opening the editor, install after the startup window closes and reopen the updated app. Automatic Updates controls this behavior. Open Workshop Now skips waiting; an unavailable check opens the existing version. Background and ordinary quit-time updates still leave the app closed.
+0.19.1: On Mac, open the editor immediately. Check and download updates in the background after five seconds. A dismissible update bar appears only when ready; Update… offers Quit & Install with the unsaved-edit check. Later keeps editing. No waiting screen or current/offline popup. Automatic Updates controls background checks.
 
 0.19.0 also allows custom ammunition values after normal refills. Weapon Durability has individual and bulk custom values plus restoration from full-condition references recorded from a freshly repaired in-game save. A normal maximum is not inferred from a worn or experimentally modified value.

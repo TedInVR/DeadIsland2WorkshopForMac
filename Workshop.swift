@@ -15,9 +15,12 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    var startupChecking = false
+    var updateBanner: NSView!
+    var updateButton: NSButton!
+    var webTop: NSLayoutConstraint!
+    var queuedVersion = ""
     var updateHandoffStarted = false
-    let version = "0.19.0"
+    let version = "0.19.1"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -40,28 +43,35 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         window = NSWindow(contentRect: NSRect(x: 0,y: 0,width: 1220,height: 850), styleMask: [.titled,.closable,.miniaturizable,.resizable], backing: .buffered, defer: false)
         window.title = "Dead Island 2 Workshop"
         window.minSize = NSSize(width: 860,height: 650)
-        window.contentView = web; window.delegate = self
+        makeContent()
         window.center();window.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps: true)
-        checkStartupUpdate()
+        startServer()
+        if CommandLine.arguments.contains("--startup-update-failed"){alert("Automatic update could not finish", "Workshop has opened with the existing version. Your saves are unchanged. See Help → Update Status for details.")}
     }
-    func checkStartupUpdate(){
-        guard automaticUpdatesEnabled(),!CommandLine.arguments.contains("--skip-startup-update") else{
-            startServer()
-            if CommandLine.arguments.contains("--startup-update-failed"){alert("Automatic update could not finish", "Workshop has opened with the existing version. Your saves are unchanged. See Help → Update Status for details.")}
-            return
-        }
-        startupChecking=true
-        web.loadHTMLString("""
-        <!doctype html><html><body style="background:#101618;color:#e7f0ed;font:18px system-ui;padding:70px"><h1>Dead Island 2 Workshop</h1><p>Checking for updates…</p><p>Any available update will download and install before the editor opens. Workshop will reopen automatically.</p><button style="padding:12px;font:inherit" onclick="window.webkit.messageHandlers.workshop.postMessage({action:'skipStartupUpdate'})">Open Workshop Now</button></body></html>
-        """,baseURL:nil)
+    func makeContent(){
+        let root=NSView();window.contentView=root;window.delegate=self
+        web.translatesAutoresizingMaskIntoConstraints=false;root.addSubview(web)
+        webTop=web.topAnchor.constraint(equalTo:root.topAnchor)
+        NSLayoutConstraint.activate([webTop,web.leadingAnchor.constraint(equalTo:root.leadingAnchor),web.trailingAnchor.constraint(equalTo:root.trailingAnchor),web.bottomAnchor.constraint(equalTo:root.bottomAnchor)])
+        updateBanner=NSView();updateBanner.translatesAutoresizingMaskIntoConstraints=false;updateBanner.isHidden=true
+        updateBanner.wantsLayer=true;updateBanner.layer?.backgroundColor=NSColor.windowBackgroundColor.cgColor;root.addSubview(updateBanner)
+        updateButton=NSButton(title:"Update ready",target:self,action:#selector(installBackgroundUpdate));updateButton.bezelStyle = .rounded
+        let later=NSButton(title:"Later",target:self,action:#selector(hideUpdateBanner));later.bezelStyle = .rounded
+        for button in [updateButton!,later]{button.translatesAutoresizingMaskIntoConstraints=false;updateBanner.addSubview(button)}
+        NSLayoutConstraint.activate([updateBanner.topAnchor.constraint(equalTo:root.topAnchor),updateBanner.leadingAnchor.constraint(equalTo:root.leadingAnchor),updateBanner.trailingAnchor.constraint(equalTo:root.trailingAnchor),updateBanner.heightAnchor.constraint(equalToConstant:48),updateButton.leadingAnchor.constraint(equalTo:updateBanner.leadingAnchor,constant:16),updateButton.centerYAnchor.constraint(equalTo:updateBanner.centerYAnchor),later.leadingAnchor.constraint(equalTo:updateButton.trailingAnchor,constant:12),later.centerYAnchor.constraint(equalTo:updateBanner.centerYAnchor)])
+    }
+    func checkBackgroundUpdate(){
+        guard automaticUpdatesEnabled(),!CommandLine.arguments.contains("--skip-startup-update") else{return}
         runUpdater("--startup"){obj in
-            guard self.startupChecking else{return}
-            self.startupChecking=false
-            if obj["status"] as? String == "queued",self.startPendingUpdate(reopen:true){
-                self.allowTermination=true;NSApp.terminate(nil)
-            }else{self.startServer()}
+            // A slow/offline check never blocks the editor or interrupts current work.
+            guard self.automaticUpdatesEnabled(),obj["status"] as? String == "queued" else{return}
+            self.queuedVersion=obj["version"] as? String ?? ""
+            self.updateButton.title="Version "+self.queuedVersion+" ready — Update…"
+            self.webTop.constant=48;self.updateBanner.isHidden=false
         }
     }
+    @objc func hideUpdateBanner(){updateBanner.isHidden=true;webTop.constant=0}
+    @objc func installBackgroundUpdate(){offerQueuedInstall(["status":"queued","version":queuedVersion])}
     func makeMenus() {
         let bar = NSMenu(); NSApp.mainMenu = bar
         let appItem = NSMenuItem();bar.addItem(appItem);let app=NSMenu();appItem.submenu=app
@@ -249,7 +259,10 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
                 }
                 let result=address
                 DispatchQueue.main.async {
-                    if let s=result,let url=URL(string:s){self.base=url;self.web.load(URLRequest(url:url))}
+                    if let s=result,let url=URL(string:s){
+                        self.base=url;self.web.load(URLRequest(url:url))
+                        DispatchQueue.main.asyncAfter(deadline:.now()+5){self.checkBackgroundUpdate()}
+                    }
                     else{self.alert("Workshop could not start", "Please send the startup log from:\n"+log.path+"\n\nThe original save has not been changed.")}
                 }
             }
@@ -262,7 +275,6 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     func webView(_ webView:WKWebView,runJavaScriptConfirmPanelWithMessage message:String,initiatedByFrame frame:WKFrameInfo,completionHandler:@escaping (Bool)->Void){let a=NSAlert();a.messageText=message;a.addButton(withTitle:"Continue");a.addButton(withTitle:"Cancel");completionHandler(a.runModal() == .alertFirstButtonReturn)}
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage){
         guard let body=message.body as? [String:Any] else{return}
-        if body["action"] as? String == "skipStartupUpdate",startupChecking{startupChecking=false;startServer();return}
         if body["action"] as? String == "declineAgreement"{allowTermination=true;NSApp.terminate(nil);return}
         if body["action"] as? String == "credits"{credits();return}
         if body["action"] as? String == "rememberSource",let path=body["path"] as? String {sourcePaths.insert(URL(fileURLWithPath:path).resolvingSymlinksInPath().standardizedFileURL.path);return}

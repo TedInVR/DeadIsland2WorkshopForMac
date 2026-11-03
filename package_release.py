@@ -16,7 +16,7 @@ def main():
             info.external_attr=((0o100755 if file.endswith('.command') else 0o100644)<<16)
             z.writestr(info,(ROOT/file).read_bytes())
     (output/'Dead-Island-2-Workshop-Mac-Latest.zip').write_bytes(path.read_bytes())
-    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Mac startup updates install and reopen automatically. Ammo custom amounts stay editable after normal restoration. Weapon Durability adds custom values and restoration from recorded full-condition references.')
+    manifest=dict(version=version,path='downloads/'+name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),notes='Mac opens immediately and checks for updates in the background. A dismissible update bar appears only when a verified download is ready. Installation waits until you quit, with unsaved-edit checks.')
     (ROOT/'update.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(dict(file=str(path),size=path.stat().st_size,**manifest)))
 if __name__=='__main__':main()

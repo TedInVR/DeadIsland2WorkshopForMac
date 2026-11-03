@@ -81,10 +81,11 @@ class UpdaterTests(unittest.TestCase):
         u.atomic_json(self.root/'settings.json',{'automatic_updates':False})
         with patch.object(u,'queue') as queue:
             self.assertEqual(u.startup()['status'],'disabled');queue.assert_not_called()
-    def test_startup_queues_and_verifies_update_before_editor_opens(self):
+    def test_background_check_queues_verified_update_without_installing(self):
         b=self.package();m=self.manifest(b)
         with patch.object(u,'manifest',return_value=m),patch.object(u,'installed_version',return_value='0.3.0'),patch.object(u,'github_bytes',return_value=b):
-            self.assertEqual(u.startup()['status'],'queued')
+            with patch.object(u,'run') as install:
+                self.assertEqual(u.startup()['status'],'queued');install.assert_not_called()
         self.assertEqual((self.root/'pending-update.zip').read_bytes(),b)
     def test_startup_handoff_reopens_only_after_install_and_clears_intent(self):
         u.atomic_json(self.root/'pending-update.json',{'version':'0.4.0'});u.atomic_json(self.root/'install-intent.json',{'pid':1})

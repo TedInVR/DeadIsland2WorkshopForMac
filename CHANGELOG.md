@@ -1,3 +1,10 @@
+# Version 0.19.1 — 3 November 2026
+
+- Open the Mac editor immediately; perform the automatic update check/download in the background after five seconds.
+- Replace the blocking startup screen and ineffective skip button with a dismissible native update bar shown only when a verified update is queued.
+- Never auto-close an editing session to install a background update. Retain Quit & Install and unsaved-edit checks; install only after closing.
+- Leave current/offline/failed background checks silent, with manual checks and status available in Help.
+
 # Version 0.19.0 — 3 November 2026
 
 - On Mac, check for updates before opening the editor, download and verify an available update, close for installation and automatically reopen afterward.

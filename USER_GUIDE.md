@@ -23,7 +23,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.19.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.19.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -236,7 +236,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.19.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.19.1 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -276,7 +276,7 @@ Workshop does not automatically retry a failed submission, which avoids creating
 ## Updates
 
 - **Help → Download Updates** opens the latest ZIP download in your default browser. The public repository needs no GitHub login. Quit Workshop and run the downloaded installer.
-- **Automatic startup updates on Mac:** opening Workshop checks for updates before the editor starts. An available package is downloaded and checksum-verified, then the startup window closes so installation can run safely. Workshop reopens automatically afterward without repeating the check. If the check is unavailable or offline, the existing editor opens. **Open Workshop Now** skips waiting; a download already underway may finish and remain queued for the next quit. A failed installation reopens the existing app with a notice and records details under Update Status. The existing **Help → Automatic Updates** setting enables or disables startup checks.
+- **Background updates on Mac:** Workshop opens the editor immediately. Five seconds after the editor starts loading, it checks and downloads updates in the background. A verified update adds a dismissible **Version … ready — Update…** bar. There is no popup when you are current or offline. Choose **Update…** to review the **Quit & Install** option, or **Later** to keep editing. Installation waits until Workshop closes and retains the unsaved-edit check. Ordinary quit-time installation leaves the app closed. **Help → Automatic Updates** controls these checks; **Help → Check for Updates** remains available.
 - **Help → Check for Updates** reads `update.json`. If a newer version is available, you can download it and choose **Quit & Install**. Installation starts immediately after the app finishes quitting. **Keep Editing** leaves the update queued for your next quit. Unsaved-edit and busy-operation guards still apply. If authentication is unavailable, it offers the browser download instead.
 - **Help → Update Status** shows the running app path/version, installed Applications version, queued version, and last installation result. **Open Update Folder** reveals `install.log` and `update-handoff.log` when troubleshooting. A successful installer exit is followed by checking the actual installed version.
 - **Help → Automatic Updates** is enabled by default and can be turned off. A per-user LaunchAgent checks every 15 minutes while the Mac is awake and you are signed in. Automatic checks/downloads/installation run only while Workshop is closed. Updates leave it closed.
@@ -314,4 +314,4 @@ Versions through 0.9.0 queued downloads for the 15-minute background agent and d
 
 ## Post-game format compatibility
 
-Version 0.19.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+Version 0.19.1 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.

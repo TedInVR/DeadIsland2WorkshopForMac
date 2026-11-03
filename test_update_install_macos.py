@@ -5,12 +5,51 @@ from unittest.mock import patch
 import updater as u
 
 
+def check_background_ui(root,temp):
+    # Compile the real window/controller with a delayed updater double. This
+    # exercises AppKit layout and completion handling without network/user data.
+    source=(root/'Workshop.swift').read_text().replace('final class Workshop:', 'class Workshop:')
+    source=source[:source.index('let app=NSApplication.shared')]
+    source+=r"""
+final class BackgroundTest: Workshop {
+    var completion: (([String:Any])->Void)?
+    var enabled=true
+    override func automaticUpdatesEnabled()->Bool{return enabled}
+    override func runUpdater(_ argument:String,completion:@escaping ([String:Any])->Void){self.completion=completion}
+}
+let app=NSApplication.shared
+let w=BackgroundTest()
+w.window=NSWindow(contentRect:NSRect(x:0,y:0,width:1000,height:700),styleMask:[.titled],backing:.buffered,defer:false)
+w.web=WKWebView(frame:.zero)
+w.makeContent()
+assert(w.updateBanner.isHidden && w.webTop.constant == 0)
+w.checkBackgroundUpdate()
+assert(w.completion != nil && w.updateBanner.isHidden)
+w.completion?(["status":"current"])
+assert(w.updateBanner.isHidden && w.webTop.constant == 0)
+w.checkBackgroundUpdate();w.completion?(["status":"error"])
+assert(w.updateBanner.isHidden)
+w.checkBackgroundUpdate();w.completion?(["status":"queued","version":"9.0.0"])
+assert(!w.updateBanner.isHidden && w.webTop.constant == 48)
+assert(w.updateButton.title.contains("9.0.0") && !w.updateHandoffStarted && !w.allowTermination)
+w.hideUpdateBanner()
+assert(w.updateBanner.isHidden && w.webTop.constant == 0)
+w.checkBackgroundUpdate();w.enabled=false
+w.completion?(["status":"queued","version":"9.0.1"])
+assert(w.updateBanner.isHidden)
+w.completion=nil;w.checkBackgroundUpdate();assert(w.completion == nil)
+print("Native background-update notice tests passed")
+"""
+    test=temp/'background-ui.swift';test.write_text(source);binary=temp/'background-ui'
+    subprocess.run(['swiftc',str(test),'-o',str(binary),'-framework','AppKit','-framework','WebKit'],check=True)
+    subprocess.run([str(binary)],check=True,timeout=30)
+
 def main():
     if sys.platform!='darwin':raise SystemExit('Run this integration check on macOS.')
     root=Path(__file__).resolve().parent
     m=json.loads((root/'update.json').read_text());package=(root/m['path']).read_bytes()
     with tempfile.TemporaryDirectory(prefix='di2-install-test-') as temp:
-        temp=Path(temp);support=temp/'Support';app=temp/'Applications'/'Dead Island 2 Workshop.app';dev=temp/'Development'
+        temp=Path(temp);check_background_ui(root,temp);support=temp/'Support';app=temp/'Applications'/'Dead Island 2 Workshop.app';dev=temp/'Development'
         (app/'Contents').mkdir(parents=True)
         (app/'Contents/Info.plist').write_bytes(plistlib.dumps({'CFBundleShortVersionString':'0.0.0'}))
         env={'DI2_WORKSHOP_INSTALL_APP':str(app),'DI2_WORKSHOP_DEV_DIR':str(dev),'DI2_WORKSHOP_SKIP_AGENT':'1','DI2_WORKSHOP_RUNTIME_DIR':str(temp/'Runtime'),'DI2_WORKSHOP_RUNTIME_PYTHON':sys.executable}

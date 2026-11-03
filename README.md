@@ -70,7 +70,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.19.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.19.1**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 
@@ -90,6 +90,6 @@ Version 0.16.0 adds the final highlighted **Finalize and Re-encrypt** action, ba
 
 0.18.0 accepts the newer observed post-game save revision and variable game-build header while preserving the complete input header during export. Normal ammo restoration was checked locally against the post-game sample; live behavior still needs confirmation.
 
-0.19.0 adds Mac startup updates: before the editor opens, check/download an available update, install with the app closed, and reopen automatically. Automatic Updates remains the preference; Open Workshop Now skips waiting. Failed checks open the existing version, and failed installations reopen it with a notice. Background updates and ordinary quit-time updates leave the app closed.
+0.19.1 opens the Mac editor immediately and checks/downloads updates in the background after five seconds. A dismissible update bar appears only when a verified update is ready. Use Update… → Quit & Install, or keep editing and install on a later quit. Offline/current checks never interrupt editing. Automatic Updates remains the preference.
 
 0.19.0 also keeps ammo fields editable after normal restoration and adds a separate Weapon Durability window with individual/scoped/global custom values. Normal durability restoration requires user-confirmed full-condition references, because maximum condition varies by weapon.
