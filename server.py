@@ -7,6 +7,7 @@ from urllib.parse import unquote
 import backup_storage
 import save_browser
 import legal_state
+import preset_storage
 import garlic_service
 import ps4_backups
 usb_busy=False
@@ -43,6 +44,9 @@ class Handler(BaseHTTPRequestHandler):
         elif p=='saves':
             try:self.reply(200,save_browser.scan())
             except Exception as e:self.reply(400,{'error':str(e)})
+        elif p=='presets':
+            try:self.reply(200,{'presets':preset_storage.list_presets()})
+            except ValueError as e:self.reply(400,{'error':str(e)})
         elif p=='named-backups':self.reply(200,{'backups':ps4_backups.list_backups()})
         elif p=='backup-folder':
             ps4_backups.root().mkdir(parents=True,exist_ok=True);self.reply(200,{'path':str(ps4_backups.root())})
@@ -57,13 +61,15 @@ class Handler(BaseHTTPRequestHandler):
         if origin and origin!='http://127.0.0.1:'+str(self.server.server_port):return self.reply(403,{'error':'Invalid origin'})
         p=self.endpoint()
         if p!='legal-accept' and not legal_state.is_accepted():return self.reply(403,{'error':'Read and acknowledge the first-use agreement first.'})
-        if p not in ('legal-accept','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
+        if p not in ('legal-accept','presets-save','presets-delete','open','prepare','profile-name','import-profiles','open-found','select-found','service-resume','service-key','service-test','service-decrypt','service-open','service-encrypt','service-encrypt-original','service-import-zip','service-resign','service-install','named-backup','restore-backup','open-backup'):return self.reply(404,{'error':'Not found'})
         try:
             n=int(self.headers.get('Content-Length',0))
             if not 0<n<=MAX:raise ValueError('File is empty or larger than 128 MB')
             raw=self.rfile.read(n)
             if len(raw)!=n:raise ValueError('Upload was interrupted')
             if p=='legal-accept':self.reply(200,legal_state.accept(json.loads(raw)))
+            elif p=='presets-save':self.reply(200,preset_storage.save(json.loads(raw)))
+            elif p=='presets-delete':self.reply(200,preset_storage.delete(json.loads(raw)))
             elif p in ('named-backup','restore-backup','open-backup'):
                 value=json.loads(raw)
                 if p=='named-backup':self.reply(200,ps4_backups.capture(save_browser.find_save(value.get('key')),value.get('name')))

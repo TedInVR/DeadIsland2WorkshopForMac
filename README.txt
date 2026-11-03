@@ -1,4 +1,4 @@
-DEAD ISLAND 2 WORKSHOP FOR MAC 0.13.0
+DEAD ISLAND 2 WORKSHOP FOR MAC 0.14.0
 
 Quit Workshop, extract this package, and double-click Install.command.
 It updates /Applications/Dead Island 2 Workshop.app and opens the same app.
@@ -21,7 +21,10 @@ No GitHub token or Save Wizard credentials are bundled in this package.
 
 Optional GarlicSaves preview: PS4 Decrypt / Encrypt remembers your worker key securely on this computer. Test Connection sends no saves. Decryption/encryption requires explicit upload confirmation. Live output compatibility and PS4 import still need testing.
 
-0.13.0: Character & Resources edits level, cash, materials, zombie parts, med-kits and fuses. USB Saves offers Back Up This Save and Named Backups. PS4 tools can resign one/all source-profile saves across CUSA game folders, with destination backups before replacement. Generic package processing depends on GarlicSaves game support and requires live testing.
+0.14.0: Character & Resources edits level, cash, materials, zombie parts, med-kits and fuses. USB Saves offers Back Up This Save and Named Backups. PS4 tools can resign one/all source-profile saves across CUSA game folders, with destination backups before replacement. Generic package processing depends on GarlicSaves game support and requires live testing.
 
 FIRST USE AND CREDITS
 Read the first-use agreement, check the box and agree, or quit. Acceptance stays local; no user list is sent online. Help includes Usage Agreement & Risks and Credits & Licenses. Modified gameplay must remain offline. Free/offline use does not establish legal permission or protection. See USAGE_TERMS.md, CREDITS.md, THIRD_PARTY_NOTICES.md and LICENSING_REVIEW.md. Catalog-table redistribution permission remains unverified.
+
+NAMED PRESETS
+Save as Preset stores the current mod/perk set locally between launches. Choose a preset and Apply Preset to use it on another weapon; Delete Preset leaves applied weapon changes intact. Done applies a replacement in the editor. Review & Export or Encrypt Edited Copy saves the edited file. Toolbar labels now stay visible and have hover help.

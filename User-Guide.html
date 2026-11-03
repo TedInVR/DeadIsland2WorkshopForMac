@@ -1,5 +1,11 @@
 <!doctype html><html><head><meta charset="utf-8"><title>Dead Island 2 Workshop User Guide</title><style>body{max-width:960px;margin:40px auto;padding:0 28px;background:#101618;color:#e7f0ed;font:16px/1.6 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}a{color:#bcead3}</style></head><body><p><a href="Credits.html">Credits &amp; Licenses</a></p><pre># Dead Island 2 Workshop for Mac — User Guide
 
+## Named mod and perk presets
+
+Select the mods/perks you want, click **Save as Preset**, give the set a name and save it. In the weapon editor or Create/Replace/Duplicate dialog, choose a saved set from **Saved mod &amp; perk presets**, then click **Apply Preset**. Applying a preset replaces that weapon&#x27;s selected mod/perk set; other weapon settings remain unchanged. Presets are stored locally between launches, independently of opened saves and app updates. A duplicate name requires confirmation before replacement. **Delete Preset** removes the saved set without changing weapons already using it. If a preset includes upgrades unavailable in the current save&#x27;s catalog, no changes are applied.
+
+The replacement dialog uses **Done** to apply your selection in the editor. It does not write to the USB save: use **Review &amp; Export** or **Encrypt Edited Copy** to save the edited copy. Top toolbar labels are shown in full without trailing dots; complete buttons wrap to additional rows and include descriptive hover help.
+
 ## First use, credits and risks
 
 On first launch, read the Experimental Use Agreement, check the acknowledgment box and choose **I Agree &amp; Continue**, or quit. Workshop stores only an acceptance flag, agreement version/hash and time locally; there is no registration or central user list. Ordinary updates remember acceptance. **Help → Usage Agreement &amp; Risks** reopens the notice; **Help → Credits &amp; Licenses** opens named credits, reference links and license boundaries.
@@ -8,7 +14,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.13.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results and uncompressed Save Wizard exports. Version 0.14.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -201,7 +207,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.13.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
+Workshop 0.14.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; PS4 import still needs testing; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 

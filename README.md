@@ -1,5 +1,11 @@
 # Dead Island 2 Workshop — Mac and Windows
 
+## Named mod and perk presets
+
+Select the mods/perks you want, click **Save as Preset**, give the set a name and save it. In the weapon editor or Create/Replace/Duplicate dialog, choose a saved set from **Saved mod & perk presets**, then click **Apply Preset**. Applying a preset replaces that weapon's selected mod/perk set; other weapon settings remain unchanged. Presets are stored locally between launches, independently of opened saves and app updates. A duplicate name requires confirmation before replacement. **Delete Preset** removes the saved set without changing weapons already using it. If a preset includes upgrades unavailable in the current save's catalog, no changes are applied.
+
+The replacement dialog uses **Done** to apply your selection in the editor. It does not write to the USB save: use **Review & Export** or **Encrypt Edited Copy** to save the edited copy. Top toolbar labels are shown in full without trailing dots; complete buttons wrap to additional rows and include descriptive hover help.
+
 ## First use, credits and risks
 
 On first launch, read the Experimental Use Agreement, check the acknowledgment box and choose **I Agree & Continue**, or quit. Workshop stores only an acceptance flag, agreement version/hash and time locally; there is no registration or central user list. Ordinary updates remember acceptance. **Help → Usage Agreement & Risks** reopens the notice; **Help → Credits & Licenses** opens named credits, reference links and license boundaries.
@@ -55,7 +61,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.13.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.14.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 

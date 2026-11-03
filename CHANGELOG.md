@@ -1,3 +1,10 @@
+# Version 0.14.0 — 3 November 2026
+
+- Save named mod/perk presets locally between launches, apply them to existing/new/replacement/duplicate weapons, replace a saved set with confirmation and delete presets without altering weapons already edited.
+- Reject unavailable preset upgrades without partial application; validate and atomically write local preset storage.
+- Rename Stage Replacement to Done, with clear guidance that export/encryption saves the file.
+- Remove toolbar ellipses, keep complete button labels, wrap buttons across rows and add descriptive hover help. Editor height follows the resized header.
+
 # Version 0.13.0 — 3 November 2026
 
 - Read and edit compressed GarlicSaves Dead Island 2 results as well as uncompressed Save Wizard exports. Recompute and verify compression framing and CityHash64 checksums on edited exports; keep no-edit exports identical.
