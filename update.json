@@ -1,6 +1,6 @@
 {
-  "version": "0.18.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.18.0.zip",
-  "sha256": "3791f80153df3cc130d60685df1e0cee50fd246b47a54ecdac9430fdf66fbb7b",
-  "notes": "Open the newer post-game save revision and retain its original version header. Includes normal ammo restoration for one/all characters; failed 9,999 fill and durability controls remain removed."
+  "version": "0.19.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.19.0.zip",
+  "sha256": "2391f5208446d0bc04485d637ddd277f05fa69151d6674313608a0ebf09d7c9f",
+  "notes": "Mac startup updates install and reopen automatically. Ammo custom amounts stay editable after normal restoration. Weapon Durability adds custom values and restoration from recorded full-condition references."
 }

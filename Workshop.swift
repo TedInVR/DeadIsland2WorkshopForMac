@@ -15,7 +15,9 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var autoUpdateItem: NSMenuItem?
     var applicationLock: Int32 = -1
     var sourcePaths = Set<String>()
-    let version = "0.18.0"
+    var startupChecking = false
+    var updateHandoffStarted = false
+    let version = "0.19.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
@@ -40,7 +42,25 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         window.minSize = NSSize(width: 860,height: 650)
         window.contentView = web; window.delegate = self
         window.center();window.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps: true)
-        startServer()
+        checkStartupUpdate()
+    }
+    func checkStartupUpdate(){
+        guard automaticUpdatesEnabled(),!CommandLine.arguments.contains("--skip-startup-update") else{
+            startServer()
+            if CommandLine.arguments.contains("--startup-update-failed"){alert("Automatic update could not finish", "Workshop has opened with the existing version. Your saves are unchanged. See Help → Update Status for details.")}
+            return
+        }
+        startupChecking=true
+        web.loadHTMLString("""
+        <!doctype html><html><body style="background:#101618;color:#e7f0ed;font:18px system-ui;padding:70px"><h1>Dead Island 2 Workshop</h1><p>Checking for updates…</p><p>Any available update will download and install before the editor opens. Workshop will reopen automatically.</p><button style="padding:12px;font:inherit" onclick="window.webkit.messageHandlers.workshop.postMessage({action:'skipStartupUpdate'})">Open Workshop Now</button></body></html>
+        """,baseURL:nil)
+        runUpdater("--startup"){obj in
+            guard self.startupChecking else{return}
+            self.startupChecking=false
+            if obj["status"] as? String == "queued",self.startPendingUpdate(reopen:true){
+                self.allowTermination=true;NSApp.terminate(nil)
+            }else{self.startServer()}
+        }
     }
     func makeMenus() {
         let bar = NSMenu(); NSApp.mainMenu = bar
@@ -156,17 +176,19 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         guard let bytes=try? Data(contentsOf:file),let value=(try? JSONSerialization.jsonObject(with:bytes)) as? [String:Any],let pid=value["pid"] as? Int,let time=value["time"] as? Double,pid>0,Date().timeIntervalSince1970-time<900 else{return false}
         return Darwin.kill(Int32(pid),0)==0
     }
-    func startPendingUpdate(){
-        guard startedNormally else{return}
+    @discardableResult func startPendingUpdate(reopen:Bool=false)->Bool{
+        if updateHandoffStarted{return true}
+        guard startedNormally else{return false}
         let support=FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop",isDirectory:true)
         let helper=support.appendingPathComponent("updater.py")
-        guard FileManager.default.fileExists(atPath:support.appendingPathComponent("pending-update.json").path),FileManager.default.fileExists(atPath:helper.path),let python=["/opt/homebrew/bin/python3","/usr/local/bin/python3","/usr/bin/python3"].first(where:{FileManager.default.isExecutableFile(atPath:$0)}) else{return}
+        guard FileManager.default.fileExists(atPath:support.appendingPathComponent("pending-update.json").path),FileManager.default.fileExists(atPath:helper.path),let python=["/opt/homebrew/bin/python3","/usr/local/bin/python3","/usr/bin/python3"].first(where:{FileManager.default.isExecutableFile(atPath:$0)}) else{return false}
         let log=support.appendingPathComponent("update-handoff.log")
         if !FileManager.default.fileExists(atPath:log.path){FileManager.default.createFile(atPath:log.path,contents:nil)}
         let handle=try? FileHandle(forWritingTo:log);try? handle?.seekToEnd()
-        let process=Process();process.executableURL=URL(fileURLWithPath:python);process.arguments=[helper.path,"--after-quit"];process.standardOutput=handle ?? FileHandle.nullDevice;process.standardError=handle ?? FileHandle.nullDevice
+        let process=Process();process.executableURL=URL(fileURLWithPath:python);process.arguments=[helper.path,"--after-quit"]+(reopen ? ["--reopen"]:[]);process.standardOutput=handle ?? FileHandle.nullDevice;process.standardError=handle ?? FileHandle.nullDevice
         do{
             try process.run()
+            updateHandoffStarted=true
             let value:[String:Any]=["pid":Int(process.processIdentifier),"time":Date().timeIntervalSince1970]
             if let bytes=try? JSONSerialization.data(withJSONObject:value){try? bytes.write(to:support.appendingPathComponent("install-intent.json"),options:.atomic)}
         }catch{
@@ -174,6 +196,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
             if let bytes=try? JSONSerialization.data(withJSONObject:value){try? bytes.write(to:support.appendingPathComponent("update-status.json"),options:.atomic)}
         }
         try? handle?.close()
+        return updateHandoffStarted
     }
     @objc func browseUSB(){web.evaluateJavaScript("window.openUSB()",completionHandler:nil)}
     @objc func openFile(){web.evaluateJavaScript("window.openSave()",completionHandler:nil)}
@@ -239,6 +262,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     func webView(_ webView:WKWebView,runJavaScriptConfirmPanelWithMessage message:String,initiatedByFrame frame:WKFrameInfo,completionHandler:@escaping (Bool)->Void){let a=NSAlert();a.messageText=message;a.addButton(withTitle:"Continue");a.addButton(withTitle:"Cancel");completionHandler(a.runModal() == .alertFirstButtonReturn)}
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage){
         guard let body=message.body as? [String:Any] else{return}
+        if body["action"] as? String == "skipStartupUpdate",startupChecking{startupChecking=false;startServer();return}
         if body["action"] as? String == "declineAgreement"{allowTermination=true;NSApp.terminate(nil);return}
         if body["action"] as? String == "credits"{credits();return}
         if body["action"] as? String == "rememberSource",let path=body["path"] as? String {sourcePaths.insert(URL(fileURLWithPath:path).resolvingSymlinksInPath().standardizedFileURL.path);return}

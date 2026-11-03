@@ -5,7 +5,7 @@
 <key>CFBundleDisplayName</key><string>Dead Island 2 Workshop</string>
 <key>CFBundleIdentifier</key><string>local.ted.di2workshop</string>
 <key>CFBundleVersion</key><string>17</string>
-<key>CFBundleShortVersionString</key><string>0.18.0</string>
+<key>CFBundleShortVersionString</key><string>0.19.0</string>
 <key>CFBundleExecutable</key><string>DI2Workshop</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleIconFile</key><string>Workshop.icns</string>

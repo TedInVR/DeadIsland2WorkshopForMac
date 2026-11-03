@@ -23,7 +23,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.18.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.19.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -152,9 +152,17 @@ Choose **Reserve Ammo** and select a character. **Restore Normal Maximum** stage
 
 Amounts are cross-checked against the published item-data table at https://github.com/Fristet/Dead-Island-2-Save-Editor-GUI/blob/master/data/inventory/items.csv and the supplied pre-edit save. These counts describe normal reserve stacks; DLC ammunition requires the relevant content. A refill retains one record of each known type, removes additional records of that same type, and adds missing known types with fresh entry IDs. Other resources, weapons and unselected characters are preserved. It does not claim to fix every possible malformed inventory or override game limits.
 
-**Undo Pending Ammo Changes** cancels pending manual ammo edits and a pending refill for the selected character, returning to that opened save's values. This is different from refilling. While a normal refill is staged its preview shows all seven amounts; undo it to return to individual count editing. Save through export or **Finalize and Re-encrypt**.
+**Undo Pending Ammo Changes** cancels pending manual ammo edits and a pending refill for the selected character, returning to that opened save's values. This is different from refilling. All seven numeric fields stay editable, including after a normal refill is staged. Enter a custom whole-number amount to override that type; other types keep their staged normal amounts. Custom values can exceed the normal amount up to 9,999,999. A saved value does not establish that the game will display or use it unchanged. Save through export or **Finalize and Re-encrypt**.
 
-The 9,999 fill buttons and experimental durability controls were removed following live testing: excessive ammunition produced duplicated inventory entries and melee durability 9,999 did not prevent normal wear. Manual reserve count edits remain experimental. No verified magazine-capacity edit or lasting durability boost is offered. Existing saved weapon runtime state remains preserved during ordinary edits and duplication.
+The one-click 9,999 ammo fill buttons were removed following live testing, but custom amount entry remains available. Excessive ammunition produced duplicated inventory entries, and melee durability 9,999 did not prevent normal wear. No verified magazine-capacity edit or lasting durability boost is offered. Existing saved weapon runtime state remains preserved during ordinary edits and duplication.
+
+## Weapon durability
+
+Open **Weapon Durability** in the header. Select a character or location to edit individual melee weapons, or enter a custom finite value from 0 to 1,000,000,000 and choose **Set This Character / Location** or **Set All Weapons**. Global custom changes include editable melee weapons in saved character inventories, lockers/unclaimed storage and queued weapons. Firearms, read-only attacks and staged deletions are excluded. Values change saved condition; they do not guarantee reduced wear or unlimited durability. All changes remain staged until export or Finalize and Re-encrypt.
+
+**Restore Normal Maximum** affects the chosen character/location. **Restore Normal Maximum — All Weapons** uses available references across saved weapons. Each weapon has its own full-condition value; there is no verified universal maximum in the save. The published editor manual explains this: https://steffenl.com/projects/dead-island-2-save-editor/manual/getting-started#notes . Workshop does not label a guessed common number as full condition.
+
+To establish accurate references, fully repair the relevant weapons at an in-game workbench, save the game, copy/decrypt that save and open it in Workshop without weapon edits. Under **Record full-condition references**, record this location or all weapons and confirm they really were fully repaired. This saves the opened weapons' current condition locally as your reference; recording a worn or modified value will not discover its true maximum. Restore controls are disabled when no matching reference exists, and restoration reports skipped weapons. Changed weapon generation, owner/profile, level, rarity, model or mods/perks invalidate matching; pasted and queued new weapons need their own saved reference. References remain local in DurabilityReferences.json and are not uploaded or published.
 
 ## Create a weapon
 
@@ -228,7 +236,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.18.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.19.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -268,6 +276,7 @@ Workshop does not automatically retry a failed submission, which avoids creating
 ## Updates
 
 - **Help → Download Updates** opens the latest ZIP download in your default browser. The public repository needs no GitHub login. Quit Workshop and run the downloaded installer.
+- **Automatic startup updates on Mac:** opening Workshop checks for updates before the editor starts. An available package is downloaded and checksum-verified, then the startup window closes so installation can run safely. Workshop reopens automatically afterward without repeating the check. If the check is unavailable or offline, the existing editor opens. **Open Workshop Now** skips waiting; a download already underway may finish and remain queued for the next quit. A failed installation reopens the existing app with a notice and records details under Update Status. The existing **Help → Automatic Updates** setting enables or disables startup checks.
 - **Help → Check for Updates** reads `update.json`. If a newer version is available, you can download it and choose **Quit & Install**. Installation starts immediately after the app finishes quitting. **Keep Editing** leaves the update queued for your next quit. Unsaved-edit and busy-operation guards still apply. If authentication is unavailable, it offers the browser download instead.
 - **Help → Update Status** shows the running app path/version, installed Applications version, queued version, and last installation result. **Open Update Folder** reveals `install.log` and `update-handoff.log` when troubleshooting. A successful installer exit is followed by checking the actual installed version.
 - **Help → Automatic Updates** is enabled by default and can be turned off. A per-user LaunchAgent checks every 15 minutes while the Mac is awake and you are signed in. Automatic checks/downloads/installation run only while Workshop is closed. Updates leave it closed.
@@ -305,4 +314,4 @@ Versions through 0.9.0 queued downloads for the 15-minute background agent and d
 
 ## Post-game format compatibility
 
-Version 0.18.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+Version 0.19.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.

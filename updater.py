@@ -8,6 +8,8 @@ SUPPORT=Path.home()/'Library/Application Support/Dead Island 2 Workshop'
 APP=Path('/Applications/Dead Island 2 Workshop.app')
 BROWSER='https://github.com/'+REPO+'/blob/main/downloads/Dead-Island-2-Workshop-Mac-Latest.zip?raw=true'
 MAX=32*1024*1024
+REQUEST_TIMEOUT=30
+GH_TIMEOUT=90
 class UpdateError(Exception):pass
 
 def atomic_json(path,value):
@@ -32,11 +34,11 @@ def github_bytes(path):
     # gh performs its own authentication. Never read, store, or log its token.
     gh=next((p for p in ['/opt/homebrew/bin/gh','/usr/local/bin/gh',shutil.which('gh')] if p and os.access(p,os.X_OK)),None)
     if gh:
-        r=subprocess.run([gh,'api','--hostname','github.com','-H','Accept: application/vnd.github.raw+json','repos/'+REPO+'/contents/'+path+'?ref='+BRANCH],capture_output=True,timeout=90)
+        r=subprocess.run([gh,'api','--hostname','github.com','-H','Accept: application/vnd.github.raw+json','repos/'+REPO+'/contents/'+path+'?ref='+BRANCH],capture_output=True,timeout=GH_TIMEOUT)
         if r.returncode==0 and len(r.stdout)<=MAX:return r.stdout
     url='https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/'+path
     try:
-        with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'DeadIsland2Workshop-Updater'}),timeout=30) as r:
+        with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'DeadIsland2Workshop-Updater'}),timeout=REQUEST_TIMEOUT) as r:
             b=r.read(MAX+1)
             if len(b)>MAX:raise UpdateError('Update exceeds size limit')
             return b
@@ -109,7 +111,17 @@ def queue():
     download(m)
     return record_status('queued','Downloaded and verified. Quit Workshop to start installation immediately. Workshop will stay closed afterward.',m['version'])
 
-def after_quit():
+def startup():
+    if not settings().get('automatic_updates',True):return {'status':'disabled'}
+    return queue()
+
+def reopen_app(failed=False):
+    # Only an opening-time update requests a restart; background updates stay closed.
+    args=['/usr/bin/open',str(APP),'--args','--skip-startup-update']
+    if failed:args.append('--startup-update-failed')
+    subprocess.Popen(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)
+
+def after_quit(reopen=False):
     try:
         pending=read_json('pending-update.json')
         if not pending:return {'status':'nothing_queued'}
@@ -118,12 +130,20 @@ def after_quit():
         while app_running():
             if time.monotonic()>=deadline:raise UpdateError('Workshop stayed open for two minutes. Quit all copies, then retry the update.')
             time.sleep(0.5)
-        return run(pending_only=True)
+        result=run(pending_only=True)
+    except Exception as e:
+        if reopen:
+            record_status('error',str(e),read_json('pending-update.json').get('version'))
+            (SUPPORT/'install-intent.json').unlink(missing_ok=True)
+            reopen_app(failed=True)
+        raise
     finally:(SUPPORT/'install-intent.json').unlink(missing_ok=True)
+    if reopen and result['status'] in ('installed','current'):reopen_app()
+    return result
 
 def run(pending_only=False):
     if not settings().get('automatic_updates',True) and not (SUPPORT/'pending-update.json').exists():return {'status':'disabled'}
-    # Never check, download, build, or install automatically while the app is open.
+    # Background updates never check, download, build or install while the app is open.
     if app_running():return {'status':'app_open'}
     m=read_json('pending-update.json')
     if not m:
@@ -169,9 +189,13 @@ def install_agent(python):
     return {'status':'agent_installed'}
 
 def main():
+    global REQUEST_TIMEOUT,GH_TIMEOUT
     p=argparse.ArgumentParser();g=p.add_mutually_exclusive_group(required=True)
-    for flag in ('check','queue','run','after-quit','enable','disable','status','install-agent'):g.add_argument('--'+flag,action='store_true')
+    for flag in ('check','queue','run','after-quit','startup','enable','disable','status','install-agent'):g.add_argument('--'+flag,action='store_true')
+    p.add_argument('--reopen',action='store_true')
     args=p.parse_args();SUPPORT.mkdir(parents=True,exist_ok=True)
+    if args.reopen and not args.after_quit:p.error('--reopen requires --after-quit')
+    if args.startup:REQUEST_TIMEOUT=10;GH_TIMEOUT=15
     # Agent registration does not perform an update; permit the installer to
     # refresh it while its parent update worker holds the serialization lock.
     if args.install_agent:
@@ -190,7 +214,8 @@ def main():
         try:
             if args.check:result=check()
             elif args.queue:result=queue()
-            elif args.after_quit:result=after_quit()
+            elif args.startup:result=startup()
+            elif args.after_quit:result=after_quit(reopen=args.reopen)
             elif args.run:result=run()
             elif args.status:result=dict(**settings(),installed=installed_version(),pending=read_json('pending-update.json').get('version'),last_update=read_json('update-status.json'))
             else:

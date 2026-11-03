@@ -58,3 +58,5 @@ Click **PS4 Decrypt / Encrypt** to enter and securely save a worker key on this 
 0.17.0 corrects the ammo Revert actions to Restore Normal Maximum for one/all characters, keeps a separate undo action, and removes the failed 9,999 fill and experimental durability controls.
 
 0.18.0 recognizes the newer post-game save revision and preserves its original build/version header.
+
+0.19.0 keeps ammo custom values editable after normal refills and adds the shared Weapon Durability window with custom values and user-recorded full-condition references. The startup auto-install/reopen flow is Mac-specific; Windows Check for Updates still opens releases.

@@ -77,5 +77,32 @@ class UpdaterTests(unittest.TestCase):
         log=(self.root/'install.log').read_text();self.assertIn('stdout failure',log);self.assertIn('stderr detail',log)
     def test_newer_version_check(self):
         with patch.object(u,'manifest',return_value={'version':'0.4.0'}),patch.object(u,'installed_version',return_value='0.3.0'):self.assertEqual(u.check()['status'],'available')
+    def test_startup_respects_disabled_preference_without_network(self):
+        u.atomic_json(self.root/'settings.json',{'automatic_updates':False})
+        with patch.object(u,'queue') as queue:
+            self.assertEqual(u.startup()['status'],'disabled');queue.assert_not_called()
+    def test_startup_queues_and_verifies_update_before_editor_opens(self):
+        b=self.package();m=self.manifest(b)
+        with patch.object(u,'manifest',return_value=m),patch.object(u,'installed_version',return_value='0.3.0'),patch.object(u,'github_bytes',return_value=b):
+            self.assertEqual(u.startup()['status'],'queued')
+        self.assertEqual((self.root/'pending-update.zip').read_bytes(),b)
+    def test_startup_handoff_reopens_only_after_install_and_clears_intent(self):
+        u.atomic_json(self.root/'pending-update.json',{'version':'0.4.0'});u.atomic_json(self.root/'install-intent.json',{'pid':1})
+        def reopen():self.assertFalse((self.root/'install-intent.json').exists())
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'run',return_value={'status':'installed'}),patch.object(u,'reopen_app',side_effect=reopen) as launch:
+            self.assertEqual(u.after_quit(reopen=True)['status'],'installed');launch.assert_called_once_with()
+    def test_startup_install_failure_reopens_old_app_with_failure_flag(self):
+        u.atomic_json(self.root/'pending-update.json',{'version':'0.4.0'});u.atomic_json(self.root/'install-intent.json',{'pid':1})
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'run',side_effect=u.UpdateError('Build failed')),patch.object(u,'reopen_app') as launch:
+            with self.assertRaisesRegex(u.UpdateError,'Build failed'):u.after_quit(reopen=True)
+            launch.assert_called_once_with(failed=True)
+        self.assertFalse((self.root/'install-intent.json').exists());self.assertEqual(u.read_json('update-status.json')['status'],'error')
+    def test_normal_quit_install_does_not_reopen(self):
+        u.atomic_json(self.root/'pending-update.json',{'version':'0.4.0'})
+        with patch.object(u,'app_running',return_value=False),patch.object(u,'run',return_value={'status':'installed'}),patch.object(u,'reopen_app') as launch:
+            u.after_quit();launch.assert_not_called()
+    def test_reopen_skips_second_startup_check(self):
+        with patch.object(u.subprocess,'Popen') as launch:
+            u.reopen_app();self.assertIn('--skip-startup-update',launch.call_args.args[0])
 
 if __name__=='__main__':unittest.main()

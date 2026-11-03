@@ -15,8 +15,10 @@ def main():
         (app/'Contents/Info.plist').write_bytes(plistlib.dumps({'CFBundleShortVersionString':'0.0.0'}))
         env={'DI2_WORKSHOP_INSTALL_APP':str(app),'DI2_WORKSHOP_DEV_DIR':str(dev),'DI2_WORKSHOP_SKIP_AGENT':'1','DI2_WORKSHOP_RUNTIME_DIR':str(temp/'Runtime'),'DI2_WORKSHOP_RUNTIME_PYTHON':sys.executable}
         with patch.object(u,'SUPPORT',support),patch.object(u,'APP',app),patch.object(u,'app_running',return_value=False),patch.object(u,'github_bytes',side_effect=lambda path:json.dumps(m).encode() if path=='update.json' else package),patch.dict(os.environ,env):
-            assert u.queue()['status']=='queued'
-            result=u.run(pending_only=True)
+            assert u.startup()['status']=='queued'
+            with patch.object(u,'reopen_app') as reopen:
+                result=u.after_quit(reopen=True)
+                reopen.assert_called_once_with()
             assert result['status']=='installed',result
             assert u.installed_version()==m['version']
             assert (app/'Contents/MacOS/DI2Workshop').is_file()

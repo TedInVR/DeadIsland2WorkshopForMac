@@ -1,3 +1,14 @@
+# Version 0.19.0 — 3 November 2026
+
+- On Mac, check for updates before opening the editor, download and verify an available update, close for installation and automatically reopen afterward.
+- Respect Automatic Updates; offer Open Workshop Now to skip waiting and open the existing editor if the check is unavailable.
+- Reopen the existing version with a notice if installation fails; prevent duplicate handoffs and recursive startup checks.
+- Preserve closed-app installation locks and ordinary/background update behavior, which leaves Workshop closed.
+- Add startup preference, verified queue, restart, failure recovery and no-restart-on-normal-quit tests.
+- Keep ammunition numeric fields editable after normal restoration; allow individual custom overrides, missing ammo types and validated consolidated stacks.
+- Add a separate Weapon Durability dialog with individual, selected-location and global custom values. Restore normal condition only from matching user-recorded fully repaired references; identify and skip missing or invalidated references.
+- Persist references privately with exact weapon/owner/generation/perk signatures, and validate condition exports and custom ammo overrides.
+
 # Version 0.18.0 — 3 November 2026
 
 - Recognize the newer observed post-game save revision and variable game-build field instead of matching one fixed build number.

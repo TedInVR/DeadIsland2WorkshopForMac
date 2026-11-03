@@ -1,8 +1,38 @@
 """Named perk sets stored only in the user's application-support folder."""
-import json,os,uuid
+import json,os,uuid,math,re
 from pathlib import Path
 import backup_storage
 class PresetError(ValueError):pass
+
+def durability_file():return backup_storage.folder().parent/'DurabilityReferences.json'
+def durability_references():
+    target=durability_file()
+    if not target.exists():return {}
+    try:
+        if target.stat().st_size>4*1024*1024:raise ValueError()
+        value=json.loads(target.read_text())
+        if not isinstance(value,dict) or len(value)>10000:raise ValueError()
+        for identity,entry in value.items():
+            if not re.fullmatch('[0-9a-fA-F]{32}:[0-9a-f]{64}',identity) or not isinstance(entry,dict) or set(entry)!={'signature','maximum'}:raise ValueError()
+            maximum=entry['maximum']
+            if not isinstance(entry['signature'],str) or not re.fullmatch('[0-9a-f]{64}',entry['signature']) or type(maximum) not in (int,float) or not math.isfinite(maximum) or not 0<maximum<=1_000_000_000:raise ValueError()
+        return value
+    except (OSError,ValueError,TypeError):raise PresetError('Saved full-durability references could not be read; existing references were not changed.') from None
+def record_durability(items):
+    values=durability_references()
+    for item in items:
+        identity=item['id'];maximum=item['maximum'];signature=item['signature']
+        if not re.fullmatch('[0-9a-fA-F]{32}',identity) or not re.fullmatch('[0-9a-f]{64}',signature) or type(maximum) not in (int,float) or not math.isfinite(maximum) or not 0<maximum<=1_000_000_000:raise PresetError('Choose melee weapons with a positive saved condition.')
+        values[identity+':'+signature]={'signature':signature,'maximum':maximum}
+    raw=json.dumps(values)
+    if len(values)>10000 or len(raw.encode())>4*1024*1024:raise PresetError('Full-durability reference storage is full.')
+    target=durability_file();target.parent.mkdir(parents=True,exist_ok=True);temporary=target.with_name(target.name+'.'+uuid.uuid4().hex+'.tmp')
+    try:
+        fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+        with os.fdopen(fd,'w') as f:f.write(raw);f.flush();os.fsync(f.fileno())
+        os.replace(temporary,target)
+    finally:temporary.unlink(missing_ok=True)
+    return values
 
 def file():return backup_storage.folder().parent/'PerkPresets.json'
 def validate(value):

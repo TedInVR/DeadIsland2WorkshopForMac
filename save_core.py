@@ -150,7 +150,8 @@ class Weapon:
             if 'RequiredRarity' in pd:self.rarity=string(b,pd['RequiredRarity'].data)[0].split('::')[-1]
         if 'RuntimeState' in self.by:self.runtime=Runtime(self.by['RuntimeState'])
     def info(self):
-        return dict(key=self.idx,id=self.id,name=WEAPON_NAMES.get(self.path,label(self.path)),path=self.path,group=self.group,level=self.level,rarity=self.rarity,perks=self.runtime.paths if self.runtime else [],durability=self.runtime.durability() if self.runtime and 'MeleeWeaponArchetype' in self.path else None,editable=bool(self.pg and self.runtime and '/Weapons/' in self.path and 'BareHands' not in self.path and 'FuryFists' not in self.path))
+        signature=hashlib.sha256((self.pg.raw() if self.pg else b'')+self.path.encode()+getattr(self,'owner',self.group).encode()+json.dumps(self.runtime.paths if self.runtime else []).encode()).hexdigest()
+        return dict(key=self.idx,id=self.id,name=WEAPON_NAMES.get(self.path,label(self.path)),path=self.path,group=self.group,level=self.level,rarity=self.rarity,perks=self.runtime.paths if self.runtime else [],durability_signature=signature,durability=self.runtime.durability() if self.runtime and 'MeleeWeaponArchetype' in self.path else None,editable=bool(self.pg and self.runtime and '/Weapons/' in self.path and 'BareHands' not in self.path and 'FuryFists' not in self.path))
     def rebuild(self,change):
         changes={}
         if 'level' in change or 'rarity' in change:
@@ -226,7 +227,7 @@ class Save:
                 wp=[];p=inner.data
                 for _ in range(count):
                     ps,end=props(b,p,inner.end)
-                    w=Weapon(b,p,end,ps,group,len(self.weapons));self.weapons.append(w);wp.append(w);p=end
+                    w=Weapon(b,p,end,ps,group,len(self.weapons));w.owner=sec.get('profile',{}).get('id',sec['name']);self.weapons.append(w);wp.append(w);p=end
                 if p!=inner.end:raise FormatError('Inventory item count/length mismatch')
                 self.arrays.append(dict(outer=outer,inner=inner,weapons=wp,section=secnum,group=group,kind=kind,key=len(self.arrays)))
         if not self.arrays:raise FormatError('No supported inventory arrays found')
@@ -249,7 +250,7 @@ class Save:
                     if count.typ!='IntProperty' or count.end-count.data!=4:raise FormatError('Unknown ammo count representation')
                     names={'ShotgunAmmo':'Shotgun shells','HeavyRoundsAmmo':'Heavy rounds','PistolAmmo':'Pistol rounds','CarbineAmmo':'Rifle rounds','NailgunNailsAmmo':'Nails','CrossbowBoltsAmmo':'Crossbow bolts','SawbladeDiskAmmo':'Sawblade disks'}
                     token=path.rsplit('DA_AmmoArchetype_',1)[-1]
-                    self.ammo.append(dict(key=len(self.ammo),name=names.get(token,label(path)),group=group,count=u32(b,count.data),field=count,section=si))
+                    self.ammo.append(dict(key=len(self.ammo),path=path,name=names.get(token,label(path)),group=group,count=u32(b,count.data),field=count,section=si))
                 if pos!=inner.end:raise FormatError('Archetype item count mismatch')
 
         character_editor.attach(self)

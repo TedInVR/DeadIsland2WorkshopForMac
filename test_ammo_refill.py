@@ -43,6 +43,21 @@ class AmmoRefillTests(unittest.TestCase):
             with self.assertRaises(FormatError):c.plan(self.s,[],{},{},groups)
     def test_all_characters_are_explicitly_scoped(self):
         edits=c.plan(self.s,[],{},{},[1,2]);self.assertEqual(len(edits[0]),2)
+    def test_custom_above_normal_overrides_refill_and_keeps_one_stack(self):
+        item=next(a for a in c.AMMO if a['name']=='Shotgun shells')
+        request=dict(group=1,path=item['path'],count=211)
+        edits=c.plan(self.s,[request],{},{},[1]);raw=edits[0][0][2];a=read_array(raw,0,1)
+        match=[r for r in a['records'] if r['path']==item['path']]
+        self.assertEqual(len(match),1);self.assertEqual(match[0]['count'],211)
+        for other in c.AMMO:
+            if other is not item:self.assertEqual(next(r for r in a['records'] if r['path']==other['path'])['count'],other['maximum'])
+    def test_custom_ammo_accepts_zero_and_rejects_invalid_values(self):
+        path=c.AMMO[0]['path']
+        for n in (-1,True,1.5,10_000_000):
+            with self.assertRaises(FormatError):c.plan(self.s,[dict(group=1,path=path,count=n)],{},{},[])
+        edits=c.plan(self.s,[dict(group=1,path=path,count=0)],{},{},[])
+        raw=edits[0][0][2];a=read_array(raw,0,1)
+        self.assertEqual(next(r for r in a['records'] if r['path']==path)['count'],0)
 
 @unittest.skipUnless(os.environ.get('DI2_TEST_SAVE'),'Requires private save fixture')
 class PrivateAmmoTests(unittest.TestCase):
@@ -58,5 +73,7 @@ class PrivateAmmoTests(unittest.TestCase):
         for a,b in zip(s.resource_arrays,t.resource_arrays):
             if a['key'] not in (selected,other):self.assertEqual(s.b[a['outer'].start:a['outer'].end],t.b[b['outer'].start:b['outer'].end])
         t=Save(s.rebuild({},ammo_refills=[g['key'] for g in groups]));c.verify(s,t,[],{},[g['key'] for g in groups])
+        request=dict(group=selected,path=c.AMMO[0]['path'],count=211)
+        t=Save(s.rebuild({},resource_changes=[request],ammo_refills=[selected]));c.verify(s,t,[request],{},[selected])
 
 if __name__=='__main__':unittest.main()
