@@ -54,7 +54,7 @@ class WireTests(unittest.TestCase):
         c=g.Client(KEY);progress=[]
         with patch.object(c,'call',side_effect=[{'status':'queued'},{'status':'running'},{'status':'done'},b'zip']) as call,patch.object(g.time,'sleep'):
             self.assertEqual(c.result('job',progress.append),b'zip')
-            self.assertEqual(len(progress),2);self.assertEqual(call.call_args.args[0],'/jobs/job/result')
+            self.assertEqual(len(progress),2);self.assertIn('has not started',progress[0]);self.assertIn('Last server response:',progress[0]);self.assertIn('processing your save',progress[1]);self.assertEqual(call.call_args.args[0],'/jobs/job/result')
     def test_busy_and_missing_key_prevent_operations(self):
         m=g.Manager(store=MemoryStore())
         with self.assertRaises(g.ServiceError):m.test()

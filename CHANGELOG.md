@@ -1,3 +1,11 @@
+# Version 0.20.0 — 4 November 2026
+
+- Add scoped exact-model copy counts, existing-weapon checkboxes and Select All / Edit Selected for batch perk, preset, level and rarity edits. Include queued copies in counts and exclude deletions.
+- Split main and creation editors into compact sections; paginate perks and move secondary service text/tools into expandable sections. Keep keyboard/focus explanations and small-window scrolling as fallback.
+- Add prominent reduced-motion-aware processing emphasis, elapsed queue wait and fresh server-status confirmation. Do not invent queue positions, percentages or finish estimates.
+- Add a three-stage Guide Me flow, with separate GarlicSaves and external Save Wizard finishing instructions; claim verified USB completion only after successful finalization.
+- Record standing interface preferences and test selection scoping, counts, walkthrough branching and status emphasis.
+
 # Version 0.19.1 — 3 November 2026
 
 - Open the Mac editor immediately; perform the automatic update check/download in the background after five seconds.

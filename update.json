@@ -1,6 +1,6 @@
 {
-  "version": "0.19.1",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.19.1.zip",
-  "sha256": "72870d145052f504cc7fab17352bd93831571cfe73cb659b58e28555c6329a0d",
-  "notes": "Mac opens immediately and checks for updates in the background. A dismissible update bar appears only when a verified download is ready. Installation waits until you quit, with unsaved-edit checks."
+  "version": "0.20.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.20.0.zip",
+  "sha256": "7fba4b57f910280df448f1a9726c8189c0d072beb9b2a4e4bb48dec2aaecc7ca",
+  "notes": "Guide Me walks through decryption, editing and finishing. Weapon copy counts and Select All / Edit Selected support backpack batches. Compact editing panels and prominent elapsed GarlicSaves job status."
 }

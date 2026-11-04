@@ -187,13 +187,15 @@ class Client:
         if not isinstance(job,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,100}',job):raise ServiceError('GarlicSaves did not return a valid job ID. Check the website before retrying.')
         return job
     def result(self,job,progress):
-        deadline=time.monotonic()+1800
+        started=time.monotonic();deadline=started+1800
         while True:
             value=self.call('/jobs/'+job);state=value.get('status') if isinstance(value,dict) else None
             if state=='done':return self.call('/jobs/'+job+'/result',binary=True)
             if state=='failed':raise ServiceError('GarlicSaves reported that the job failed. View its details on the GarlicSaves website. Job: '+job)
             if state not in ('queued','running'):raise ServiceError('Unexpected job status. Check GarlicSaves. Job: '+job)
-            progress('GarlicSaves job '+state+'. Keep Workshop open. Job: '+job)
+            elapsed=max(0,int(time.monotonic()-started));duration=str(elapsed//60)+'m '+str(elapsed%60)+'s'
+            message=('Waiting in GarlicSaves queue; decryption/processing has not started.' if state=='queued' else 'GarlicSaves is processing your save.')
+            progress(message+' Waited '+duration+'. Last server response: '+time.strftime('%H:%M:%S')+'. Keep Workshop open. Job: '+job)
             if time.monotonic()>=deadline:raise ServiceError('Stopped waiting after 30 minutes. The remote job may still finish; check GarlicSaves before retrying. Job: '+job)
             time.sleep(5)
 

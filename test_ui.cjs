@@ -205,8 +205,42 @@ const assert=require('assert');
    return finalizeFetch(url,o);
   };
   await w.openFinalize();assert(d.querySelector('#finalize-dialog').open);assert.equal(d.querySelector('#finalize-drive').value,'example-drive');assert(d.querySelector('#finalize-target').textContent.startsWith('/USB/PS4/SAVEDATA/'));
+  w.eval('guideRoute="garlic";guideStep="finish";guideFinalized=false');
   const beforeFailedFinalize=w.eval('JSON.stringify(changes)');await w.finalizeSave();assert(d.querySelector('#finalize-status').textContent.includes('failed'));assert.equal(w.eval('JSON.stringify(changes)'),beforeFailedFinalize);assert(!d.querySelector('#finalize-confirm').hidden);
-  finalizeInstalled=true;await w.finalizeSave();assert(d.querySelector('#finalize-status').textContent.includes('Saved to USB and verified'));assert.equal(w.eval('Object.keys(changes).length+ammoDirty()+extraDirty()+additions.length+deletions.length'),0);assert.equal(d.querySelector('#finalize-close').textContent,'Done');assert(d.querySelector('#finalize-confirm').hidden);assert(finalizeCalls.every(c=>c.drive_key==='example-drive'&&c.consent===true));w.fetch=finalizeFetch;d.querySelector('#finalize-dialog').close();
+  assert.equal(w.eval('guideStep'),'finish');assert(!w.eval('guideFinalized'));finalizeInstalled=true;await w.finalizeSave();assert.equal(w.eval('guideStep'),'complete');assert(w.eval('guideFinalized'));w.endGuide();assert(d.querySelector('#finalize-status').textContent.includes('Saved to USB and verified'));assert.equal(w.eval('Object.keys(changes).length+ammoDirty()+extraDirty()+additions.length+deletions.length'),0);assert.equal(d.querySelector('#finalize-close').textContent,'Done');assert(d.querySelector('#finalize-confirm').hidden);assert(finalizeCalls.every(c=>c.drive_key==='example-drive'&&c.consent===true));w.fetch=finalizeFetch;d.querySelector('#finalize-dialog').close();
+
+  // Counts are scoped to the inventory, independent of search, and track staged copies/deletions.
+  const backpack=w.eval('data.containers.find(c=>c.profile_id&&data.weapons.some(w=>w.group===c.name&&w.editable))');
+  d.querySelector('#group').value=backpack.name;w.changeWeaponGroup();
+  const target=w.eval('data.weapons.find(w=>w.group==='+JSON.stringify(backpack.name)+'&&w.editable)');
+  const countBefore=w.weaponModelCounts(backpack.name).get(target.path);
+  w.eval('additions.push({path:'+JSON.stringify(target.path)+',destination:'+backpack.key+',level:30,rarity:"Legendary",perks:[]})');
+  assert.equal(w.weaponModelCounts(backpack.name).get(target.path),countBefore+1);
+  w.eval('deletions.push('+target.key+')');assert.equal(w.weaponModelCounts(backpack.name).get(target.path),countBefore);
+  w.eval('deletions=[];additions=[]');d.querySelector('#search').value='no matching weapon';w.renderList();w.selectAllWeapons();
+  const checked=w.selectionTargets();assert(checked.length>0);assert(checked.every(x=>x.group===backpack.name&&x.editable));
+  assert.equal(checked.length,w.eval('data.weapons.filter(w=>w.group==='+JSON.stringify(backpack.name)+'&&w.editable).length'));
+  const othersBefore=w.eval('JSON.stringify(data.weapons.filter(w=>w.group!=='+JSON.stringify(backpack.name)+').map(w=>state(w)))');
+  await w.openSelectionEdit();d.querySelector('#selection-action').value='level';w.selectionEditControls();d.querySelector('#selection-level').value=22;w.applySelectionEdit();
+  assert(checked.every(x=>w.eval('state(data.weapons.find(w=>w.key==='+x.key+')).level')===22));
+  d.querySelector('#selection-action').value='add';w.selectionEditControls();const batchPerk=d.querySelector('#selection-value').value;w.applySelectionEdit();
+  assert(checked.every(x=>w.eval('state(data.weapons.find(w=>w.key==='+x.key+')).perks').includes(batchPerk)));
+  assert.equal(w.eval('JSON.stringify(data.weapons.filter(w=>w.group!=='+JSON.stringify(backpack.name)+').map(w=>state(w)))'),othersBefore);
+  d.querySelector('#search').value='';w.renderList();assert(d.querySelector('.weapon-count').textContent.match(/^\(\d+\)$/));
+  d.querySelector('#group').value=full.name;w.changeWeaponGroup();assert.equal(w.selectionTargets().length,0);
+  w.editorTab('settings');assert.equal(d.querySelector('#detail').dataset.tab,'settings');w.editorTab('perks');
+  w.createTab('perks');assert(d.querySelector('#new-weapon-pane').hidden);assert(!d.querySelector('#new-perks-pane').hidden);w.createTab('weapon');
+  w.select(target.key);assert(d.querySelectorAll('#perks .perk').length<=6);const firstPerk=d.querySelector('#perks .perk-name').textContent;w.changePerkPage(1);assert.notEqual(d.querySelector('#perks .perk-name').textContent,firstPerk);
+  // Guidance follows real opening/finalization state and does not perform uploads or writes itself.
+  w.endGuide();w.openGuide();assert(d.querySelector('#guide-choices').textContent.includes('Save Wizard'));
+  w.chooseGuideRoute('wizard');assert(!d.querySelector('#guidebar').hidden);w.acceptSave(originalData,'guide.sav');
+  assert.equal(w.eval('guideStep'),'edit');w.openGuide();const finishGuide=[...d.querySelectorAll('#guide-choices button')].find(b=>b.textContent.includes('My edits are ready'));finishGuide.click();
+  assert.equal(w.eval('guideStep'),'finish');assert(d.querySelector('#guide-text').textContent.includes('cannot verify'));
+  w.endGuide();w.chooseGuideRoute('garlic');assert.equal(w.eval('guideStep'),'source');assert(!d.querySelector('#guide-text').textContent.includes('verified'));
+  w.eval('guideStep="finish"');w.openGuide();assert(d.querySelector('#guide-choices').textContent.includes('Finalize and Re-encrypt'));w.endGuide();
+  w.eval('serviceActive=true');w.serviceRender({has_key:true,message:'Waiting in GarlicSaves queue'});assert(d.querySelector('#service-status').classList.contains('processing'));assert(d.querySelector('#status').classList.contains('processing'));
+  w.eval('serviceActive=false');w.serviceRender();w.status('Ready');assert(!d.querySelector('#service-status').classList.contains('processing'));assert(!d.querySelector('#status').classList.contains('processing'));
+  console.log('PASS: scoped exact-model counts; search-independent backpack selection; bulk levels/perks preserve other characters; selection resets across locations; compact tabs and perk paging; separate GarlicSaves/Save Wizard guide paths; active processing emphasis');
   console.log('PASS: highlighted last-step finalize flow, failed-write handling and refreshed baseline; half resource fill and character levels; scoped/global ammo actions; clipboard snapshot paste; per-weapon preset labels and update-existing mode; named presets save/reload/apply to another weapon/create/delete; Done replacement label and header tooltips; USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; custom/scoped durability and recorded normal references; editable ammo overrides and normal refills; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();
  }finally{proc.kill()}

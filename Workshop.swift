@@ -20,7 +20,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var webTop: NSLayoutConstraint!
     var queuedVersion = ""
     var updateHandoffStarted = false
-    let version = "0.19.1"
+    let version = "0.20.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         let support = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Dead Island 2 Workshop", isDirectory: true)
