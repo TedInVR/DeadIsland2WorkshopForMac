@@ -331,6 +331,7 @@ class Save:
         return replace_props(raw,0,end,fields,{k:by[k].replace(target.by[k].payload()) for k in ('EntryID','UniqueId')})
 
     def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None,ammo_refills=None,story_resets=None):
+        if story_resets:raise FormatError(story_editor.RESET_UNAVAILABLE)
         resource_changes=resource_changes or [];character_levels=character_levels or {}
         deletions=deletions or []
         if not isinstance(deletions,list) or any(type(k)!=int for k in deletions):raise FormatError('Invalid deletion list')
@@ -407,7 +408,6 @@ class Save:
             payload.append(self.b[pos:sec['end']]);data=b''.join(payload)
             out.extend([self.b[last:sec['sizepos']],put(len(data)),data]);last=sec['end']
         out.append(self.b[last:]);result=b''.join(out)
-        if story_resets:result=story_editor.apply(Save(result),story_resets)
         # Re-parse entire output and verify every requested value, before returning bytes.
         check=Save(result)
         if len(check.weapons)!=len(self.weapons)-len(deleted)+len(additions):raise FormatError('Validation changed inventory count')

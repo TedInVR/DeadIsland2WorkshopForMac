@@ -31,7 +31,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.22.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.22.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -244,7 +244,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.22.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.22.1 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -322,15 +322,15 @@ Versions through 0.9.0 queued downloads for the 15-minute background agent and d
 
 ## Post-game format compatibility
 
-Version 0.22.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+Version 0.22.1 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
 
-## Reset Story (experimental)
+## Story reset temporarily unavailable
 
-Open **Character & Resources → Reset Story**, choose the character and click **Stage Story Reset**. No reference character, low-level character or unused save slot is required. The reset generates an empty initial campaign; the game initializes its Regular or NG+ opening on the next load. The character keeps its existing mode. NG+ may skip the prologue according to the game’s own initialization.
+Version 0.22.1 disables story reset in the interface and exporter. A console test of the previous campaign-clearing method produced a New Game slot rather than a playable replay of an existing character. Menu progress bars also remained completed. Byte-preservation checks did not establish correct game behavior.
 
-This clears missions (including DLC), objectives, world interactions, dialogue, map discovery and saved position. It preserves identity, XP/level, inventory, weapon state, resources, skills, challenges, collectibles, cosmetics, entitlements, rewards and shortcuts. Other characters and shared lockers remain unchanged. Lowering or raising a character’s level does not affect reset eligibility; the current level is retained.
+If affected, restore the full save backup from before the reset. Workshop saved an **opened** decrypted snapshot under **Help → Open Backup Folder**. USB finalization also backed up the prior encrypted destination under **USB Saves → Named Backups**. Choose a backup from before the failed reset, keeping both encrypted companion files together when restoring a USB pair. A full backup restores the whole save, including its other characters; identify the correct timestamp first. Opening, exporting or updating the app does not repair a previously reset file.
 
-Use **Undo This Reset** to remove a pending reset. Review & Export and Finalize and Re-encrypt both include staged resets. Automatic backups and export protections apply. The exporter verifies preservation of all protected bytes. Console behavior is not yet verified: the game may alter carried items or impose progression rules during initialization and opening sequences. Test a separate backed-up copy first. No personal templates are bundled.
+No replacement reset operation has been console-verified. The intended eventual feature still requires no reference character and must retain level, inventory, skills and character identity.
 
 ## Reopening after an update
 

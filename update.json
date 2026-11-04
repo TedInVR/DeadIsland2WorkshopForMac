@@ -1,6 +1,6 @@
 {
-  "version": "0.22.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.22.0.zip",
-  "sha256": "db21dbff13e8c10a9b0b3a0f5ad06e8cdd0afaa8563c0ed4a5f0e6a0c06596b6",
-  "notes": "Reset Story requires no reference character and preserves XP/level, inventory and skills. Explicit update installation reopens Workshop with checked macOS launch handling."
+  "version": "0.22.1",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.22.1.zip",
+  "sha256": "0b09915ef884af887f1cd31a4e6e0cd0b6f6fe5fafd8b3cd5ae68c5633308f2e",
+  "notes": "Disables the faulty story-reset method after a console regression. Restore a pre-reset backup if affected; updating does not repair reset saves. Other editing features remain available."
 }

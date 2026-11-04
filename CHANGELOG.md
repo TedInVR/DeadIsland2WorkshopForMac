@@ -1,3 +1,8 @@
+# Version 0.22.1 — 4 November 2026
+
+- Disable story reset in the interface and reject all nonempty story-reset requests before export or re-encryption. A live-console test of the campaign-clearing approach produced New Game rather than Continue and retained completed menu progress.
+- Remove the unsafe campaign-clearing writer. Keep other editing functions available. Add backup recovery instructions; this update does not repair already-reset saves.
+
 # Version 0.22.0 — 4 November 2026
 
 - Replace reference-character story transfer with generated campaign initialization. Choose only the target; no unused character or low-level donor is required. Clear campaign/world/quest/location state while preserving XP, level, inventory, skills and other character state. Console behavior remains experimental.

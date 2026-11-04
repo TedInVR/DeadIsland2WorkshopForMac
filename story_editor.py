@@ -1,4 +1,4 @@
-"""Experimental generated story reset. Character data is preserved verbatim.
+"""Story diagnostics; reset writes suspended after a live-console regression. Character data is preserved verbatim.
 
 Independent reader of the section/node/script framing documented by
 SteffenL/file-format-docs. No personal save templates or reference characters are used.
@@ -133,11 +133,10 @@ def inspect(s):
         result.append(dict(id=pf['id'],name=pf['name'],ng=pf['ng'],level=pf.get('level'),location=location,completed=states.get('Complete',0),started=started))
     return result
 
+RESET_UNAVAILABLE = ('Story reset is temporarily unavailable: clearing campaign data can make an existing character appear as New Game. Restore a pre-reset backup; opening the affected save does not repair it.')
+
 def info(s):
-    if hasattr(s,'_story_info'):return s._story_info
-    try:result=dict(available=True,characters=inspect(s))
-    except (ValueError,struct.error,IndexError,KeyError) as e:result=dict(available=False,characters=[],reason=str(e))
-    s._story_info=result;return result
+    return dict(available=False,characters=[],reason=RESET_UNAVAILABLE)
 
 # Keep character statistics, skills, challenges, collectibles, cosmetics,
 # entitlements, rewards, shortcuts and all inventory outside this allowlist.
@@ -161,86 +160,8 @@ def summary_node(s,pid):
     if end!=sc.end:raise StoryError('Unsupported character summary tail')
     return sec,nd,sc,records
 
-def initial_state(s,root):
-    """Generate an uninitialized campaign from typed fields, never a donor save.
-
-    Empty campaign/world collections and an unset saved location match the
-    observed fresh NG+ slot. The game chooses its mode-specific opening on load.
-    No identity, XP, inventory, skill or stat fields are reset.
-    """
-    from save_core import prop,put
-    changes=[]
-    stats=named(root.scripts,'QuestStats')
-    if {f.name for f in stats.fields}!={'QuestRecords','ObjectiveRecords'}:raise StoryError('Unsupported quest statistics fields')
-    stats_edits=[]
-    for f in stats.fields:
-        inner,end=prop(s.b,f.data)
-        if inner is None or inner.extra!='QuestRecord' or end!=f.end:raise StoryError('Unsupported quest statistics schema')
-        stats_edits.append((f.start,f.end,f.replace(inner.replace(put(0)+put(0)))))
-    changes.append((stats.start,stats.end,splice(s.b,stats.start,stats.end,stats_edits)))
-    campaign=named(root.children,'Campaign')
-    if set(c.name for c in campaign.children)-set(CAMPAIGN_STORY):raise StoryError('Unknown campaign state; reset is unsupported for this save')
-    changes.append((campaign.start,campaign.end,put(0)+put(len(campaign.scripts))+b''.join(raw(s.b,x) for x in campaign.scripts)))
-    discovery=named(root.children,'Discovery')
-    if discovery.children or len(discovery.scripts)!=1:raise StoryError('Unsupported discovery state')
-    ds=discovery.scripts[0];df=field(ds,'DiscoveredObjects')
-    if len(ds.fields)!=1 or df.typ!='ArrayProperty' or df.extra!='StrProperty':raise StoryError('Unsupported map discovery schema')
-    changes.append((df.start,df.end,df.replace(put(0))))
-    game=named(root.children,'GameProgression')
-    if game.children or len(game.scripts)!=1:raise StoryError('Unsupported saved location')
-    gp=game.scripts[0]
-    if {f.name for f in gp.fields}!={'MapPath','PlayerLocation','bSavedPlayerLocation'}:raise StoryError('Unsupported saved location fields')
-    for f in gp.fields:
-        if f.name=='MapPath':
-            if f.typ!='StrProperty':raise StoryError('Unsupported location path')
-            value=f.replace(put(0))
-        elif f.name=='PlayerLocation':
-            if f.typ!='StructProperty' or f.extra!='Vector' or len(f.payload())!=12:raise StoryError('Unsupported location vector')
-            value=f.replace(bytes(12))
-        else:
-            if f.typ!='BoolProperty' or len(f.payload()) or f.raw()[-1:]!=b'\0':raise StoryError('Unsupported saved-location flag')
-            value=bytearray(f.raw());value[-2]=0;value=bytes(value)
-        changes.append((f.start,f.end,value))
-    for name in ('Dialogue','Sectors'):
-        nd=named(root.children,name);changes.append((nd.start,nd.end,put(0)+put(0)))
-    return changes
-
-
 def apply(s,requests):
-    """Clear selected stories; use the game's mode-specific initialization."""
-    from save_core import put
-    if not isinstance(requests,list) or len(requests)>12:raise StoryError('Invalid story reset list')
-    if not requests:return s.b
-    known={sec['name']:sec for sec in s.sections if 'profile' in sec};targets=set()
-    for request in requests:
-        if not isinstance(request,dict) or set(request)!={'target'} or not isinstance(request['target'],str):raise StoryError('Choose a character to reset')
-        pid=request['target']
-        if pid not in known or pid in targets:raise StoryError('Invalid or duplicate story reset character')
-        targets.add(pid)
-    edits={}
-    for pid in targets:
-        sec=known[pid];root=tree(s,sec);edits[s.sections.index(sec)]=initial_state(s,root)
-        summary,nd,sc,records=summary_node(s,pid)
-        kept=[x[3] for x in records if x[0] not in SUMMARY_STORY]
-        edits.setdefault(s.sections.index(summary),[]).append((sc.tail,sc.end,put(len(kept))+b''.join(kept)))
-    output=[];last=0
-    for si,sec in enumerate(s.sections):
-        if si not in edits:continue
-        data=splice(s.b,sec['start'],sec['end'],edits[si]);output.extend((s.b[last:sec['sizepos']],put(len(data)),data));last=sec['end']
-    output.append(s.b[last:]);result=b''.join(output)
-    from save_core import Save
-    check=Save(result)
-    for si,sec in enumerate(s.sections):
-        new=check.sections[si];wanted=splice(s.b,sec['start'],sec['end'],edits.get(si,[]))
-        if check.b[new['start']:new['end']]!=wanted:raise StoryError('Story reset preservation check failed')
-        if sec['name'] not in targets:continue
-        before=tree(s,sec);after=tree(check,new)
-        for sc in before.scripts:
-            if sc.name!='QuestStats' and raw(s.b,sc)!=raw(check.b,named(after.scripts,sc.name)):raise StoryError('Story reset changed character data')
-        for child in before.children:
-            if child.name not in ROOT_STORY+('Campaign',) and raw(s.b,child)!=raw(check.b,named(after.children,child.name)):raise StoryError('Story reset changed inventory or character state')
-        bc=named(before.children,'Campaign');ac=named(after.children,'Campaign')
-        if ac.children:raise StoryError('Campaign reset validation failed')
-        if [raw(s.b,x) for x in bc.scripts]!=[raw(check.b,x) for x in ac.scripts]:raise StoryError('Story reset changed fury state')
-        if quest_counts(check,after)!=[0,0]:raise StoryError('Quest reset validation failed')
-    return result
+    """Fail closed after the live-console regression. Never clear campaigns."""
+    if not isinstance(requests,list):raise StoryError('Invalid story reset list')
+    if requests:raise StoryError(RESET_UNAVAILABLE)
+    return s.b

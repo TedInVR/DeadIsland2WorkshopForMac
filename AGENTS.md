@@ -13,3 +13,7 @@ Show an exact-model copy count beside weapon names, scoped to the chosen charact
 ## Story reset invariant
 
 Story reset must preserve the selected character’s current XP/level regardless of any previous manual level edits. Preserve inventory, weapons, resources, skills and character identity; generate the initial campaign state in the existing Regular/NG+ mode. Never require another character to be kept at an early story point. Never publish personal save templates. Clearly distinguish byte-preservation checks from unverified in-game behavior.
+
+## Story reset regression — 4 November 2026
+
+A live-console test of 0.22.0 showed completed progress bars and New Game instead of Continue after clearing campaign/location state. Treat generated empty campaign reset as disproven. Version 0.22.1 blocks reset writes and disables the control. Do not re-enable this method or call byte preservation evidence of a working mission replay. Recovery requires a pre-reset backup; an app update does not repair affected saves. A future implementation needs initialized mission, objective, world, location and menu-summary state, while preserving character data and requiring no permanent donor.
