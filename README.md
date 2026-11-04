@@ -70,7 +70,7 @@ The public repository supports direct downloads without authentication. If you m
 
 ## Preview status
 
-Version **0.20.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
+Version **0.21.0**. Save serialization and interface regression tests passed; the native 0.1.0 installer/window was tested by the user. The user has reported opening/exporting from the Mac app and completing a Save Wizard import. New controls and their in-game effects still need testing on the Mac/PS4.
 
 Workshop offers an opt-in **GarlicSaves connection preview** for online PS4 decryption/re-encryption, alongside the existing Save Wizard workflow. Enter a worker key locally; selected saves are sent only after confirmation. Actual GarlicSaves output compatibility and a PS4 console round trip still need live testing. See [PS4 encryption](USER_GUIDE.md#ps4-encryption-and-save-wizard).
 
@@ -90,8 +90,10 @@ Version 0.16.0 adds the final highlighted **Finalize and Re-encrypt** action, ba
 
 0.18.0 accepts the newer observed post-game save revision and variable game-build header while preserving the complete input header during export. Normal ammo restoration was checked locally against the post-game sample; live behavior still needs confirmation.
 
-0.20.0 opens the Mac editor immediately and checks/downloads updates in the background after five seconds. A dismissible update bar appears only when a verified update is ready. Use Update… → Quit & Install, or keep editing and install on a later quit. Offline/current checks never interrupt editing. Automatic Updates remains the preference.
+0.21.0 opens the Mac editor immediately and checks/downloads updates in the background after five seconds. A dismissible update bar appears only when a verified update is ready. Use Update… → Quit & Install, or keep editing and install on a later quit. Offline/current checks never interrupt editing. Automatic Updates remains the preference.
 
 0.19.0 also keeps ammo fields editable after normal restoration and adds a separate Weapon Durability window with individual/scoped/global custom values. Normal durability restoration requires user-confirmed full-condition references, because maximum condition varies by weapon.
 
-0.20.0 adds scoped weapon counts, Select All / Edit Selected, compact editing panels, prominent live service status and Guide Me. See USER_GUIDE.md for the distinct GarlicSaves and Save Wizard paths.
+0.21.0 adds scoped weapon counts, Select All / Edit Selected, compact editing panels, prominent live service status and Guide Me. See USER_GUIDE.md for the distinct GarlicSaves and Save Wizard paths.
+
+0.21.0 adds experimental same-save, same-mode story reset under Character & Resources. Level/XP, inventory and skills are preserved byte-for-byte; a saved early character supplies the starting point. Console behavior is not yet verified. Explicit Quit & Install reopens the Mac app after installation.

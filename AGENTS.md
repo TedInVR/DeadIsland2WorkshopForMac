@@ -9,3 +9,7 @@ Keep the existing application identity, user settings, presets, backups and cred
 ## User interface preferences — 4 November 2026
 
 Show an exact-model copy count beside weapon names, scoped to the chosen character/location and including staged changes. Provide an obvious Select All / Edit Selected workflow for one backpack; exclude other characters, lockers, deletions and read-only attacks unless explicitly selected. Prefer compact panels, tabs and collapsible secondary information over scrolling the main editor or dialogs. Keep labels readable; show detailed explanations on hover/focus and in Help. Give active service jobs a prominent, gently pulsing status with reduced-motion support, elapsed wait and fresh status confirmation; animation is not a completion estimate. Provide a simple Guide Me entry point that walks through opening/decryption, editing, re-encryption and console transfer, distinguishing GarlicSaves from the external Save Wizard workflow. Do not claim USB readiness before actual verified finalization or the user's explicit external-workflow acknowledgment.
+
+## Story reset invariant
+
+Story reset must preserve the selected character’s current XP/level even when the starting-point character was manually changed to a different level. Preserve inventory, weapons, resources, skills and character identity; select references by story state and same Regular/NG+ mode, not level. Never publish personal save templates. Clearly distinguish byte-preservation checks from unverified in-game behavior.

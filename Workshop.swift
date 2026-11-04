@@ -20,6 +20,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     var webTop: NSLayoutConstraint!
     var queuedVersion = ""
     var updateHandoffStarted = false
+    var reopenAfterUpdate = false
     let version = "0.20.0"
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
@@ -152,9 +153,9 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     func offerQueuedInstall(_ obj:[String:Any]){
         guard obj["status"] as? String == "queued" else{alert("Workshop Update",obj["message"] as? String ?? "The update could not be queued. See Help → Update Status.");return}
         let a=NSAlert();a.messageText="Ready to install version "+(obj["version"] as? String ?? "")
-        a.informativeText="The download is verified. Quit Workshop to start installation immediately. Export any edits you want to keep first. Workshop will stay closed afterward."
+        a.informativeText="The download is verified. Quit Workshop to start installation immediately. Export any edits you want to keep first. Workshop will reopen after installation."
         a.addButton(withTitle:"Quit & Install");a.addButton(withTitle:"Keep Editing")
-        if a.runModal() == .alertFirstButtonReturn{quitApp()}
+        if a.runModal() == .alertFirstButtonReturn{requestQuit(reopen:true)}
     }
     @objc func updates(){
         runUpdater("--check"){obj in
@@ -214,7 +215,8 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
     @objc func createWeapon(){web.evaluateJavaScript("window.createWeapon()",completionHandler:nil)}
     @objc func exportFile(){web.evaluateJavaScript("window.reviewSave()",completionHandler:nil)}
     @objc func closeWindow(){window.performClose(nil)}
-    @objc func quitApp(){
+    @objc func quitApp(){requestQuit(reopen:false)}
+    func requestQuit(reopen:Bool){
         if exporting {alert("Export in progress", "Please wait until saving has finished before quitting.");return}
         web.evaluateJavaScript("({dirty:typeof changes==='undefined'?0:Object.keys(changes).length+additions.length+deletions.length+ammoDirty()+extraDirty(),busy:typeof busy!=='undefined'&&busy})") { value, _ in
             let state=value as? [String:Any] ?? [:]
@@ -223,7 +225,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
                 let a=NSAlert();a.messageText="Quit Workshop?";a.informativeText="Edits are kept in memory. If you have not exported them, they will be discarded.";a.addButton(withTitle:"Keep Editing");a.addButton(withTitle:"Quit")
                 if a.runModal() != .alertSecondButtonReturn{return}
             }
-            self.allowTermination=true;NSApp.terminate(nil)
+            self.reopenAfterUpdate=reopen;self.allowTermination=true;NSApp.terminate(nil)
         }
     }
     func applicationShouldTerminate(_ sender:NSApplication)->NSApplication.TerminateReply{
@@ -231,7 +233,7 @@ final class Workshop: NSObject, NSApplicationDelegate, WKScriptMessageHandler, W
         quitApp();return .terminateCancel
     }
     func windowShouldClose(_ sender: NSWindow)->Bool{quitApp();return false}
-    func applicationWillTerminate(_ notification: Notification){startPendingUpdate();worker?.terminate();if applicationLock >= 0 {flock(applicationLock, LOCK_UN);Darwin.close(applicationLock)};if let r=ready{try? FileManager.default.removeItem(at:r)};try? logHandle?.close()}
+    func applicationWillTerminate(_ notification: Notification){startPendingUpdate(reopen:reopenAfterUpdate);worker?.terminate();if applicationLock >= 0 {flock(applicationLock, LOCK_UN);Darwin.close(applicationLock)};if let r=ready{try? FileManager.default.removeItem(at:r)};try? logHandle?.close()}
     func alert(_ title:String,_ message:String){let a=NSAlert();a.messageText=title;a.informativeText=message;a.addButton(withTitle:"OK");a.runModal()}
     func startServer(){
         guard let resources=Bundle.main.resourceURL else {alert("Unable to start","App resources are missing.");return}

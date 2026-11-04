@@ -28,19 +28,19 @@ if [[ ! -x "$RUNTIME/bin/python3" ]] || ! "$RUNTIME/bin/python3" -c 'import zsta
     "$RUNTIME/bin/python3" -m pip install --disable-pip-version-check --only-binary=:all: -r "$SOURCE/requirements-runtime.txt" || fail "Compression support could not be installed. Check your internet connection and retry. Your existing app is unchanged."
 fi
 "$RUNTIME/bin/python3" -c 'import zstandard,cityhash' || fail "Workshop’s compression support is incomplete."
-"$PYTHON" -c 'import py_compile,sys; [py_compile.compile(x,doraise=True,cfile="/tmp/di2-workshop-check.pyc") for x in sys.argv[1:]]' "$SOURCE/preset_storage.py" "$SOURCE/save_codec.py" "$SOURCE/legal_state.py" "$SOURCE/ps4_backups.py" "$SOURCE/character_editor.py" "$SOURCE/credential_store.py" "$SOURCE/garlic_service.py" "$SOURCE/server.py" "$SOURCE/save_browser.py" "$SOURCE/backup_storage.py" "$SOURCE/save_core.py" "$SOURCE/updater.py"
+"$PYTHON" -c 'import py_compile,sys; [py_compile.compile(x,doraise=True,cfile="/tmp/di2-workshop-check.pyc") for x in sys.argv[1:]]' "$SOURCE/preset_storage.py" "$SOURCE/save_codec.py" "$SOURCE/legal_state.py" "$SOURCE/ps4_backups.py" "$SOURCE/story_editor.py" "$SOURCE/character_editor.py" "$SOURCE/credential_store.py" "$SOURCE/garlic_service.py" "$SOURCE/server.py" "$SOURCE/save_browser.py" "$SOURCE/backup_storage.py" "$SOURCE/save_core.py" "$SOURCE/updater.py"
 mkdir -p "$BUILD/Dead Island 2 Workshop.app/Contents/MacOS" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources"
 if ! "$SWIFTC" -sdk "$SDK" -O -framework AppKit -framework WebKit "$SOURCE/Workshop.swift" -o "$BUILD/Dead Island 2 Workshop.app/Contents/MacOS/DI2Workshop"; then
     fail "The Mac build did not finish. Send the compiler message above to ChatGPT. Your existing app and saves have not been changed."
 fi
 cp "$SOURCE/Info.plist" "$BUILD/Dead Island 2 Workshop.app/Contents/Info.plist"
-for name in server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py character_editor.py resource_catalog.json ammo_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/$name"; done
+for name in server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py story_editor.py character_editor.py resource_catalog.json ammo_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/$name"; done
 printf '%s\n' "$RUNTIME/bin/python3" > "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/PythonPath.txt"
 cp -R "$SOURCE/third_party_licenses" "$BUILD/Dead Island 2 Workshop.app/Contents/Resources/third_party_licenses"
 /usr/bin/codesign --force --sign - "$BUILD/Dead Island 2 Workshop.app"
 mkdir -p "$DEV"
 if [[ "$SOURCE" != "$DEV" ]]; then
-    for name in Install.command Workshop.swift server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py character_editor.py resource_catalog.json ammo_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Info.plist Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$DEV/$name"; done
+    for name in Install.command Workshop.swift server.py preset_storage.py save_codec.py requirements-runtime.txt legal_state.py ps4_backups.py story_editor.py character_editor.py resource_catalog.json ammo_catalog.json credential_store.py garlic_service.py save_browser.py backup_storage.py save_core.py index.html Info.plist Workshop.icns catalog.json updater.py User-Guide.html USER_GUIDE.md README.txt USAGE_TERMS.md CREDITS.md Credits.html THIRD_PARTY_NOTICES.md LICENSING_REVIEW.md; do cp "$SOURCE/$name" "$DEV/$name"; done
 fi
 if [[ "$SOURCE" != "$DEV" ]]; then cp -R "$SOURCE/third_party_licenses" "$DEV/"; fi
 chmod +x "$DEV/Install.command"

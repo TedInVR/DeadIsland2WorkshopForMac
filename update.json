@@ -1,6 +1,6 @@
 {
-  "version": "0.20.0",
-  "path": "downloads/Dead-Island-2-Workshop-Mac-0.20.0.zip",
-  "sha256": "7fba4b57f910280df448f1a9726c8189c0d072beb9b2a4e4bb48dec2aaecc7ca",
-  "notes": "Guide Me walks through decryption, editing and finishing. Weapon copy counts and Select All / Edit Selected support backpack batches. Compact editing panels and prominent elapsed GarlicSaves job status."
+  "version": "0.21.0",
+  "path": "downloads/Dead-Island-2-Workshop-Mac-0.21.0.zip",
+  "sha256": "b8e2a034987f326be46fcda89d12aff8d55ac0a5f480c126307beb49b547b3f1",
+  "notes": "Experimental story reset from a same-mode early character in your save, preserving level, inventory and skills. Explicit Quit & Install now reopens Workshop after updating."
 }

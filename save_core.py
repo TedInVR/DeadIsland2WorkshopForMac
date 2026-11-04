@@ -1,6 +1,7 @@
 import math
 import save_codec
 import character_editor
+import story_editor
 """DI2 PS4 Save Wizard export reader; preserves unedited bytes verbatim.
 Independent implementation for the uncompressed, sectioned PS4 export format.
 """
@@ -275,7 +276,7 @@ class Save:
             cap=16 if ar['kind']=='DIInventory' else 64
             dest.append(dict(key=ar['key'],name=ar['group'],count=count,capacity=cap,free=max(0,cap-count)))
         containers=[dict(key=a['key'],name=a['group'],profile_id=self.sections[a['section']].get('profile',{}).get('id'),count=sum(w.info()['editable'] for w in a['weapons']),capacity=next((d['capacity'] for d in dest if d['key']==a['key']),None)) for a in self.arrays if a['weapons'] or any(d['key']==a['key'] for d in dest)]
-        return dict(ammo_catalog=character_editor.AMMO,ammo_groups=[dict(key=a["key"],name=a["group"]) for a in self.resource_arrays if a["kind"]=="DIInventory" and a["profile_id"]],resource_groups=character_editor.info(self),ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
+        return dict(story=story_editor.info(self),ammo_catalog=character_editor.AMMO,ammo_groups=[dict(key=a["key"],name=a["group"]) for a in self.resource_arrays if a["kind"]=="DIInventory" and a["profile_id"]],resource_groups=character_editor.info(self),ammo=[{k:v for k,v in a.items() if k not in ('field','section')} for a in self.ammo],containers=containers,sha=self.sha,bytes=len(self.b),weapons=[w.info() for w in self.weapons if '/Weapons/' in w.path],catalog=pc,weapon_catalog=wc,destinations=dest,profiles=self.profiles)
     def duplicate_record(self,request):
         key=request.get('clone_source')
         if type(key)!=int or not 0<=key<len(self.weapons):raise FormatError('Invalid duplicate source')
@@ -329,7 +330,7 @@ class Save:
         # Keep destination references intact; every other field comes from the snapshot.
         return replace_props(raw,0,end,fields,{k:by[k].replace(target.by[k].payload()) for k in ('EntryID','UniqueId')})
 
-    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None,ammo_refills=None):
+    def rebuild(self,changes,additions=None,deletions=None,ammo_changes=None,resource_changes=None,character_levels=None,ammo_refills=None,story_resets=None):
         resource_changes=resource_changes or [];character_levels=character_levels or {}
         deletions=deletions or []
         if not isinstance(deletions,list) or any(type(k)!=int for k in deletions):raise FormatError('Invalid deletion list')
@@ -406,6 +407,7 @@ class Save:
             payload.append(self.b[pos:sec['end']]);data=b''.join(payload)
             out.extend([self.b[last:sec['sizepos']],put(len(data)),data]);last=sec['end']
         out.append(self.b[last:]);result=b''.join(out)
+        if story_resets:result=story_editor.apply(Save(result),story_resets)
         # Re-parse entire output and verify every requested value, before returning bytes.
         check=Save(result)
         if len(check.weapons)!=len(self.weapons)-len(deleted)+len(additions):raise FormatError('Validation changed inventory count')

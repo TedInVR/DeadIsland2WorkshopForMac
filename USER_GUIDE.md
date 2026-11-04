@@ -31,7 +31,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.20.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.21.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -244,7 +244,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.20.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.21.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -322,4 +322,14 @@ Versions through 0.9.0 queued downloads for the 15-minute background agent and d
 
 ## Post-game format compatibility
 
-Version 0.20.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+Version 0.21.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+
+## Reset Story (experimental)
+
+Open **Character & Resources → Reset Story**. Choose the character to reset and an early starting-point character from the same save and mode. Reference selection uses mission state, not level: changing an early character to level 4 or 40 does not change whether it is a usable reference. A saved, initialized reference is required; an unplayed NG+ slot is insufficient. Regular and NG+ cannot be mixed. If no reference is available, create a fresh character in that mode, enter gameplay, save and reopen the updated decrypted save.
+
+The operation stages a transfer of missions (including DLC), objectives, world interactions, dialogue, map discovery and saved position. The selected character retains its identity, XP/level, full inventory, weapon state, resources, skill configuration, challenges, collectibles, cosmetics, entitlements, rewards and shortcuts. Shared lockers, the reference and other characters are unchanged. The opening position comes from the reference; NG+ may begin after the prologue. It is not a universal mission selector.
+
+Use **Undo This Reset** to remove a pending reset. Review & Export and Finalize and Re-encrypt both include staged resets. Existing automatic backup and export protections apply. The exporter verifies unchanged character and inventory bytes. Live console behavior is not yet verified: the game may alter carried items or impose progression rules during opening sequences. Test a separate backed-up copy before relying on it. No personal story templates are included in downloads.
+
+When you explicitly choose **Quit & Install**, Workshop now reopens after installation. Updates installed after an ordinary quit leave it closed.

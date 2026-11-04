@@ -24,6 +24,8 @@ on:
       - 'credential_store.py'
       - 'ps4_backups.py'
       - 'character_editor.py'
+      - 'story_editor.py'
+      - 'test_story_editor.py'
       - 'resource_catalog.json'
       - 'ammo_catalog.json'
       - 'test_ps4_backups.py'
@@ -55,7 +57,7 @@ jobs:
       - name: Install build dependencies
         run: python -m pip install -r requirements-windows.txt
       - name: Test desktop file operations
-        run: python -m unittest test_windows.py test_backups.py test_save_browser.py test_garlic_service.py test_ownership.py test_finalize.py test_ammo_refill.py test_credentials.py test_legal.py test_presets.py test_durability_references.py test_weapon_paste.py test_compression.py test_license_bundle.py test_ps4_backups.py test_ps4_service.py -v
+        run: python -m unittest test_story_editor.py test_windows.py test_backups.py test_save_browser.py test_garlic_service.py test_ownership.py test_finalize.py test_ammo_refill.py test_credentials.py test_legal.py test_presets.py test_durability_references.py test_weapon_paste.py test_compression.py test_license_bundle.py test_ps4_backups.py test_ps4_service.py -v
       - name: Build Windows executable
         run: python build_windows.py
       - name: Smoke-test the bundled executable

@@ -1,3 +1,10 @@
+# Version 0.21.0 — 4 November 2026
+
+- Add experimental Reset Story under Character & Resources. Select a target and a saved early same-mode reference in the open save; no personal templates are distributed.
+- Transfer mission/objective/world/location state and story summary keys while preserving the target’s XP/level, inventory, weapons, skills and other protected character state. Preserve other characters and shared storage. Reject mode mixing, uninitialized/progressed references, cycles, duplicate targets, character-bound donor data and unsupported framing.
+- Include staged resets in review, decrypted export and re-encryption; allow undo before export. Clearly label the feature as not yet console-verified.
+- Reopen the Mac app after an explicit Quit & Install, retaining the ordinary-quit behavior of staying closed.
+
 # Version 0.20.0 — 4 November 2026
 
 - Add scoped exact-model copy counts, existing-weapon checkboxes and Select All / Edit Selected for batch perk, preset, level and rarity edits. Include queued copies in counts and exclude deletions.

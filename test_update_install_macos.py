@@ -14,6 +14,8 @@ def check_background_ui(root,temp):
 final class BackgroundTest: Workshop {
     var completion: (([String:Any])->Void)?
     var enabled=true
+    var reopenRequested:Bool? = nil
+    override func startPendingUpdate(reopen:Bool=false)->Bool{reopenRequested=reopen;return true}
     override func automaticUpdatesEnabled()->Bool{return enabled}
     override func runUpdater(_ argument:String,completion:@escaping ([String:Any])->Void){self.completion=completion}
 }
@@ -38,7 +40,12 @@ w.checkBackgroundUpdate();w.enabled=false
 w.completion?(["status":"queued","version":"9.0.1"])
 assert(w.updateBanner.isHidden)
 w.completion=nil;w.checkBackgroundUpdate();assert(w.completion == nil)
-print("Native background-update notice tests passed")
+assert(w.reopenRequested == nil)
+w.reopenAfterUpdate=false;w.applicationWillTerminate(Notification(name:NSApplication.willTerminateNotification))
+assert(w.reopenRequested == false)
+w.reopenAfterUpdate=true;w.applicationWillTerminate(Notification(name:NSApplication.willTerminateNotification))
+assert(w.reopenRequested == true)
+print("Native background-update notice and reopen handoff tests passed")
 """
     test=temp/'background-ui.swift';test.write_text(source);binary=temp/'background-ui'
     subprocess.run(['swiftc',str(test),'-o',str(binary),'-framework','AppKit','-framework','WebKit'],check=True)
@@ -61,7 +68,7 @@ def main():
             assert result['status']=='installed',result
             assert u.installed_version()==m['version']
             assert (app/'Contents/MacOS/DI2Workshop').is_file()
-            for name in ('preset_storage.py','save_codec.py','PythonPath.txt','requirements-runtime.txt','legal_state.py','USAGE_TERMS.md','CREDITS.md','Credits.html','THIRD_PARTY_NOTICES.md','LICENSING_REVIEW.md','third_party_licenses/CC-BY-SA-3.0.txt','updater.py','credential_store.py','garlic_service.py','server.py','ps4_backups.py','character_editor.py','resource_catalog.json','ammo_catalog.json','backup_storage.py','save_browser.py','catalog.json','index.html'):
+            for name in ('preset_storage.py','save_codec.py','PythonPath.txt','requirements-runtime.txt','legal_state.py','USAGE_TERMS.md','CREDITS.md','Credits.html','THIRD_PARTY_NOTICES.md','LICENSING_REVIEW.md','third_party_licenses/CC-BY-SA-3.0.txt','updater.py','credential_store.py','garlic_service.py','server.py','ps4_backups.py','story_editor.py','character_editor.py','resource_catalog.json','ammo_catalog.json','backup_storage.py','save_browser.py','catalog.json','index.html'):
                 assert (app/'Contents/Resources'/name).is_file(),name
             runtime=(app/'Contents/Resources/PythonPath.txt').read_text().strip()
             subprocess.run([runtime,'-B','-c','import zstandard,cityhash; import sys; sys.path.insert(0,sys.argv[1]); import save_codec; assert save_codec.encode(b"example",None)==b"example"',str(app/'Contents/Resources')],check=True)

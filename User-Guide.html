@@ -31,7 +31,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.20.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.21.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -244,7 +244,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.20.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.21.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -322,5 +322,5 @@ Versions through 0.9.0 queued downloads for the 15-minute background agent and d
 
 ## Post-game format compatibility
 
-Version 0.20.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
-</pre></body></html>
+Version 0.21.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+</pre><h2>Reset Story · Experimental</h2><p>Open Character &amp; Resources → Reset Story. Choose a character and a saved early starting-point character in the same mode. Reference eligibility depends on missions, not level. Regular and NG+ cannot be mixed. An unplayed slot is insufficient.</p><p>Story/world state and location are transferred; XP/level, inventory, weapons, skills, challenges and collectibles are preserved in the exported save. Shared storage, other characters and the reference stay unchanged. Includes DLC story progress. Stage the reset, then Review &amp; Export or Finalize and Re-encrypt. Undo This Reset removes a pending reset.</p><p>Console behavior remains unverified. Opening sequences may change inventory in-game. Test a separate backed-up copy. See USER_GUIDE.md for details. Explicit Quit &amp; Install now reopens Workshop afterward.</p></body></html>
