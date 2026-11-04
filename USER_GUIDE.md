@@ -31,7 +31,7 @@ Workshop is a free, independent experimental hobby project maintained by TedInVR
 
 With appreciation to Sony/PlayStation, PLAION/Deep Silver/Dambuster/Fishlabs, the community and dependency authors. Workshop is not affiliated with or endorsed by them. See [the agreement](USAGE_TERMS.md), [credits](CREDITS.md), [third-party notices](THIRD_PARTY_NOTICES.md) and [licensing review](LICENSING_REVIEW.md). The technical review identified no bundled Sony SDK, firmware or console keys; this is a limited review, not certification. Redistribution permission for the referenced catalog tables remains unverified. Attribution alone is not permission.
 
-Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.22.1 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
+Workshop edits weapons inside a **decrypted PS4 Dead Island 2 save**, including compressed GarlicSaves results, the newer observed post-game save revision, and uncompressed Save Wizard exports. Version 0.23.0 is a preview. Structural checks have passed; PS4 in-game testing remains necessary.
 
 ## Install or update
 
@@ -244,7 +244,7 @@ PSN targets come from your local profile names and accounts found on drives. Reg
 
 ## PS4 encryption and Save Wizard
 
-Workshop 0.22.1 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
+Workshop 0.23.0 includes a **GarlicSaves connection preview**. The cryptographic processing takes place on GarlicSaves’ remote console workers. It is not offline decryption on the Mac or PC, and does not need Save Wizard for the proposed online workflow. Compressed Dead Island 2 package parsing, edit/recompression and companion-file preservation are tested locally; The user has confirmed a successful console import after the ownership correction. Normal-ammo restoration still requires an in-game check; the existing Save Wizard workflow remains available.
 
 ### Connect and decrypt
 
@@ -322,15 +322,23 @@ Versions through 0.9.0 queued downloads for the 15-minute background agent and d
 
 ## Post-game format compatibility
 
-Version 0.22.1 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
+Version 0.23.0 accepts both observed save revisions and treats the first header field as the game build number. It does not replace that field with an older build. Compression/checksum, section boundaries and property schemas remain validated. No-edit exports are byte-identical; edited saves retain the complete original header. If a future revision is unknown, the downloaded ZIP remains available for diagnosis.
 
-## Story reset temporarily unavailable
+## Restart story after the prologue
 
-Version 0.22.1 disables story reset in the interface and exporter. A console test of the previous campaign-clearing method produced a New Game slot rather than a playable replay of an existing character. Menu progress bars also remained completed. Byte-preservation checks did not establish correct game behavior.
+Open your verified dumpster checkpoint save once in Workshop. It privately remembers separate Regular and NG+ story starting points for the matching game build. Eligible checkpoints must have the prologue completed, mission two active at its opening hard checkpoint and a saved position beside the dumpster. Airplane and unplayed slots are rejected. Starting points contain story data only, never character levels, inventory or credentials. They remain local across app restarts and updates; no personal templates are distributed. The original characters can then progress normally or be removed. A future game build may need its own starting points captured once.
 
-If affected, restore the full save backup from before the reset. Workshop saved an **opened** decrypted snapshot under **Help → Open Backup Folder**. USB finalization also backed up the prior encrypted destination under **USB Saves → Named Backups**. Choose a backup from before the failed reset, keeping both encrypted companion files together when restoring a USB pair. A full backup restores the whole save, including its other characters; identify the correct timestamp first. Opening, exporting or updating the app does not repair a previously reset file.
+Use **Character & Resources → Reset Story**, select the character and click **Stage Story Restart**. No donor selection is required. Review & Export and Finalize and Re-encrypt both include the staged restart. **Undo This Restart** removes it before saving.
 
-No replacement reset operation has been console-verified. The intended eventual feature still requires no reference character and must retain level, inventory, skills and character identity.
+The character starts beside the dumpster, before heading to Emma’s mansion. The prologue is already complete, so mission progress starts at **1/39**, with side and lost-and-found counts at zero. Missions including DLC, objectives, checkpoints, world interactions, dialogue, discovery, location and story summary keys are replaced with the initialized starting state. Only identified mission completion statistics are reset; denominators remain intact.
+
+XP/level, weapons and their modifications, inventory, med-kits, resources, skills, challenges, collectibles, cosmetics, rewards and character identity remain unchanged in the exported save. Shared storage and unselected characters are unchanged. The reset does not convert Regular to NG+ or vice versa. It never falls back to deleting campaign data if a point is missing or damaged.
+
+File-preservation and checkpoint checks do not establish game behavior after transferring a starting state to another character. Test one backed-up character first on your console; verify Continue, dumpster spawn, equipment and progression toward Emma’s mansion. This avoids the earlier airplane tutorial’s forced med-kit and weapon pickups.
+
+### Previous reset regression and recovery
+
+Version 0.22.0’s campaign-clearing approach was disproven by a console test: it produced New Game and retained completed bars. Version 0.22.1 removed that writer. This implementation uses fully initialized post-tutorial data instead. Updating does not repair a previously reset save. Restore its pre-reset backup if needed; full-save restoration also restores other characters, so check its timestamp first.
 
 ## Reopening after an update
 

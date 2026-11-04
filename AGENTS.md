@@ -17,3 +17,7 @@ Story reset must preserve the selected character’s current XP/level regardless
 ## Story reset regression — 4 November 2026
 
 A live-console test of 0.22.0 showed completed progress bars and New Game instead of Continue after clearing campaign/location state. Treat generated empty campaign reset as disproven. Version 0.22.1 blocks reset writes and disables the control. Do not re-enable this method or call byte preservation evidence of a working mission replay. Recovery requires a pre-reset backup; an app update does not repair affected saves. A future implementation needs initialized mission, objective, world, location and menu-summary state, while preserving character data and requiring no permanent donor.
+
+## Post-tutorial reset replacement
+
+The supplied Regular and NG+ dumpster checkpoints have mission one complete, mission two active at ObjectiveDisplayIndex 4, its hard checkpoint OBJ_Main01_08a_Cutscene_TheThanksIGet, and a nonempty saved Bel-Air location. Capture only this initialized checkpoint into private per-game-build, per-mode local storage, excluding identity/level/inventory. Do not bundle personal checkpoints. Users must not have to keep donor characters unused. Reset named Main/Side/TertiaryMissionsCompleted counters but preserve *_Total denominators and unrelated character statistics. File checks are distinct from console validation on another character.

@@ -1,3 +1,9 @@
+# Version 0.23.0 — 4 November 2026
+
+- Replace the disabled campaign-clearing reset with initialized post-prologue starting points captured privately from a verified dumpster save. Store Regular and NG+ separately for each game build and retain across restarts; no donor picker or permanent unused character required.
+- Restore the opening hard checkpoint, mission/world/location state and menu summary; reset identified mission completion counters while preserving totals. Start at 1/39 because the prologue is complete.
+- Preserve current XP/level, inventory, weapons, resources, skills and unselected characters. Reject missing/corrupt/incompatible points and never fall back to an empty campaign. Transferred-character console testing remains necessary.
+
 # Version 0.22.1 — 4 November 2026
 
 - Disable story reset in the interface and reject all nonempty story-reset requests before export or re-encryption. A live-console test of the campaign-clearing approach produced New Game rather than Continue and retained completed menu progress.

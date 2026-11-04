@@ -25,6 +25,7 @@ on:
       - 'ps4_backups.py'
       - 'character_editor.py'
       - 'story_editor.py'
+      - 'story_points.py'
       - 'test_story_editor.py'
       - 'resource_catalog.json'
       - 'ammo_catalog.json'
