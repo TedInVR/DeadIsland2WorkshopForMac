@@ -109,17 +109,20 @@ def queue():
     m=manifest()
     if version_tuple(m['version'])<=version_tuple(installed_version()):return {'status':'current','version':m['version']}
     download(m)
-    return record_status('queued','Downloaded and verified. Quit Workshop to start installation immediately. Workshop will stay closed afterward.',m['version'])
+    return record_status('queued','Downloaded and verified. Choose Quit, Install & Reopen to install now and reopen Workshop, or keep editing.',m['version'])
 
 def startup():
     if not settings().get('automatic_updates',True):return {'status':'disabled'}
     return queue()
 
 def reopen_app(failed=False):
-    # Only an opening-time update requests a restart; background updates stay closed.
-    args=['/usr/bin/open',str(APP),'--args','--skip-startup-update']
+    # Explicit update installation requests a restart; ordinary closed-app updates stay closed.
+    args=['/usr/bin/open','-n',str(APP),'--args','--skip-startup-update']
     if failed:args.append('--startup-update-failed')
-    subprocess.Popen(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)
+    try:
+        subprocess.run(args,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE,text=True,check=True,timeout=30)
+    except (OSError,subprocess.SubprocessError) as e:
+        raise UpdateError('macOS could not reopen Workshop. Open it from Applications. Details: '+str(e)) from e
 
 def after_quit(reopen=False):
     try:

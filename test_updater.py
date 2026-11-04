@@ -1,4 +1,4 @@
-import io,json,hashlib,plistlib,tempfile,unittest,zipfile
+import io,json,hashlib,plistlib,tempfile,unittest,zipfile,subprocess
 from pathlib import Path
 from unittest.mock import patch
 import updater as u
@@ -103,7 +103,17 @@ class UpdaterTests(unittest.TestCase):
         with patch.object(u,'app_running',return_value=False),patch.object(u,'run',return_value={'status':'installed'}),patch.object(u,'reopen_app') as launch:
             u.after_quit();launch.assert_not_called()
     def test_reopen_skips_second_startup_check(self):
-        with patch.object(u.subprocess,'Popen') as launch:
+        with patch.object(u.subprocess,'run') as launch:
             u.reopen_app();self.assertIn('--skip-startup-update',launch.call_args.args[0])
+
+    def test_reopen_checks_macos_launch_and_uses_new_instance(self):
+        with patch.object(u.subprocess,'run') as launch:
+            u.reopen_app()
+            self.assertEqual(launch.call_args.args[0][:2],['/usr/bin/open','-n'])
+            self.assertTrue(launch.call_args.kwargs['check'])
+            self.assertEqual(launch.call_args.kwargs['timeout'],30)
+    def test_reopen_reports_launch_failure(self):
+        with patch.object(u.subprocess,'run',side_effect=subprocess.CalledProcessError(1,['open'])):
+            with self.assertRaisesRegex(u.UpdateError,'could not reopen'):u.reopen_app()
 
 if __name__=='__main__':unittest.main()

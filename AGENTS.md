@@ -12,4 +12,4 @@ Show an exact-model copy count beside weapon names, scoped to the chosen charact
 
 ## Story reset invariant
 
-Story reset must preserve the selected character’s current XP/level even when the starting-point character was manually changed to a different level. Preserve inventory, weapons, resources, skills and character identity; select references by story state and same Regular/NG+ mode, not level. Never publish personal save templates. Clearly distinguish byte-preservation checks from unverified in-game behavior.
+Story reset must preserve the selected character’s current XP/level regardless of any previous manual level edits. Preserve inventory, weapons, resources, skills and character identity; generate the initial campaign state in the existing Regular/NG+ mode. Never require another character to be kept at an early story point. Never publish personal save templates. Clearly distinguish byte-preservation checks from unverified in-game behavior.

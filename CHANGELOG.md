@@ -1,3 +1,8 @@
+# Version 0.22.0 — 4 November 2026
+
+- Replace reference-character story transfer with generated campaign initialization. Choose only the target; no unused character or low-level donor is required. Clear campaign/world/quest/location state while preserving XP, level, inventory, skills and other character state. Console behavior remains experimental.
+- Make manual update action explicit: Quit, Install & Reopen. Check the macOS launch command and record failures; retain closed-app background-update behavior. Read the running version from the app bundle.
+
 # Version 0.21.0 — 4 November 2026
 
 - Add experimental Reset Story under Character & Resources. Select a target and a saved early same-mode reference in the open save; no personal templates are distributed.

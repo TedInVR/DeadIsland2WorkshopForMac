@@ -240,18 +240,16 @@ const assert=require('assert');
   w.eval('guideStep="finish"');w.openGuide();assert(d.querySelector('#guide-choices').textContent.includes('Finalize and Re-encrypt'));w.endGuide();
   w.eval('serviceActive=true');w.serviceRender({has_key:true,message:'Waiting in GarlicSaves queue'});assert(d.querySelector('#service-status').classList.contains('processing'));assert(d.querySelector('#status').classList.contains('processing'));
   w.eval('serviceActive=false');w.serviceRender();w.status('Ready');assert(!d.querySelector('#service-status').classList.contains('processing'));assert(!d.querySelector('#status').classList.contains('processing'));
-  // Story staging stays independent of character level and is sent through every export path.
-  w.acceptSave(originalData,'story.sav');
-  w.eval(`data.story={available:true,characters:data.profiles.map((p,i)=>({...p,reference:i===0||i===1,completed:0,started:['mis_main01']}))}`);
+  // Story reset needs only a target, including when every character has progressed.
+  w.acceptSave(originalData,'story.sav');w.eval('data.story={available:true,characters:[]}');
   w.openStoryReset();d.querySelector('#story-target').value=w.eval('data.profiles.find((p,i)=>i>1&&!p.ng).id');w.renderStoryReset();
-  assert(!d.querySelector('#story-stage').disabled);assert([...d.querySelector('#story-reference').options].every(o=>!w.eval('data.profiles.find(p=>p.id==='+JSON.stringify(o.value)+').ng')));
-  const resetTarget=d.querySelector('#story-target').value,resetReference=d.querySelector('#story-reference').value;
-  w.stageStoryReset();assert.equal(w.editPayload().story_resets.length,1);assert.equal(w.editPayload().story_resets[0].target,resetTarget);assert.equal(w.editPayload().story_resets[0].reference,resetReference);
+  assert(!d.querySelector('#story-stage').disabled);assert(!d.querySelector('#story-reference'));
+  const resetTarget=d.querySelector('#story-target').value;w.stageStoryReset();assert.equal(w.editPayload().story_resets.length,1);assert.equal(w.editPayload().story_resets[0].target,resetTarget);assert.deepEqual(Object.keys(w.editPayload().story_resets[0]),['target']);
   assert.equal(w.eval('Object.keys(characterLevels).length'),0);assert.equal(w.eval('Object.keys(changes).length'),0);assert.equal(w.extraDirty(),1);
   w.review();assert(d.querySelector('#reviewitems').textContent.includes('RESET STORY'));d.querySelector('#review').close();
   w.undoStoryReset();assert.equal(w.editPayload().story_resets.length,0);w.stageStoryReset();w.acceptSave(originalData,'next.sav');assert.equal(w.editPayload().story_resets.length,0);
   w.eval('data.story={available:false,reason:"Unsupported test framing",characters:[]}');w.openStoryReset();assert(d.querySelector('#story-stage').disabled);assert(d.querySelector('#story-description').textContent.includes('Unsupported test framing'));
-  console.log('PASS: experimental story reset same-mode choices, level independence, review/payload, undo, reopen cleanup and unsupported format');
+  console.log('PASS: story reset requires no reference; level independence, review/payload, undo and unsupported format');
   console.log('PASS: scoped exact-model counts; search-independent backpack selection; bulk levels/perks preserve other characters; selection resets across locations; compact tabs and perk paging; separate GarlicSaves/Save Wizard guide paths; active processing emphasis');
   console.log('PASS: highlighted last-step finalize flow, failed-write handling and refreshed baseline; half resource fill and character levels; scoped/global ammo actions; clipboard snapshot paste; per-weapon preset labels and update-existing mode; named presets save/reload/apply to another weapon/create/delete; Done replacement label and header tooltips; USB discovery, profile rename, encrypted-pair selection, direct decrypted open and drive removal; automatic open/export backups; Windows open/export bridge; complete duplication; slot counters; batch family/location/deletion scopes; custom/scoped durability and recorded normal references; editable ammo overrides and normal refills; weapon silhouettes; Raven type and searchable labels; live creation/replacement previews; unverified fallback; inline and hover descriptions; accessible help; filtered Select All; individual deselection; partial state; clear all; import; named profiles; staged deletion/undo; freed-slot creation; review; validated export; in-place replacement');
   dom.window.close();

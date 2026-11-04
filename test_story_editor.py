@@ -27,7 +27,7 @@ def character(pid,early,mode=False):
         state='Started' if early and i==0 else 'Waiting' if early else 'Complete'
         missions.append((('mis_main01' if i==0 else 'mission_'+str(i)),node([script('mis_main01' if i==0 else 'mission_'+str(i),'DIQuestInstancePersistentDataCollection',[tagged('State','EnumProperty',fs('EMissionState::'+state),'EMissionState')])])))
     campaign=node([script('FuryValues','FuryValuesState',[tagged('CurrentFury','FloatProperty',put(123))])],[(n,node(children=missions) if n=='MissionSystem' else scalar_node(n,'early' if early else 'late')) for n in story.CAMPAIGN_STORY])
-    return node([script('CharacterData','CharacterProfile',[tagged('Owner','StrProperty',fs(pid))]),script('Progression','PlayerProgressionState',[tagged('XPValue','IntProperty',put(6800 if early else 589500))]),script('QuestStats','QuestStatsTrackerRuntimeState',[statistics('QuestRecords',0 if early else 90),statistics('ObjectiveRecords',2 if early else 1000)])],[(n,scalar_node(n,'early' if early else 'late')) for n in ('Discovery','Dialogue','Sectors')]+[('Campaign',campaign),('GameProgression',node([script('GameProgressionState','GameProgressionPersistentData',[tagged('MapPath','StrProperty',fs('/test/start' if early else '/test/end'))])])),('DIInventory',scalar_node('Items','private equipment '+pid)),('SkillSlots',scalar_node('ActiveSkills','skills '+pid)),('CharacterStats',scalar_node('Stats','stats '+pid)),('Stash',scalar_node('Items','locker '+pid))])
+    return node([script('CharacterData','CharacterProfile',[tagged('Owner','StrProperty',fs(pid))]),script('Progression','PlayerProgressionState',[tagged('XPValue','IntProperty',put(6800 if early else 589500))]),script('QuestStats','QuestStatsTrackerRuntimeState',[statistics('QuestRecords',0 if early else 90),statistics('ObjectiveRecords',2 if early else 1000)])],[(n,scalar_node(n,'early' if early else 'late')) for n in ('Dialogue','Sectors')]+[('Discovery',node([script('Discovery','TestDiscovery',[tagged('DiscoveredObjects','ArrayProperty',put(0),'StrProperty')])])),('Campaign',campaign),('GameProgression',node([script('GameProgressionState','GameProgressionPersistentData',[tagged('MapPath','StrProperty',fs('/test/start' if early else '/test/end')),tagged('PlayerLocation','StructProperty',bytes(12),'Vector'),fs('bSavedPlayerLocation')+fs('BoolProperty')+put(0)+put(0)+bytes([1,0])])])),('DIInventory',scalar_node('Items','private equipment '+pid)),('SkillSlots',scalar_node('ActiveSkills','skills '+pid)),('CharacterStats',scalar_node('Stats','stats '+pid)),('Stash',scalar_node('Items','locker '+pid))])
 def variant(name,typ,value):return fs(name)+put(typ)+put(len(value))+value
 
 def make_save(raw=None):
@@ -52,27 +52,33 @@ class StoryTests(unittest.TestCase):
     def apply(self,requests):
         with patch('save_core.Save',side_effect=make_save):return make_save(story.apply(self.s,requests))
     def test_reset_preserves_level_inventory_skills_identity_other_characters(self):
-        request=dict(target=GUIDS[0],reference=GUIDS[1]);out=self.apply([request])
+        request=dict(target=GUIDS[0]);out=self.apply([request])
         old=story.tree(self.s,self.s.sections[1]);new=story.tree(out,out.sections[1]);donor=story.tree(self.s,self.s.sections[2])
         for name in ('DIInventory','SkillSlots','CharacterStats','Stash'):
             self.assertEqual(story.raw(self.s.b,story.named(old.children,name)),story.raw(out.b,story.named(new.children,name)))
         for name in ('CharacterData','Progression'):
             self.assertEqual(story.raw(self.s.b,story.named(old.scripts,name)),story.raw(out.b,story.named(new.scripts,name)))
-        for name in story.ROOT_STORY:self.assertEqual(story.raw(out.b,story.named(new.children,name)),story.raw(self.s.b,story.named(donor.children,name)))
+        self.assertEqual(story.quest_counts(out,new),[0,0])
+        self.assertEqual(story.named(new.children,'Campaign').children,[])
+        self.assertEqual(story.named(new.children,'Dialogue').children,[])
         for i in (2,3):self.assertEqual(self.s.b[self.s.sections[i]['start']:self.s.sections[i]['end']],out.b[out.sections[i]['start']:out.sections[i]['end']])
         a=story.summary_node(self.s,GUIDS[0])[3];b=story.summary_node(out,GUIDS[0])[3]
         self.assertEqual([x[3] for x in a if x[0] not in story.SUMMARY_STORY],[x[3] for x in b if x[0] not in story.SUMMARY_STORY])
         self.assertEqual(next(x for x in story.inspect(out) if x['id']==GUIDS[0])['completed'],0)
-    def test_reject_mismatched_modes_self_progressed_reference_duplicates(self):
+    def test_reject_legacy_reference_requests(self):
         for rs in ([dict(target=GUIDS[0],reference=GUIDS[2])],[dict(target=GUIDS[0],reference=GUIDS[0])],[dict(target=GUIDS[1],reference=GUIDS[0])],[dict(target=GUIDS[0],reference=GUIDS[1])]*2,[dict(target=GUIDS[0],reference=GUIDS[1]),dict(target=GUIDS[1],reference=GUIDS[0])]):
+            with self.assertRaises(story.StoryError):self.apply(rs)
+    def test_reject_duplicate_or_unknown_targets(self):
+        for rs in ([dict(target=GUIDS[0])]*2,[dict(target='unknown')],[dict(target=[])],{}):
             with self.assertRaises(story.StoryError):self.apply(rs)
     def test_noop_and_truncated_or_unsupported_input(self):
         self.assertEqual(story.apply(self.s,[]),self.s.b)
         for b in (b'',put(100001)+put(0),put(0)+put(1)+fs('x')+fs('/test')+put(9)):
             with self.assertRaises(ValueError):story.read_node(b,0)
-    def test_reference_detection_does_not_use_level(self):
+    def test_level_does_not_determine_reset_eligibility(self):
         refs=story.inspect(self.s)
-        self.assertFalse(refs[0]['reference']);self.assertTrue(refs[1]['reference'])
-        self.s.sections[2]['profile']['level']=40
-        self.assertTrue(story.inspect(self.s)[1]['reference'])
+        self.assertEqual(refs[0]['completed'],96);self.assertEqual(refs[1]['completed'],0)
+        out=self.apply([dict(target=GUIDS[0]),dict(target=GUIDS[1]),dict(target=GUIDS[2])])
+        self.assertEqual([x['profile']['ng']for x in out.sections if 'profile'in x],[False,False,True])
+        for sec in out.sections[1:]:self.assertEqual(story.quest_counts(out,story.tree(out,sec)),[0,0])
 if __name__=='__main__':unittest.main()
